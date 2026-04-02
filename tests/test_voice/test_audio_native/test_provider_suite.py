@@ -360,7 +360,7 @@ class TestSingleTurn:
     def test_single_turn_reply(
         self, connected_adapter: DiscreteTimeAdapter, audio_file: str
     ):
-        """Send speech audio, verify agent responds with audio."""
+        """Send speech audio, verify agent responds with audio and transcript."""
         audio = load_telephony_audio(audio_file)
         chunks = chunk_audio(audio, connected_adapter.bytes_per_tick)
 
@@ -370,6 +370,21 @@ class TestSingleTurn:
         assert got_audio, (
             f"Agent did not produce audio within {len(results)} ticks "
             f"({len(results) * TICK_DURATION_MS}ms) for {audio_file}"
+        )
+
+        # Drain a few more ticks to let transcript arrive (may lag behind audio)
+        silence = make_silence()
+        for tick in range(10):
+            result = connected_adapter.run_tick(
+                silence, tick_number=len(results) + tick + 1
+            )
+            results.append(result)
+            assert_audio_capping(result, connected_adapter)
+
+        got_transcript = any(r.proportional_transcript for r in results)
+        assert got_transcript, (
+            f"Agent produced audio but no transcript within {len(results)} ticks "
+            f"for {audio_file}"
         )
 
 
