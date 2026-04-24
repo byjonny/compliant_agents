@@ -390,6 +390,19 @@ def add_run_args(parser):
         help="Arguments to pass to the retrieval config constructor as JSON (e.g., '{\"top_k\": 10}').",
     )
 
+    # Guardrails
+    parser.add_argument(
+        "--guardrail-config",
+        type=str,
+        default=None,
+        help=(
+            "Path to a guardrail JSON config file. "
+            "When provided, agent tool calls are intercepted and validated against "
+            "policy rules before execution. See tau2/guardrails/loader.py for the "
+            "config format. Example: --guardrail-config guardrail_configs/airline_defaults.json"
+        ),
+    )
+
     # Resume mode
     parser.add_argument(
         "--auto-resume",
@@ -670,6 +683,7 @@ def main():
                 user=args.user,
                 max_steps=args.max_steps,
                 enforce_communication_protocol=args.enforce_communication_protocol,
+                guardrail_config_path=getattr(args, "guardrail_config", None),
             )
 
         return run_domain(config)

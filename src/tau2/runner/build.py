@@ -24,6 +24,8 @@ from tau2.data_model.simulation import (
 from tau2.data_model.tasks import Task
 from tau2.data_model.voice import SpeechComplexity, SynthesisConfig, VoiceSettings
 from tau2.environment.environment import Environment
+from tau2.guardrails.loader import load_middleware_from_file
+from tau2.guardrails.middleware import GuardrailMiddleware
 from tau2.orchestrator.full_duplex_orchestrator import FullDuplexOrchestrator
 from tau2.orchestrator.orchestrator import Orchestrator
 from tau2.registry import registry
@@ -331,6 +333,7 @@ def build_text_orchestrator(
     seed: Optional[int] = None,
     simulation_id: Optional[str] = None,
     user_persona_config: Optional[PersonaConfig] = None,
+    guardrail_middleware: Optional[GuardrailMiddleware] = None,
 ) -> Orchestrator:
     """Build a half-duplex (text) orchestrator from a TextRunConfig.
 
@@ -340,14 +343,28 @@ def build_text_orchestrator(
         seed: Per-trial seed. If None, uses config.seed.
         simulation_id: Unique simulation ID. If None, a UUID is generated.
         user_persona_config: Persona config for the user simulator.
+        guardrail_middleware: Optional guardrail middleware. When provided, a
+            GuardrailOrchestrator is returned instead of a plain Orchestrator.
+            Agent tool calls are intercepted and evaluated before execution.
+            User tool calls are always forwarded unchanged.
 
     Returns:
-        A fully constructed Orchestrator, ready for run_simulation().
+        A fully constructed Orchestrator (or GuardrailOrchestrator), ready for run_simulation().
 
     Example:
         config = TextRunConfig(domain="airline", agent="llm_agent")
         tasks = get_tasks("airline")
         orchestrator = build_text_orchestrator(config, tasks[0], seed=42)
+        result = run_simulation(orchestrator)
+
+    Example with guardrails:
+        from tau2.guardrails import SequentialGuardrailMiddleware
+        from tau2.guardrails.guards import FlightStatusGuard, CancellationEligibilityGuard
+        middleware = SequentialGuardrailMiddleware(guards=[
+            FlightStatusGuard(),
+            CancellationEligibilityGuard(),
+        ])
+        orchestrator = build_text_orchestrator(config, task, guardrail_middleware=middleware)
         result = run_simulation(orchestrator)
     """
     if simulation_id is None:
@@ -382,6 +399,11 @@ def build_text_orchestrator(
         solo_mode=solo_mode,
     )
 
+    # Resolve guardrail middleware: explicit param > config file > None (= NullGuardrailMiddleware)
+    resolved_middleware = guardrail_middleware
+    if resolved_middleware is None and config.guardrail_config_path:
+        resolved_middleware = load_middleware_from_file(config.guardrail_config_path)
+
     orchestrator = Orchestrator(
         domain=domain,
         agent=agent,
@@ -395,6 +417,7 @@ def build_text_orchestrator(
         simulation_id=simulation_id,
         validate_communication=config.enforce_communication_protocol,
         timeout=config.timeout,
+        guardrail_middleware=resolved_middleware,
     )
 
     logger.debug(

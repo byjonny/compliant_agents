@@ -535,6 +535,17 @@ class TextRunConfig(BaseRunConfig):
         ),
     ]
 
+    # ---- Guardrails ----
+    guardrail_config_path: Annotated[
+        Optional[str],
+        Field(
+            description="Path to a guardrail JSON config file. "
+            "When set, agent tool calls are intercepted and checked before execution. "
+            "See tau2.guardrails.loader for the config format.",
+            default=None,
+        ),
+    ]
+
     # ---- Text-specific ----
     max_steps: Annotated[
         int,
@@ -1229,6 +1240,29 @@ class TerminationReason(str, Enum):
     UNEXPECTED_ERROR = "unexpected_error"
 
 
+class GuardrailEvent(BaseModel):
+    """
+    Records a single guardrail block — an agent tool call that was intercepted
+    and rejected by a guard before reaching the environment.
+
+    The tool_call_id field matches the corresponding ToolMessage id in the
+    simulation's messages list, so events can be cross-referenced with the
+    conversation trajectory.
+
+    Only blocking events (allowed=False) are recorded; allowed calls produce
+    no GuardrailEvent.
+    """
+
+    tool_call_id: str = Field(
+        description="ID of the intercepted tool call. Matches the id of the "
+        "rejection ToolMessage in the messages list."
+    )
+    tool_name: str = Field(description="Name of the tool call that was blocked.")
+    tool_arguments: dict = Field(description="Arguments that were passed to the blocked call.")
+    guard_name: str = Field(description="Name of the guard that triggered the block.")
+    reason: Optional[str] = Field(description="Human-readable explanation of the policy violation.")
+
+
 class SimulationRun(BaseModel):
     """
     Simulation run for the given task.
@@ -1312,6 +1346,13 @@ class SimulationRun(BaseModel):
     )
     effect_timeline: Optional[EffectTimeline] = Field(
         description="Timeline of audio effect events during the simulation (full-duplex voice only).",
+        default=None,
+    )
+    guardrail_events: Optional[list[GuardrailEvent]] = Field(
+        description="Guardrail blocks that occurred during the simulation. "
+        "Each entry records an agent tool call that was intercepted and rejected "
+        "by a guard before reaching the environment. None when no guardrail "
+        "middleware was active or no blocks occurred.",
         default=None,
     )
 
