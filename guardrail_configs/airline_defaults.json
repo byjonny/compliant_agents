@@ -1,0 +1,11 @@
+{
+  "type": "sequential",
+  "guards": [
+    {
+      "type": "flight_status"
+    },
+    {
+      "type": "cancellation_eligibility"
+    }
+  ]
+}
