@@ -34,6 +34,8 @@ from tau2.user.user_simulator_base import (
     UserError,
     is_valid_user_history_message,
 )
+from tau2.data_model.simulation import GuardrailEvent
+from tau2.guardrails.middleware import GuardrailMiddleware, NullGuardrailMiddleware
 from tau2.utils.llm_utils import get_cost
 from tau2.utils.utils import format_time, get_now
 
@@ -99,6 +101,7 @@ class BaseOrchestrator(ABC, Generic[BaseAgentT, BaseUserT, TrajectoryItemT]):
         seed: Optional[int] = None,
         simulation_id: Optional[str] = None,
         timeout: Optional[float] = None,
+        guardrail_middleware: Optional[GuardrailMiddleware] = None,
     ):
         """
         Initialize the base orchestrator.
@@ -114,6 +117,9 @@ class BaseOrchestrator(ABC, Generic[BaseAgentT, BaseUserT, TrajectoryItemT]):
             seed: Optional random seed for reproducibility. Defaults to None.
             simulation_id: Optional simulation ID. Defaults to generated UUID.
             timeout: Maximum wallclock time in seconds. None means no timeout.
+            guardrail_middleware: Middleware that intercepts agent tool calls before execution.
+                Defaults to NullGuardrailMiddleware (no-op). Swap in a
+                SequentialGuardrailMiddleware to enforce policy rules at runtime.
         """
         self.domain = domain
         self.agent: BaseAgentT = agent
@@ -137,6 +143,14 @@ class BaseOrchestrator(ABC, Generic[BaseAgentT, BaseUserT, TrajectoryItemT]):
         self.num_errors: int = 0
         self._run_start_time: Optional[str] = None
         self._run_start_perf: Optional[float] = None
+
+        # Guardrail middleware — intercepts agent tool calls before execution
+        self.guardrail_middleware: GuardrailMiddleware = (
+            guardrail_middleware if guardrail_middleware is not None
+            else NullGuardrailMiddleware()
+        )
+        self.guardrail_block_count: int = 0
+        self._guardrail_events: list[GuardrailEvent] = []
 
     @abstractmethod
     def initialize(self) -> None:
@@ -310,9 +324,26 @@ class BaseOrchestrator(ABC, Generic[BaseAgentT, BaseUserT, TrajectoryItemT]):
             message_history=message_history,
         )
 
+    def _get_history(self) -> list[Message]:
+        """Return the conversation history for guardrail context.
+
+        Overridden by Orchestrator to return self.trajectory (the live message list).
+        Returns an empty list by default so guardrails still function deterministically
+        in subclasses that do not maintain a flat message trajectory.
+        """
+        return []
+
     def _execute_tool_calls(self, tool_calls: list[ToolCall]) -> list[ToolMessage]:
         """
         Execute tool calls and return results.
+
+        Agent tool calls (requestor == "assistant") are first evaluated by the
+        guardrail middleware. Allowed calls proceed to the environment; blocked
+        calls receive a structured rejection ToolMessage(error=False) instead.
+        User tool calls always bypass the middleware.
+
+        Guardrail blocks do NOT increment num_errors — they are policy feedback,
+        not execution failures.
 
         Args:
             tool_calls: List of tool calls to execute.
@@ -321,11 +352,39 @@ class BaseOrchestrator(ABC, Generic[BaseAgentT, BaseUserT, TrajectoryItemT]):
             List of ToolMessage results from the environment.
         """
         tool_results = []
+        history = self._get_history()
+
         for tool_call in tool_calls:
-            tool_result = self.environment.get_response(tool_call)
-            if tool_result.error:
-                self.num_errors += 1
-            tool_results.append(tool_result)
+            if tool_call.requestor != "assistant":
+                tool_result = self.environment.get_response(tool_call)
+                if tool_result.error:
+                    self.num_errors += 1
+                tool_results.append(tool_result)
+                continue
+
+            verdict, rejection = self.guardrail_middleware.evaluate(
+                tool_call, self.environment, history
+            )
+            if verdict.allowed:
+                tool_result = self.environment.get_response(tool_call)
+                if tool_result.error:
+                    self.num_errors += 1
+                tool_results.append(tool_result)
+            else:
+                self.guardrail_block_count += 1
+                self._guardrail_events.append(
+                    GuardrailEvent(
+                        tool_call_id=tool_call.id,
+                        tool_name=tool_call.name,
+                        tool_arguments=tool_call.arguments,
+                        guard_name=verdict.guard_name,
+                        reason=verdict.reason,
+                    )
+                )
+                print("[orchestrator.py] Guardrail block detected")
+                tool_results.append(rejection)
+                print(f"[orchestrator.py] Rejection message: {tool_results}")
+
         return tool_results
 
     def _wrap_tool_results(self, tool_results: list[ToolMessage]) -> Message:
@@ -405,6 +464,7 @@ class Orchestrator(BaseOrchestrator[AgentT, UserT, Message]):
         simulation_id: Optional[str] = None,
         validate_communication: bool = False,
         timeout: Optional[float] = None,
+        guardrail_middleware: Optional[GuardrailMiddleware] = None,
     ):
         """
         Initialize the Orchestrator for managing simulation between Agent, User, and Environment.
@@ -428,6 +488,8 @@ class Orchestrator(BaseOrchestrator[AgentT, UserT, Message]):
             validate_communication: If True, validates communication protocol rules (e.g., no mixed
                                    messages with both text and tool calls). Defaults to False.
             timeout: Maximum wallclock time in seconds. None means no timeout.
+            guardrail_middleware: Optional middleware for intercepting agent tool calls.
+                                  Defaults to NullGuardrailMiddleware (no-op).
         """
         # Initialize base class
         super().__init__(
@@ -441,6 +503,7 @@ class Orchestrator(BaseOrchestrator[AgentT, UserT, Message]):
             seed=seed,
             simulation_id=simulation_id,
             timeout=timeout,
+            guardrail_middleware=guardrail_middleware,
         )
 
         # Half-duplex specific attributes
@@ -456,6 +519,9 @@ class Orchestrator(BaseOrchestrator[AgentT, UserT, Message]):
 
         # Validate mode compatibility
         self._validate_mode_compatibility()
+
+    def _get_history(self) -> list[Message]:
+        return list(self.trajectory)
 
     def _validate_mode_compatibility(self):
         """
@@ -817,6 +883,7 @@ class Orchestrator(BaseOrchestrator[AgentT, UserT, Message]):
             seed=self.seed,
             mode=self.mode.value,
             speech_environment=speech_environment,
+            guardrail_events=self._guardrail_events if self._guardrail_events else None,
         )
         return simulation_run
 
