@@ -366,6 +366,12 @@ class Environment:
             # comparison issues.
             if not self._is_mutating_tool(tool_call.name):
                 continue
+            # Guardrail-blocked calls never executed — the recorded response is a
+            # policy feedback message, not a real tool result. Re-executing here
+            # would mutate the environment incorrectly.
+            if isinstance(expected_response.content, str) and \
+                    expected_response.content.startswith("POLICY GUARDRAIL"):
+                continue
             response = self.get_response(tool_call)
             try:
                 content = json.loads(response.content)
