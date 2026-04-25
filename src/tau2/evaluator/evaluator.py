@@ -13,6 +13,10 @@ from tau2.evaluator.evaluator_env import (
     EnvironmentEvaluator,
     FullDuplexEnvironmentEvaluator,
 )
+from tau2.evaluator.evaluator_compliance import (
+    ComplianceEvaluator,
+    FullDuplexComplianceEvaluator,
+)
 from tau2.evaluator.evaluator_nl_assertions import (
     FullDuplexNLAssertionsEvaluator,
     NLAssertionsEvaluator,
@@ -145,6 +149,7 @@ def evaluate_simulation(
         FullDuplexCommunicateEvaluator if is_full_duplex else CommunicateEvaluator
     )
     ActEvaluator = FullDuplexActionEvaluator if is_full_duplex else ActionEvaluator
+    CompEvaluator = FullDuplexComplianceEvaluator if is_full_duplex else ComplianceEvaluator
 
     # Get tool types from the environment for action evaluation
     tool_types: Optional[dict[str, ToolType]] = None
@@ -211,15 +216,21 @@ def evaluate_simulation(
                 full_trajectory=trajectory,
             )
 
+        compliance_reward_info = CompEvaluator.calculate_reward(
+            task=task,
+            full_trajectory=trajectory,
+        )
+
         ## Combine all the rewards.
         reward = 1.0
         env_bases = {RewardType.DB, RewardType.ENV_ASSERTION}
         action_bases = {RewardType.ACTION}
         nl_bases = {RewardType.NL_ASSERTION}
         comm_bases = {RewardType.COMMUNICATE}
+        compliance_bases = {RewardType.COMPLIANCE}
         task_reward_basis = set(task.evaluation_criteria.reward_basis)
 
-        evaluated_bases = env_bases | action_bases | comm_bases
+        evaluated_bases = env_bases | action_bases | comm_bases | compliance_bases
         if nl_reward_info is not None:
             evaluated_bases |= nl_bases
         unevaluated = task_reward_basis - evaluated_bases
@@ -246,6 +257,10 @@ def evaluate_simulation(
             if communicate_reward_info.reward_breakdown is not None:
                 reward_breakdown.update(communicate_reward_info.reward_breakdown)
             reward *= communicate_reward_info.reward
+        if task_reward_basis & compliance_bases:
+            if compliance_reward_info.reward_breakdown is not None:
+                reward_breakdown.update(compliance_reward_info.reward_breakdown)
+            reward *= compliance_reward_info.reward
 
         reward_info = RewardInfo(
             reward=reward,
@@ -256,6 +271,7 @@ def evaluate_simulation(
                 nl_reward_info.nl_assertions if nl_reward_info is not None else None
             ),
             communicate_checks=communicate_reward_info.communicate_checks,
+            compliance_checks=compliance_reward_info.compliance_checks,
             reward_basis=task.evaluation_criteria.reward_basis,
             reward_breakdown=reward_breakdown,
             info={
@@ -263,6 +279,7 @@ def evaluate_simulation(
                 "nl": nl_reward_info.info if nl_reward_info is not None else None,
                 "communicate": communicate_reward_info.info,
                 "action": action_reward_info.info,
+                "compliance": compliance_reward_info.info,
             },
         )
     elif evaluation_type in {
@@ -292,6 +309,11 @@ def evaluate_simulation(
                 full_trajectory=trajectory,
             )
 
+        compliance_reward_info = CompEvaluator.calculate_reward(
+            task=task,
+            full_trajectory=trajectory,
+        )
+
         # Combine all rewards regardless of the task's reward_basis
         reward = 1.0
         reward_breakdown = {}
@@ -313,6 +335,10 @@ def evaluate_simulation(
                 reward_breakdown.update(nl_reward_info.reward_breakdown)
             reward *= nl_reward_info.reward
 
+        if compliance_reward_info.reward_breakdown is not None:
+            reward_breakdown.update(compliance_reward_info.reward_breakdown)
+        reward *= compliance_reward_info.reward
+
         reward_info = RewardInfo(
             reward=reward,
             db_check=env_reward_info.db_check,
@@ -322,12 +348,14 @@ def evaluate_simulation(
                 nl_reward_info.nl_assertions if nl_reward_info is not None else None
             ),
             communicate_checks=communicate_reward_info.communicate_checks,
+            compliance_checks=compliance_reward_info.compliance_checks,
             # Reflect that all checks were used
             reward_basis=[
                 RewardType.DB,
                 RewardType.ENV_ASSERTION,
                 RewardType.ACTION,
                 RewardType.COMMUNICATE,
+                RewardType.COMPLIANCE,
                 *([RewardType.NL_ASSERTION] if nl_reward_info is not None else []),
             ],
             reward_breakdown=reward_breakdown,
@@ -336,6 +364,7 @@ def evaluate_simulation(
                 "nl": nl_reward_info.info if nl_reward_info is not None else None,
                 "communicate": communicate_reward_info.info,
                 "action": action_reward_info.info,
+                "compliance": compliance_reward_info.info,
             },
         )
     else:

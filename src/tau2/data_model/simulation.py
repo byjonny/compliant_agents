@@ -51,7 +51,7 @@ from tau2.config import (
 from tau2.data_model.audio_effects import EffectTimeline
 from tau2.data_model.message import Message, Tick
 from tau2.data_model.persona import PersonaConfig
-from tau2.data_model.tasks import Action, EnvAssertion, RewardType, Task
+from tau2.data_model.tasks import Action, ComplianceType, EnvAssertion, RewardType, Task
 from tau2.data_model.voice import SpeechComplexity, SpeechEnvironment, VoiceSettings
 from tau2.environment.environment import EnvironmentInfo
 from tau2.environment.toolkit import ToolType
@@ -725,6 +725,32 @@ class EnvAssertionCheck(BaseModel):
     reward: float
 
 
+class ComplianceCheckResult(BaseModel):
+    """
+    Result of evaluating a single CompliancePredicate against a simulation trajectory.
+
+    ``passed=True`` means the agent was compliant (no violation found).
+    ``skipped=True`` means the check was not applicable (e.g. the write tool
+    was never called so the ordering constraint is irrelevant).
+    """
+
+    check_id: str = Field(description="Matches CompliancePredicate.check_id.")
+    type: ComplianceType = Field(description="Which compliance check was run.")
+    description: str = Field(description="Human-readable predicate description.")
+    passed: bool = Field(description="True = compliant, False = violation detected.")
+    skipped: bool = Field(
+        default=False,
+        description="True = check was N/A for this trajectory (does not affect reward).",
+    )
+    violation_detail: Optional[str] = Field(
+        default=None,
+        description="Explanation of what was violated (only set when passed=False).",
+    )
+    reward: float = Field(
+        description="1.0 if passed or skipped, 0.0 if violation found."
+    )
+
+
 # =============================================================================
 # Review Data Models (for LLM-based conversation review)
 # =============================================================================
@@ -1071,6 +1097,13 @@ class RewardInfo(BaseModel):
         Optional[list[CommunicateCheck]],
         Field(
             description="Checks that the agent communicated the required information.",
+            default=None,
+        ),
+    ]
+    compliance_checks: Annotated[
+        Optional[list[ComplianceCheckResult]],
+        Field(
+            description="Structured compliance predicate results (unauthorized actions, omitted reads/writes, sequencing, information integrity).",
             default=None,
         ),
     ]
