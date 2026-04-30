@@ -1,0 +1,33 @@
+[project]
+name = "policy-tool-mapper"
+version = "0.1.0"
+description = "LangGraph pipeline that maps policy statements to API tools (n:m, recall-optimized)"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=0.2",
+    "langchain>=0.3",
+    "langchain-core>=0.3",
+    "langchain-anthropic>=0.3",
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+openai   = ["langchain-openai>=0.2"]
+google   = ["langchain-google-genai>=2.0"]
+mistral  = ["langchain-mistralai>=0.1"]
+
+[project.scripts]
+policy-map = "policy_tool_mapper.main:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+# The policy_tool_mapper package lives one directory up from this pyproject.toml
+# (the directory containing this file IS the package).
+# Run:  pip install -e .  from inside the policy_tool_mapper/ folder.
+where = [".."]
+include = ["policy_tool_mapper*"]

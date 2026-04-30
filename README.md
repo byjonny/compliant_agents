@@ -162,6 +162,25 @@ tau2 run --domain airline --guardrail-config guardrail_configs/null.json
 tau2 run --domain airline --guardrail-config guardrail_configs/airline_with_llm.json
 ```
 
+### Policy Tool Mapper
+
+First you have to normaliue the tool.py file to a json & then run the policy mappe 
+```bash
+cd "./policy_tool_mapper" && pip install -e .
+
+cd tau2-bench
+uv run python policy_tool_mapper/build_tools_json.py \
+  --tools-file src/tau2/domains/airline/tools.py
+
+policy-map \
+  --policy  ./input/airlinePolicy.md \
+  --openapi ./input/airlineTools.json \
+  --output  ./output/airline-mappings.json \
+  --model gpt-4.1-mini
+
+```
+
+
 ### View Trajectories
 
 ```bash
