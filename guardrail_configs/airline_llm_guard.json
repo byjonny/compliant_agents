@@ -1,0 +1,13 @@
+{
+  "type": "sequential",
+  "guards": [
+    { "type": "flight_status" },
+    {
+      "type": "llm_guard",
+      "tool_name": "cancel_reservation",
+      "mappings_file": "policy_tool_mapper/output/airline-mappings-gpt-5.4.json",
+      "llm": "gpt-5.1",
+      "history_window": 10
+    }
+  ]
+}

@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Optional
+from enum import Enum
+from typing import Literal, Optional
+
+from pydantic import BaseModel
 
 from tau2.data_model.message import Message, ToolCall
 from tau2.environment.environment import Environment
@@ -8,11 +11,61 @@ from tau2.environment.environment import Environment
 
 @dataclass
 class GuardVerdict:
-    """Result of a single guard evaluation."""
+    """
+    Result of a single guard evaluation.
+
+    This is the public interface shared by all guards, the middleware, and the
+    orchestrator. It is intentionally minimal — richer internal representations
+    (e.g. GuardJudgement for LLM-based guards) must be converted to this before
+    returning from check().
+    """
 
     allowed: bool
     reason: Optional[str] = None
     guard_name: str = field(default="")
+
+
+# ---------------------------------------------------------------------------
+# Rich verdict models — used internally by LLM-based guards
+# ---------------------------------------------------------------------------
+
+
+class PolicyPassage(BaseModel):
+    """A single verbatim policy passage pre-loaded for a specific tool."""
+
+    id: str                        # e.g. "PS-001"
+    text: str                      # verbatim policy text
+    section: Optional[str] = None  # nearest section heading
+
+
+class VerdictType(str, Enum):
+    ALLOW    = "ALLOW"     # call is policy-compliant — allow execution
+    DENY     = "DENY"      # call violates policy — block and give feedback
+    ESCALATE = "ESCALATE"  # genuinely uncertain — block and flag for review
+
+
+class PolicyRuleCheck(BaseModel):
+    """Per-passage compliance assessment."""
+
+    passage_id: str
+    assessment: Literal["compliant", "violation", "unclear"]
+    note: Optional[str] = None
+
+
+class GuardJudgement(BaseModel):
+    """
+    Structured LLM output for a policy compliance decision.
+
+    Internal to LLM-based guards. Must be converted to GuardVerdict before
+    returning from check() so the middleware/orchestrator stay decoupled from
+    the richer schema.
+    """
+
+    verdict: VerdictType
+    reason: str                          # one concise sentence explaining the decision
+    feedback: Optional[str] = None       # if DENY: actionable alternative for the agent
+    intent_summary: str                  # what the user is trying to achieve
+    policy_check: list[PolicyRuleCheck]  # per-passage assessment
 
 
 class Guard(ABC):
