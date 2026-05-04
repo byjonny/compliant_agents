@@ -111,7 +111,7 @@ def check_unauthorized_action(
     )
     return _fail(predicate.check_id, predicate, detail)
 
-
+# TODO: NOT USED YET
 def check_omitted_write(
     predicate: CompliancePredicate,
     ordered_calls: list[tuple[int, ToolCall]],
@@ -133,7 +133,7 @@ def check_omitted_write(
         f"Required call to '{predicate.tool_name}'{suffix} was never made.",
     )
 
-
+# TODO: NOT USED YET
 def check_omitted_read(
     predicate: CompliancePredicate,
     ordered_calls: list[tuple[int, ToolCall]],
@@ -183,7 +183,7 @@ def check_omitted_read(
         f"'{predicate.before_write}'.",
     )
 
-
+# TODO: NOT USED YET
 def check_process_sequencing(
     predicate: CompliancePredicate,
     ordered_calls: list[tuple[int, ToolCall]],

@@ -1,0 +1,388 @@
+{
+  "mappings": [
+    {
+      "tool_id": "get_user_details",
+      "tool_name": "get_user_details",
+      "statements": [
+        {
+          "id": "GT-001",
+          "text": "The agent must first obtain the user id from the user.",
+          "section": null
+        },
+        {
+          "id": "GT-002",
+          "text": "The user must provide their user id.",
+          "section": null
+        },
+        {
+          "id": "GT-003",
+          "text": "Each user has a profile containing: user id, email, addresses, date of birth, payment methods, membership level, reservation numbers.",
+          "section": null
+        },
+        {
+          "id": "GT-004",
+          "text": "All payment methods must already be in user profile for safety reasons.",
+          "section": null
+        },
+        {
+          "id": "GT-005",
+          "text": "The payment method must already be in user profile for safety reasons.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "get_reservation_details",
+      "tool_name": "get_reservation_details",
+      "statements": [
+        {
+          "id": "GT-006",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": null
+        },
+        {
+          "id": "GT-007",
+          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "book_reservation",
+      "tool_name": "book_reservation",
+      "statements": [
+        {
+          "id": "GT-008",
+          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": null
+        },
+        {
+          "id": "GT-009",
+          "text": "Cabin class must be the same across all the flights in a reservation.",
+          "section": null
+        },
+        {
+          "id": "GT-010",
+          "text": "Each reservation can have at most five passengers.",
+          "section": null
+        },
+        {
+          "id": "GT-011",
+          "text": "The agent needs to collect the first name, last name, and date of birth for each passenger.",
+          "section": null
+        },
+        {
+          "id": "GT-012",
+          "text": "All passengers must fly the same flights in the same cabin.",
+          "section": null
+        },
+        {
+          "id": "GT-013",
+          "text": "Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
+          "section": null
+        },
+        {
+          "id": "GT-014",
+          "text": "The remaining amount of a travel certificate is not refundable.",
+          "section": null
+        },
+        {
+          "id": "GT-015",
+          "text": "All payment methods must already be in user profile for safety reasons.",
+          "section": null
+        },
+        {
+          "id": "GT-016",
+          "text": "Regular/Silver/Gold member checked bag allowances apply per cabin class.",
+          "section": null
+        },
+        {
+          "id": "GT-017",
+          "text": "If the booking user is a regular member: 0 free checked bag for each basic economy passenger - 1 free checked bag for each economy passenger - 2 free checked bags for each business passenger",
+          "section": null
+        },
+        {
+          "id": "GT-018",
+          "text": "If the booking user is a silver member:- 1 free checked bag for each basic economy passenger - 2 free checked bag for each economy passenger - 3 free checked bags for each business passenger",
+          "section": null
+        },
+        {
+          "id": "GT-019",
+          "text": "If the booking user is a gold member: - 2 free checked bag for each basic economy passenger - 3 free checked bag for each economy passenger - 4 free checked bags for each business passenger",
+          "section": null
+        },
+        {
+          "id": "GT-020",
+          "text": "Each extra baggage is 50 dollars.",
+          "section": null
+        },
+        {
+          "id": "GT-021",
+          "text": "Do not add checked bags that the user does not need.",
+          "section": null
+        },
+        {
+          "id": "GT-022",
+          "text": "The travel insurance is 30 dollars per passenger and enables full refund if the user needs to cancel the flight given health or weather reasons.",
+          "section": null
+        },
+        {
+          "id": "GT-023",
+          "text": "The agent should ask if the user wants to buy the travel insurance.",
+          "section": null
+        },
+        {
+          "id": "GT-024",
+          "text": "If the status is delayed or on time, the flight has not taken off, cannot be booked.",
+          "section": null
+        },
+        {
+          "id": "GT-025",
+          "text": "If the status is flying, the flight has taken off but not landed, cannot be booked.",
+          "section": null
+        },
+        {
+          "id": "GT-026",
+          "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "cancel_reservation",
+      "tool_name": "cancel_reservation",
+      "statements": [
+        {
+          "id": "GT-027",
+          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": null
+        },
+        {
+          "id": "GT-028",
+          "text": "The agent must also obtain the reason for cancellation (change of plan, airline cancelled flight, or other reasons).",
+          "section": null
+        },
+        {
+          "id": "GT-029",
+          "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
+          "section": null
+        },
+        {
+          "id": "GT-030",
+          "text": "A flight can be cancelled if any of the following is true: The booking was made within the last 24 hrs; The flight is cancelled by airline; It is a business flight; The user has travel insurance and the reason for cancellation is covered by insurance.",
+          "section": null
+        },
+        {
+          "id": "GT-031",
+          "text": "The API does not check that cancellation rules are met, so the agent must make sure the rules apply before calling the API!",
+          "section": null
+        },
+        {
+          "id": "GT-032",
+          "text": "The refund will go to original payment methods within 5 to 7 business days.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "update_reservation_flights",
+      "tool_name": "update_reservation_flights",
+      "statements": [
+        {
+          "id": "GT-033",
+          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": null
+        },
+        {
+          "id": "GT-034",
+          "text": "Basic economy flights cannot be modified.",
+          "section": null
+        },
+        {
+          "id": "GT-035",
+          "text": "Other reservations can be modified without changing the origin, destination, and trip type.",
+          "section": null
+        },
+        {
+          "id": "GT-036",
+          "text": "Some flight segments can be kept, but their prices will not be updated based on the current price.",
+          "section": null
+        },
+        {
+          "id": "GT-037",
+          "text": "The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!",
+          "section": null
+        },
+        {
+          "id": "GT-038",
+          "text": "Cabin class must remain the same across all the flights in the same reservation; changing cabin for just one flight segment is not possible.",
+          "section": null
+        },
+        {
+          "id": "GT-039",
+          "text": "Cabin cannot be changed if any flight in the reservation has already been flown.",
+          "section": null
+        },
+        {
+          "id": "GT-040",
+          "text": "In other cases, all reservations, including basic economy, can change cabin without changing the flights.",
+          "section": null
+        },
+        {
+          "id": "GT-041",
+          "text": "If the price after cabin change is higher than the original price, the user is required to pay for the difference.",
+          "section": null
+        },
+        {
+          "id": "GT-042",
+          "text": "If the price after cabin change is lower than the original price, the user should be refunded the difference.",
+          "section": null
+        },
+        {
+          "id": "GT-043",
+          "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method. The payment method must already be in user profile for safety reasons.",
+          "section": null
+        },
+        {
+          "id": "GT-044",
+          "text": "- If the status is **available**, the flight has not taken off, available seats and prices are listed.",
+          "section": null
+        },
+        {
+          "id": "GT-045",
+          "text": "- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.",
+          "section": null
+        },
+        {
+          "id": "GT-046",
+          "text": "- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "update_reservation_baggages",
+      "tool_name": "update_reservation_baggages",
+      "statements": [
+        {
+          "id": "GT-047",
+          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": null
+        },
+        {
+          "id": "GT-048",
+          "text": "The user can add but not remove checked bags.",
+          "section": null
+        },
+        {
+          "id": "GT-049",
+          "text": "If the booking user is a regular member: 0 free checked bag for each basic economy passenger - 1 free checked bag for each economy passenger - 2 free checked bags for each business passenger",
+          "section": null
+        },
+        {
+          "id": "GT-050",
+          "text": "If the booking user is a silver member:- 1 free checked bag for each basic economy passenger - 2 free checked bag for each economy passenger - 3 free checked bags for each business passenger",
+          "section": null
+        },
+        {
+          "id": "GT-051",
+          "text": "If the booking user is a gold member: - 2 free checked bag for each basic economy passenger - 3 free checked bag for each economy passenger - 4 free checked bags for each business passenger",
+          "section": null
+        },
+        {
+          "id": "GT-052",
+          "text": "Each extra baggage is 50 dollars.",
+          "section": null
+        },
+        {
+          "id": "GT-053",
+          "text": "Do not add checked bags that the user does not need.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "update_reservation_passengers",
+      "tool_name": "update_reservation_passengers",
+      "statements": [
+        {
+          "id": "GT-054",
+          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": null
+        },
+        {
+          "id": "GT-055",
+          "text": "The user can modify passengers but cannot modify the number of passengers.",
+          "section": null
+        },
+        {
+          "id": "GT-056",
+          "text": "The agent needs to collect the first name, last name, and date of birth for each passenger.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "send_certificate",
+      "tool_name": "send_certificate",
+      "statements": [
+        {
+          "id": "GT-057",
+          "text": "Do not proactively offer a compensation unless the user explicitly asks for one.",
+          "section": null
+        },
+        {
+          "id": "GT-058",
+          "text": "Do not compensate if the user is a regular member and has no travel insurance and flies (basic) economy.",
+          "section": null
+        },
+        {
+          "id": "GT-059",
+          "text": "Always confirm the facts before offering compensation.",
+          "section": null
+        },
+        {
+          "id": "GT-060",
+          "text": "Only compensate if the user is a silver/gold member or has travel insurance or flies business.",
+          "section": null
+        },
+        {
+          "id": "GT-061",
+          "text": "If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $100 times the number of passengers.",
+          "section": null
+        },
+        {
+          "id": "GT-062",
+          "text": "If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $50 times the number of passengers.",
+          "section": null
+        },
+        {
+          "id": "GT-063",
+          "text": "Do not offer compensation for any other reason than the ones listed above.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "transfer_to_human_agents",
+      "tool_name": "transfer_to_human_agents",
+      "statements": [
+        {
+          "id": "GT-064",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": null
+        },
+        {
+          "id": "GT-065",
+          "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
+          "section": null
+        },
+        {
+          "id": "GT-066",
+          "text": "Even a human agent cannot modify the number of passengers.",
+          "section": null
+        }
+      ]
+    }
+  ]
+}

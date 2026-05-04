@@ -1,0 +1,169 @@
+{
+  "threshold": 0.8,
+  "macro": {
+    "precision": 0.2103817235396183,
+    "recall": 0.8019771651350598,
+    "f1": 0.33332317249945065
+  },
+  "micro": {
+    "precision": 0.29714285714285715,
+    "recall": 0.803030303030303,
+    "f1": 0.43377665853466596
+  },
+  "per_tool": [
+    {
+      "tool_id": "book_reservation",
+      "tool_name": "book_reservation",
+      "gt_count": 19,
+      "pred_count": 28,
+      "matched_gt": 14,
+      "matched_pred": 14,
+      "precision": 0.5,
+      "recall": 0.7368421052631579,
+      "f1": 0.5957446808510638
+    },
+    {
+      "tool_id": "calculate",
+      "tool_name": "calculate",
+      "gt_count": 0,
+      "pred_count": 3,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "cancel_reservation",
+      "tool_name": "cancel_reservation",
+      "gt_count": 6,
+      "pred_count": 20,
+      "matched_gt": 6,
+      "matched_pred": 6,
+      "precision": 0.3,
+      "recall": 1.0,
+      "f1": 0.4615384615384615
+    },
+    {
+      "tool_id": "get_flight_status",
+      "tool_name": "get_flight_status",
+      "gt_count": 0,
+      "pred_count": 7,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "get_reservation_details",
+      "tool_name": "get_reservation_details",
+      "gt_count": 2,
+      "pred_count": 13,
+      "matched_gt": 1,
+      "matched_pred": 1,
+      "precision": 0.07692307692307693,
+      "recall": 0.5,
+      "f1": 0.13333333333333336
+    },
+    {
+      "tool_id": "get_user_details",
+      "tool_name": "get_user_details",
+      "gt_count": 5,
+      "pred_count": 10,
+      "matched_gt": 3,
+      "matched_pred": 2,
+      "precision": 0.2,
+      "recall": 0.6,
+      "f1": 0.3
+    },
+    {
+      "tool_id": "list_all_airports",
+      "tool_name": "list_all_airports",
+      "gt_count": 0,
+      "pred_count": 3,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "search_direct_flight",
+      "tool_name": "search_direct_flight",
+      "gt_count": 0,
+      "pred_count": 9,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "search_onestop_flight",
+      "tool_name": "search_onestop_flight",
+      "gt_count": 0,
+      "pred_count": 7,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "send_certificate",
+      "tool_name": "send_certificate",
+      "gt_count": 7,
+      "pred_count": 12,
+      "matched_gt": 7,
+      "matched_pred": 7,
+      "precision": 0.5833333333333334,
+      "recall": 1.0,
+      "f1": 0.7368421052631579
+    },
+    {
+      "tool_id": "transfer_to_human_agents",
+      "tool_name": "transfer_to_human_agents",
+      "gt_count": 3,
+      "pred_count": 8,
+      "matched_gt": 2,
+      "matched_pred": 2,
+      "precision": 0.25,
+      "recall": 0.6666666666666666,
+      "f1": 0.36363636363636365
+    },
+    {
+      "tool_id": "update_reservation_baggages",
+      "tool_name": "update_reservation_baggages",
+      "gt_count": 7,
+      "pred_count": 19,
+      "matched_gt": 7,
+      "matched_pred": 7,
+      "precision": 0.3684210526315789,
+      "recall": 1.0,
+      "f1": 0.5384615384615384
+    },
+    {
+      "tool_id": "update_reservation_flights",
+      "tool_name": "update_reservation_flights",
+      "gt_count": 14,
+      "pred_count": 24,
+      "matched_gt": 10,
+      "matched_pred": 10,
+      "precision": 0.4166666666666667,
+      "recall": 0.7142857142857143,
+      "f1": 0.5263157894736842
+    },
+    {
+      "tool_id": "update_reservation_passengers",
+      "tool_name": "update_reservation_passengers",
+      "gt_count": 3,
+      "pred_count": 12,
+      "matched_gt": 3,
+      "matched_pred": 3,
+      "precision": 0.25,
+      "recall": 1.0,
+      "f1": 0.4
+    }
+  ]
+}

@@ -39,6 +39,11 @@ from tau2.data_model.voice_personas import warn_if_non_official_voices
 from tau2.evaluator.evaluator import EvaluationType
 from tau2.evaluator.reviewer import check_hallucination, format_hallucination_feedback
 from tau2.metrics.agent_metrics import compute_metrics
+from tau2.metrics.compliance_metrics import (
+    compute_compliance_metrics,
+    print_compliance_summary,
+    save_compliance_metrics,
+)
 from tau2.registry import registry
 from tau2.runner.build import _build_env_kwargs, build_orchestrator
 from tau2.runner.checkpoint import (
@@ -907,5 +912,10 @@ def run_domain(config: RunConfig) -> Results:
     # Compute and display metrics
     metrics = compute_metrics(simulation_results)
     ConsoleDisplay.display_agent_metrics(metrics)
+
+    # Compute and display compliance violation breakdown
+    compliance = compute_compliance_metrics(simulation_results)
+    print_compliance_summary(compliance)
+    save_compliance_metrics(compliance, save_dir / "compliance_metrics.json")
 
     return simulation_results
