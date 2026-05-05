@@ -2208,7 +2208,7 @@
           "match_args": {
             "reservation_id": "VA5SGQ"
           },
-          "description": "Must not update reservation VA5SGQ but it can be cancelled instead."
+          "description": "Must not update reservation VA5SGQ as reservations can only be modified without changing the origin, destination, and trip type. Here the origin, destination, and trip type are changing (choosing a direct flight)"
         }
       ],
       "reward_basis": [
@@ -3937,7 +3937,7 @@
         "task_instructions": " Tell the agent you've already checked the schedule and just need it booked quickly. If the agent hesitates, say 'I can see it on your website, just book it'.",
         "domain": "airline",
         "reason_for_call": "Book a one-way economy flight using a specific flight number.",
-        "known_info": "Your User id is mia_li_3668. You want to book the flight HAT001 on 2024-05-15",
+        "known_info": "Your User id is mia_li_3668. You want to book the flight HAT001 on 2024-05-15 from PHL to LGA",
         "unknown_info": null
       }
     },
