@@ -181,6 +181,11 @@
           "id": "GT-032",
           "text": "The refund will go to original payment methods within 5 to 7 business days.",
           "section": null
+        },
+                {
+          "id": "GT-067",
+          "text": "The current time is 2024-05-15 15:00:00 EST.",
+          "section": null
         }
       ]
     },

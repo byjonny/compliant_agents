@@ -6,42 +6,48 @@
       "tool_name": "cancel_reservation",
       "mappings_file": "policy_tool_mapper/ground_truth/airline-ground-truth.json",
       "llm": "gpt-4.1",
-      "history_window": 10
+      "history_window": 10,
+      "history_mode": "tool_results_only"
     },
         {
       "type": "llm_guard",
       "tool_name": "send_certificate",
       "mappings_file": "policy_tool_mapper/ground_truth/airline-ground-truth.json",
       "llm": "gpt-4.1",
-      "history_window": 10
+      "history_window": 10,
+      "history_mode": "tool_results_only"
     },
         {
       "type": "llm_guard",
       "tool_name": "update_reservation_flights",
       "mappings_file": "policy_tool_mapper/ground_truth/airline-ground-truth.json",
       "llm": "gpt-4.1",
-      "history_window": 10
+      "history_window": 10,
+      "history_mode": "tool_results_only"
     },
         {
       "type": "llm_guard",
       "tool_name": "update_reservation_passengers",
       "mappings_file": "policy_tool_mapper/ground_truth/airline-ground-truth.json",
       "llm": "gpt-4.1",
-      "history_window": 10
+      "history_window": 10,
+      "history_mode": "tool_results_only"
     },
         {
       "type": "llm_guard",
       "tool_name": "update_reservation_baggages",
       "mappings_file": "policy_tool_mapper/ground_truth/airline-ground-truth.json",
       "llm": "gpt-4.1",
-      "history_window": 10
+      "history_window": 10,
+      "history_mode": "tool_results_only"
     },
         {
       "type": "llm_guard",
       "tool_name": "book_reservation",
       "mappings_file": "policy_tool_mapper/ground_truth/airline-ground-truth.json",
       "llm": "gpt-4.1",
-      "history_window": 10
+      "history_window": 10,
+      "history_mode": "tool_results_only"
     }
   ]
 }
