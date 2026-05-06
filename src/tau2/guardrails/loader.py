@@ -34,6 +34,7 @@ Guard types
       llm_args        (optional) — dict of extra kwargs for litellm.completion()
       template_path   (optional) — path to a custom Jinja2 prompt template
       history_window  (optional) — number of recent messages to include (default 10)
+      history_mode    (optional) — "full" (default) or "tool_results_only"
   "llm_policy"               → LLMPolicyGuard (legacy; fetches full policy from env)
       llm               (required) — model string, e.g. "gpt-4.1-mini"
       llm_args          (optional) — dict of extra kwargs for generate()
@@ -101,6 +102,7 @@ def _build_llm_guard(cfg: dict) -> LLMGuard:
         llm_args=cfg.get("llm_args"),
         template_path=cfg.get("template_path"),
         history_window=cfg.get("history_window", 10),
+        history_mode=cfg.get("history_mode", "full"),
     )
 
 
