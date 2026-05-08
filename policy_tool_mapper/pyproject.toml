@@ -20,7 +20,8 @@ google   = ["langchain-google-genai>=2.0"]
 mistral  = ["langchain-mistralai>=0.1"]
 
 [project.scripts]
-policy-map = "policy_tool_mapper.main:main"
+policy-map      = "policy_tool_mapper.main:main"
+policy-map-eval = "policy_tool_mapper.eval_mappings:main"
 
 [build-system]
 requires = ["setuptools>=68"]

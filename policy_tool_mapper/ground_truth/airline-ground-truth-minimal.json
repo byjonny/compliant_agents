@@ -4,12 +4,47 @@
       "tool_id": "get_user_details",
       "tool_name": "get_user_details",
       "statements": [
+        {
+          "id": "GT-001",
+          "text": "The agent must first obtain the user id from the user.",
+          "section": null
+        },
+        {
+          "id": "GT-002",
+          "text": "The user must provide their user id.",
+          "section": null
+        },
+        {
+          "id": "GT-003",
+          "text": "Each user has a profile containing: user id, email, addresses, date of birth, payment methods, membership level, reservation numbers.",
+          "section": null
+        },
+        {
+          "id": "GT-004",
+          "text": "All payment methods must already be in user profile for safety reasons.",
+          "section": null
+        },
+        {
+          "id": "GT-005",
+          "text": "The payment method must already be in user profile for safety reasons.",
+          "section": null
+        }
       ]
     },
     {
       "tool_id": "get_reservation_details",
       "tool_name": "get_reservation_details",
       "statements": [
+        {
+          "id": "GT-006",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": null
+        },
+        {
+          "id": "GT-007",
+          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
+          "section": null
+        }
       ]
     },
     {
@@ -118,16 +153,6 @@
       "tool_name": "cancel_reservation",
       "statements": [
         {
-          "id": "GT-027",
-          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
-          "section": null
-        },
-        {
-          "id": "GT-028",
-          "text": "The agent must also obtain the reason for cancellation (change of plan, airline cancelled flight, or other reasons).",
-          "section": null
-        },
-        {
           "id": "GT-029",
           "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
           "section": null
@@ -138,16 +163,6 @@
           "section": null
         },
         {
-          "id": "GT-031",
-          "text": "The API does not check that cancellation rules are met, so the agent must make sure the rules apply before calling the API!",
-          "section": null
-        },
-        {
-          "id": "GT-032",
-          "text": "The refund will go to original payment methods within 5 to 7 business days.",
-          "section": null
-        },
-                {
           "id": "GT-067",
           "text": "The current time is 2024-05-15 15:00:00 EST.",
           "section": null
@@ -337,6 +352,21 @@
       "tool_id": "transfer_to_human_agents",
       "tool_name": "transfer_to_human_agents",
       "statements": [
+        {
+          "id": "GT-064",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": null
+        },
+        {
+          "id": "GT-065",
+          "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
+          "section": null
+        },
+        {
+          "id": "GT-066",
+          "text": "Even a human agent cannot modify the number of passengers.",
+          "section": null
+        }
       ]
     }
   ]
