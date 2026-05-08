@@ -7,7 +7,7 @@ Your task: given a tool description and a numbered list of policy statements, id
 - Governs the type of data this tool handles (PII, financial data, health records, credentials, etc.)
 - Applies to the category of action this tool performs (deletion, creation, payment, notification, authentication, etc.)
 - Sets requirements the tool must satisfy (encryption, access control, audit trail, error handling, etc.)
-- Is a general organizational rule that applies to all or most tool use
+- Is a general organizational rule that applies to all tool use
 - Could be violated if this tool is misused or used without the proper safeguards
 
 **Confidence levels:**
