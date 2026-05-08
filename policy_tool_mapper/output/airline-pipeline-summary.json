@@ -1,0 +1,104 @@
+{
+  "domain": "airline",
+  "models": [
+    "gpt-4.1-mini",
+    "gpt-5.1",
+    "gpt-5.4"
+  ],
+  "timestamp": "2026-05-08T14:31:50.183135+00:00",
+  "results": [
+    {
+      "model": "gpt-4.1-mini",
+      "status": "ok",
+      "mappings": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-mappings-gpt-4.1-mini.json",
+      "eval_high": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-eval-gpt-4.1-mini-high.json",
+      "eval_all": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-eval-gpt-4.1-mini-all.json",
+      "scores_high": {
+        "macro": {
+          "precision": 0.4409,
+          "recall": 0.5514,
+          "f1": 0.4853
+        },
+        "micro": {
+          "precision": 0.3696,
+          "recall": 0.6071,
+          "f1": 0.4595
+        }
+      },
+      "scores_all": {
+        "macro": {
+          "precision": 0.4185,
+          "recall": 0.599,
+          "f1": 0.4613
+        },
+        "micro": {
+          "precision": 0.2721,
+          "recall": 0.6429,
+          "f1": 0.3823
+        }
+      }
+    },
+    {
+      "model": "gpt-5.1",
+      "status": "ok",
+      "mappings": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-mappings-gpt-5.1.json",
+      "eval_high": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-eval-gpt-5.1-high.json",
+      "eval_all": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-eval-gpt-5.1-all.json",
+      "scores_high": {
+        "macro": {
+          "precision": 0.4762,
+          "recall": 0.8014,
+          "f1": 0.5887
+        },
+        "micro": {
+          "precision": 0.3129,
+          "recall": 0.7857,
+          "f1": 0.4476
+        }
+      },
+      "scores_all": {
+        "macro": {
+          "precision": 0.2544,
+          "recall": 0.8133,
+          "f1": 0.38
+        },
+        "micro": {
+          "precision": 0.1667,
+          "recall": 0.8036,
+          "f1": 0.2761
+        }
+      }
+    },
+    {
+      "model": "gpt-5.4",
+      "status": "ok",
+      "mappings": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-mappings-gpt-5.4.json",
+      "eval_high": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-eval-gpt-5.4-high.json",
+      "eval_all": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-eval-gpt-5.4-all.json",
+      "scores_high": {
+        "macro": {
+          "precision": 0.599,
+          "recall": 0.9071,
+          "f1": 0.7153
+        },
+        "micro": {
+          "precision": 0.4273,
+          "recall": 0.875,
+          "f1": 0.5742
+        }
+      },
+      "scores_all": {
+        "macro": {
+          "precision": 0.4007,
+          "recall": 0.9071,
+          "f1": 0.5427
+        },
+        "micro": {
+          "precision": 0.2686,
+          "recall": 0.875,
+          "f1": 0.411
+        }
+      }
+    }
+  ]
+}

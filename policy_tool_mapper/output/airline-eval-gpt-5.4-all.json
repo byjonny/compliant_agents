@@ -3,9 +3,9 @@
     "threshold": 0.8,
     "high_conf_only": false,
     "total_tools": 14,
-    "timestamp": "2026-05-08T09:33:03.392624+00:00",
-    "predicted_file": "policy_tool_mapper/output/airline-mappings-gpt-5.4.json",
-    "ground_truth_file": "policy_tool_mapper/ground_truth/airline-ground-truth.json"
+    "timestamp": "2026-05-08T14:31:50.138984+00:00",
+    "predicted_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-mappings-gpt-5.4.json",
+    "ground_truth_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/ground_truth/airline-ground-truth.json"
   },
   "overall": {
     "macro": {

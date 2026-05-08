@@ -3,29 +3,29 @@
     "threshold": 0.8,
     "high_conf_only": false,
     "total_tools": 14,
-    "timestamp": "2026-05-08T08:48:59.147783+00:00",
+    "timestamp": "2026-05-08T10:25:45.802040+00:00",
     "predicted_file": "policy_tool_mapper/output/airline-mappings-gpt-4.1-mini.json",
     "ground_truth_file": "policy_tool_mapper/ground_truth/airline-ground-truth.json"
   },
   "overall": {
     "macro": {
       "precision": 0.4185,
-      "recall": 0.6058,
-      "f1": 0.4645
+      "recall": 0.599,
+      "f1": 0.4613
     },
     "micro": {
-      "precision": 0.2647,
-      "recall": 0.6545,
-      "f1": 0.377
+      "precision": 0.2721,
+      "recall": 0.6429,
+      "f1": 0.3823
     }
   },
   "per_tool": {
     "book_reservation": {
       "precision": 0.7,
-      "recall": 0.7778,
-      "f1": 0.7368,
+      "recall": 0.7368,
+      "f1": 0.7179,
       "n_predicted": 20,
-      "n_gt": 18,
+      "n_gt": 19,
       "n_matched_pred": 14,
       "n_matched_gt": 14,
       "n_comp_matches": 0,
@@ -80,12 +80,17 @@
         },
         {
           "id": "GT-025",
-          "text": "If the status is flying, the flight has taken off but not landed, cannot be booked.",
+          "text": "If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
           "section": null
         },
         {
           "id": "GT-026",
           "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
+          "section": null
+        },
+        {
+          "id": "GT-068",
+          "text": "If the status is **available**, the flight has not taken off, available seats and prices are listed.",
           "section": null
         }
       ],

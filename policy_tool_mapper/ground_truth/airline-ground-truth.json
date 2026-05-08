@@ -47,11 +47,6 @@
           "section": null
         },
         {
-          "id": "GT-014",
-          "text": "The remaining amount of a travel certificate is not refundable.",
-          "section": null
-        },
-        {
           "id": "GT-015",
           "text": "All payment methods must already be in user profile for safety reasons.",
           "section": null
@@ -97,13 +92,18 @@
           "section": null
         },
         {
+          "id": "GT-068",
+          "text": "If the status is **available**, the flight has not taken off, available seats and prices are listed.",
+          "section": null
+        },
+        {
           "id": "GT-024",
           "text": "If the status is delayed or on time, the flight has not taken off, cannot be booked.",
           "section": null
         },
         {
           "id": "GT-025",
-          "text": "If the status is flying, the flight has taken off but not landed, cannot be booked.",
+          "text": "If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
           "section": null
         },
         {
@@ -143,11 +143,6 @@
           "section": null
         },
         {
-          "id": "GT-032",
-          "text": "The refund will go to original payment methods within 5 to 7 business days.",
-          "section": null
-        },
-                {
           "id": "GT-067",
           "text": "The current time is 2024-05-15 15:00:00 EST.",
           "section": null

@@ -1,0 +1,1087 @@
+{
+  "metadata": {
+    "threshold": 0.8,
+    "high_conf_only": true,
+    "total_tools": 14,
+    "timestamp": "2026-05-08T09:38:04.367478+00:00",
+    "predicted_file": "policy_tool_mapper/output/airline-mappings-gpt-5.1.json",
+    "ground_truth_file": "policy_tool_mapper/ground_truth/airline-ground-truth.json"
+  },
+  "overall": {
+    "macro": {
+      "precision": 0.4762,
+      "recall": 0.8014,
+      "f1": 0.5887
+    },
+    "micro": {
+      "precision": 0.3129,
+      "recall": 0.7857,
+      "f1": 0.4476
+    }
+  },
+  "per_tool": {
+    "book_reservation": {
+      "precision": 0.4286,
+      "recall": 0.7368,
+      "f1": 0.5419,
+      "n_predicted": 28,
+      "n_gt": 19,
+      "n_matched_pred": 12,
+      "n_matched_gt": 14,
+      "n_comp_matches": 6,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As an airline agent, you can help users **book**, **modify**, or **cancel** flight reservations.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-013",
+          "text": "Each flight has the following attributes:\n- flight number\n- origin\n- destination\n- scheduled departure and arrival time (local time)",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-014",
+          "text": "A flight can be available at multiple dates.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-016",
+          "text": "There are three cabin classes: **basic economy**, **economy**, **business**.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "Each reservation specifies the following:",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "- reservation id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "- user id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "- trip type",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-026",
+          "text": "- created time",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-027",
+          "text": "- baggages",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- travel insurance information",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "There are two types of trip: **one way** and **round trip**.",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "The agent must first obtain the user id from the user.",
+          "section": "Book flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-031",
+          "text": "The agent should then ask for the trip type, origin, destination.",
+          "section": "Book flight",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-011",
+          "text": "The agent needs to collect the first name, last name, and date of birth for each passenger.",
+          "section": null
+        },
+        {
+          "id": "GT-016",
+          "text": "Regular/Silver/Gold member checked bag allowances apply per cabin class.",
+          "section": null
+        },
+        {
+          "id": "GT-020",
+          "text": "Each extra baggage is 50 dollars.",
+          "section": null
+        },
+        {
+          "id": "GT-022",
+          "text": "The travel insurance is 30 dollars per passenger and enables full refund if the user needs to cancel the flight given health or weather reasons.",
+          "section": null
+        },
+        {
+          "id": "GT-026",
+          "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
+          "section": null
+        }
+      ],
+      "compositional_matches": [
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-015",
+            "text": "For each date:\n- If the status is **available**, the flight has not taken off, available seats and prices are listed.\n- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.\n- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+            "section": "Flight",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-024",
+              "text": "If the status is delayed or on time, the flight has not taken off, cannot be booked.",
+              "section": null
+            }
+          ]
+        },
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-015",
+            "text": "For each date:\n- If the status is **available**, the flight has not taken off, available seats and prices are listed.\n- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.\n- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+            "section": "Flight",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-025",
+              "text": "If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+              "section": null
+            }
+          ]
+        },
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-015",
+            "text": "For each date:\n- If the status is **available**, the flight has not taken off, available seats and prices are listed.\n- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.\n- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+            "section": "Flight",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-068",
+              "text": "If the status is **available**, the flight has not taken off, available seats and prices are listed.",
+              "section": null
+            }
+          ]
+        },
+        {
+          "type": "gt_contains_pred",
+          "container": {
+            "id": "GT-008",
+            "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+            "section": null
+          },
+          "contained": [
+            {
+              "id": "PS-023",
+              "text": "- flights",
+              "section": "Reservation",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "type": "gt_contains_pred",
+          "container": {
+            "id": "GT-010",
+            "text": "Each reservation can have at most five passengers.",
+            "section": null
+          },
+          "contained": [
+            {
+              "id": "PS-024",
+              "text": "- passengers",
+              "section": "Reservation",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "type": "gt_contains_pred",
+          "container": {
+            "id": "GT-015",
+            "text": "All payment methods must already be in user profile for safety reasons.",
+            "section": null
+          },
+          "contained": [
+            {
+              "id": "PS-025",
+              "text": "- payment methods",
+              "section": "Reservation",
+              "confidence": "high"
+            }
+          ]
+        }
+      ]
+    },
+    "calculate": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 2,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "cancel_reservation": {
+      "precision": 0.5333,
+      "recall": 0.8333,
+      "f1": 0.6504,
+      "n_predicted": 15,
+      "n_gt": 6,
+      "n_matched_pred": 8,
+      "n_matched_gt": 5,
+      "n_comp_matches": 4,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As an airline agent, you can help users **book**, **modify**, or **cancel** flight reservations.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "Each reservation specifies the following:",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "- reservation id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-056",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": "Cancel flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-057",
+          "text": "The user must provide their user id.",
+          "section": "Cancel flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-058",
+          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
+          "section": "Cancel flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-061",
+          "text": "Otherwise, flight can be cancelled if any of the following is true:",
+          "section": "Cancel flight",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-067",
+          "text": "The current time is 2024-05-15 15:00:00 EST.",
+          "section": null
+        }
+      ],
+      "compositional_matches": [
+        {
+          "type": "gt_contains_pred",
+          "container": {
+            "id": "GT-030",
+            "text": "A flight can be cancelled if any of the following is true: The booking was made within the last 24 hrs; The flight is cancelled by airline; It is a business flight; The user has travel insurance and the reason for cancellation is covered by insurance.",
+            "section": null
+          },
+          "contained": [
+            {
+              "id": "PS-062",
+              "text": "The booking was made within the last 24 hrs",
+              "section": "Cancel flight",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "type": "gt_contains_pred",
+          "container": {
+            "id": "GT-030",
+            "text": "A flight can be cancelled if any of the following is true: The booking was made within the last 24 hrs; The flight is cancelled by airline; It is a business flight; The user has travel insurance and the reason for cancellation is covered by insurance.",
+            "section": null
+          },
+          "contained": [
+            {
+              "id": "PS-063",
+              "text": "The flight is cancelled by airline",
+              "section": "Cancel flight",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "type": "gt_contains_pred",
+          "container": {
+            "id": "GT-030",
+            "text": "A flight can be cancelled if any of the following is true: The booking was made within the last 24 hrs; The flight is cancelled by airline; It is a business flight; The user has travel insurance and the reason for cancellation is covered by insurance.",
+            "section": null
+          },
+          "contained": [
+            {
+              "id": "PS-064",
+              "text": "It is a business flight",
+              "section": "Cancel flight",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "type": "gt_contains_pred",
+          "container": {
+            "id": "GT-030",
+            "text": "A flight can be cancelled if any of the following is true: The booking was made within the last 24 hrs; The flight is cancelled by airline; It is a business flight; The user has travel insurance and the reason for cancellation is covered by insurance.",
+            "section": null
+          },
+          "contained": [
+            {
+              "id": "PS-065",
+              "text": "The user has travel insurance and the reason for cancellation is covered by insurance.",
+              "section": "Cancel flight",
+              "confidence": "high"
+            }
+          ]
+        }
+      ]
+    },
+    "get_flight_status": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 5,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-013",
+          "text": "Each flight has the following attributes:\n- flight number\n- origin\n- destination\n- scheduled departure and arrival time (local time)",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-014",
+          "text": "A flight can be available at multiple dates.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-015",
+          "text": "For each date:\n- If the status is **available**, the flight has not taken off, available seats and prices are listed.\n- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.\n- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "section": "Flight",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_reservation_details": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 9,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "Each reservation specifies the following:",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "- reservation id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "- user id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-038",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": "Modify flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-040",
+          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
+          "section": "Modify flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-056",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": "Cancel flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-058",
+          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
+          "section": "Cancel flight",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_user_details": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 13,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "Each reservation specifies the following:",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "- reservation id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "- user id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "The agent must first obtain the user id from the user.",
+          "section": "Book flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-038",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": "Modify flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-039",
+          "text": "The user must provide their user id.",
+          "section": "Modify flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-040",
+          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
+          "section": "Modify flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-056",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": "Cancel flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-057",
+          "text": "The user must provide their user id.",
+          "section": "Cancel flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-058",
+          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
+          "section": "Cancel flight",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "list_all_airports": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 2,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "search_direct_flight": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 4,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-013",
+          "text": "Each flight has the following attributes:\n- flight number\n- origin\n- destination\n- scheduled departure and arrival time (local time)",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-014",
+          "text": "A flight can be available at multiple dates.",
+          "section": "Flight",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "search_onestop_flight": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 8,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-004",
+          "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-013",
+          "text": "Each flight has the following attributes:\n- flight number\n- origin\n- destination\n- scheduled departure and arrival time (local time)",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-014",
+          "text": "A flight can be available at multiple dates.",
+          "section": "Flight",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "send_certificate": {
+      "precision": 0.7,
+      "recall": 1.0,
+      "f1": 0.8235,
+      "n_predicted": 10,
+      "n_gt": 7,
+      "n_matched_pred": 7,
+      "n_matched_gt": 7,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-002",
+          "text": "You also handle **refunds and compensation**.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+          "section": "User",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "transfer_to_human_agents": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 5,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-060",
+          "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
+          "section": "Cancel flight",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "update_reservation_baggages": {
+      "precision": 0.2667,
+      "recall": 0.8571,
+      "f1": 0.4068,
+      "n_predicted": 15,
+      "n_gt": 7,
+      "n_matched_pred": 4,
+      "n_matched_gt": 6,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As an airline agent, you can help users **book**, **modify**, or **cancel** flight reservations.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "Each reservation specifies the following:",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "- reservation id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
+          "text": "- payment methods",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-027",
+          "text": "- baggages",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-055",
+          "text": "The payment method must already be in user profile for safety reasons.",
+          "section": "Payment",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-052",
+          "text": "Each extra baggage is 50 dollars.",
+          "section": null
+        }
+      ],
+      "compositional_matches": []
+    },
+    "update_reservation_flights": {
+      "precision": 0.5,
+      "recall": 0.7143,
+      "f1": 0.5882,
+      "n_predicted": 24,
+      "n_gt": 14,
+      "n_matched_pred": 12,
+      "n_matched_gt": 10,
+      "n_comp_matches": 1,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As an airline agent, you can help users **book**, **modify**, or **cancel** flight reservations.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-016",
+          "text": "There are three cabin classes: **basic economy**, **economy**, **business**.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "Each reservation specifies the following:",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "- reservation id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "- user id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
+          "text": "- payment methods",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-032",
+          "text": "Cabin:\n- Cabin class must be the same across all the flights in a reservation.",
+          "section": "Book flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-038",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": "Modify flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-039",
+          "text": "The user must provide their user id.",
+          "section": "Modify flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-040",
+          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
+          "section": "Modify flight",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-036",
+          "text": "Some flight segments can be kept, but their prices will not be updated based on the current price.",
+          "section": null
+        },
+        {
+          "id": "GT-044",
+          "text": "- If the status is **available**, the flight has not taken off, available seats and prices are listed.",
+          "section": null
+        },
+        {
+          "id": "GT-045",
+          "text": "- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.",
+          "section": null
+        },
+        {
+          "id": "GT-046",
+          "text": "- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "section": null
+        }
+      ],
+      "compositional_matches": [
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-023",
+            "text": "- flights",
+            "section": "Reservation",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-043",
+              "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method. The payment method must already be in user profile for safety reasons.",
+              "section": null
+            }
+          ]
+        }
+      ]
+    },
+    "update_reservation_passengers": {
+      "precision": 0.4286,
+      "recall": 0.6667,
+      "f1": 0.5217,
+      "n_predicted": 7,
+      "n_gt": 3,
+      "n_matched_pred": 3,
+      "n_matched_gt": 2,
+      "n_comp_matches": 1,
+      "precision_paragraphs": [
+        {
+          "id": "PS-007",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "Each reservation specifies the following:",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "- reservation id",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-053",
+          "text": "Even a human agent cannot modify the number of passengers.",
+          "section": "Change passengers",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-056",
+          "text": "The agent needs to collect the first name, last name, and date of birth for each passenger.",
+          "section": null
+        }
+      ],
+      "compositional_matches": [
+        {
+          "type": "gt_contains_pred",
+          "container": {
+            "id": "GT-055",
+            "text": "The user can modify passengers but cannot modify the number of passengers.",
+            "section": null
+          },
+          "contained": [
+            {
+              "id": "PS-024",
+              "text": "- passengers",
+              "section": "Reservation",
+              "confidence": "high"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

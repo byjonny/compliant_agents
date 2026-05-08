@@ -1,0 +1,158 @@
+{
+  "threshold": 0.8,
+  "macro": {
+    "precision": 0.1451454528377605,
+    "recall": 0.8571428571428571,
+    "f1": 0.24825269716865742
+  },
+  "micro": {
+    "precision": 0.14953271028037382,
+    "recall": 0.7619047619047619,
+    "f1": 0.24999999999999997
+  },
+  "per_tool": [
+    {
+      "tool_id": "disable_roaming",
+      "tool_name": "disable_roaming",
+      "gt_count": 1,
+      "pred_count": 7,
+      "matched_gt": 1,
+      "matched_pred": 1,
+      "precision": 0.14285714285714285,
+      "recall": 1.0,
+      "f1": 0.25
+    },
+    {
+      "tool_id": "enable_roaming",
+      "tool_name": "enable_roaming",
+      "gt_count": 2,
+      "pred_count": 13,
+      "matched_gt": 2,
+      "matched_pred": 2,
+      "precision": 0.15384615384615385,
+      "recall": 1.0,
+      "f1": 0.2666666666666667
+    },
+    {
+      "tool_id": "get_bills_for_customer",
+      "tool_name": "get_bills_for_customer",
+      "gt_count": 0,
+      "pred_count": 6,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "get_customer_by_id",
+      "tool_name": "get_customer_by_id",
+      "gt_count": 0,
+      "pred_count": 4,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "get_customer_by_name",
+      "tool_name": "get_customer_by_name",
+      "gt_count": 0,
+      "pred_count": 4,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "get_customer_by_phone",
+      "tool_name": "get_customer_by_phone",
+      "gt_count": 0,
+      "pred_count": 10,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "get_data_usage",
+      "tool_name": "get_data_usage",
+      "gt_count": 0,
+      "pred_count": 14,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "get_details_by_id",
+      "tool_name": "get_details_by_id",
+      "gt_count": 0,
+      "pred_count": 7,
+      "matched_gt": 0,
+      "matched_pred": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+    },
+    {
+      "tool_id": "refuel_data",
+      "tool_name": "refuel_data",
+      "gt_count": 6,
+      "pred_count": 11,
+      "matched_gt": 3,
+      "matched_pred": 3,
+      "precision": 0.2727272727272727,
+      "recall": 0.5,
+      "f1": 0.3529411764705882
+    },
+    {
+      "tool_id": "resume_line",
+      "tool_name": "resume_line",
+      "gt_count": 3,
+      "pred_count": 9,
+      "matched_gt": 3,
+      "matched_pred": 3,
+      "precision": 0.3333333333333333,
+      "recall": 1.0,
+      "f1": 0.5
+    },
+    {
+      "tool_id": "send_payment_request",
+      "tool_name": "send_payment_request",
+      "gt_count": 4,
+      "pred_count": 6,
+      "matched_gt": 2,
+      "matched_pred": 2,
+      "precision": 0.3333333333333333,
+      "recall": 0.5,
+      "f1": 0.4
+    },
+    {
+      "tool_id": "suspend_line",
+      "tool_name": "suspend_line",
+      "gt_count": 2,
+      "pred_count": 9,
+      "matched_gt": 2,
+      "matched_pred": 2,
+      "precision": 0.2222222222222222,
+      "recall": 1.0,
+      "f1": 0.3636363636363636
+    },
+    {
+      "tool_id": "transfer_to_human_agents",
+      "tool_name": "transfer_to_human_agents",
+      "gt_count": 3,
+      "pred_count": 7,
+      "matched_gt": 3,
+      "matched_pred": 3,
+      "precision": 0.42857142857142855,
+      "recall": 1.0,
+      "f1": 0.6
+    }
+  ]
+}

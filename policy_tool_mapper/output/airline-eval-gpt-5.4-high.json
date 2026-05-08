@@ -1,30 +1,30 @@
 {
   "metadata": {
     "threshold": 0.8,
-    "high_conf_only": false,
+    "high_conf_only": true,
     "total_tools": 14,
-    "timestamp": "2026-05-08T09:33:03.392624+00:00",
-    "predicted_file": "policy_tool_mapper/output/airline-mappings-gpt-5.4.json",
-    "ground_truth_file": "policy_tool_mapper/ground_truth/airline-ground-truth.json"
+    "timestamp": "2026-05-08T14:31:49.720918+00:00",
+    "predicted_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-mappings-gpt-5.4.json",
+    "ground_truth_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/ground_truth/airline-ground-truth.json"
   },
   "overall": {
     "macro": {
-      "precision": 0.4007,
+      "precision": 0.599,
       "recall": 0.9071,
-      "f1": 0.5427
+      "f1": 0.7153
     },
     "micro": {
-      "precision": 0.2686,
+      "precision": 0.4273,
       "recall": 0.875,
-      "f1": 0.411
+      "f1": 0.5742
     }
   },
   "per_tool": {
     "book_reservation": {
-      "precision": 0.5357,
+      "precision": 0.6,
       "recall": 0.8947,
-      "f1": 0.6702,
-      "n_predicted": 28,
+      "f1": 0.7183,
+      "n_predicted": 25,
       "n_gt": 19,
       "n_matched_pred": 15,
       "n_matched_gt": 17,
@@ -35,24 +35,6 @@
           "text": "As an airline agent, you can help users **book**, **modify**, or **cancel** flight reservations. You also handle **refunds and compensation**.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-004",
-          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-007",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
-          "section": "User",
-          "confidence": "medium"
         },
         {
           "id": "PS-008",
@@ -176,39 +158,27 @@
       "precision": null,
       "recall": null,
       "f1": null,
-      "n_predicted": 3,
+      "n_predicted": 1,
       "n_gt": 0,
       "n_matched_pred": 0,
       "n_matched_gt": 0,
       "n_comp_matches": 0,
       "precision_paragraphs": [
         {
-          "id": "PS-003",
-          "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-004",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
         }
       ],
       "recall_paragraphs": [],
       "compositional_matches": []
     },
     "cancel_reservation": {
-      "precision": 0.25,
+      "precision": 0.625,
       "recall": 0.8333,
-      "f1": 0.3846,
-      "n_predicted": 20,
+      "f1": 0.7143,
+      "n_predicted": 8,
       "n_gt": 6,
       "n_matched_pred": 5,
       "n_matched_gt": 5,
@@ -221,88 +191,16 @@
           "confidence": "high"
         },
         {
-          "id": "PS-004",
-          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-007",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
-          "section": "User",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-015",
           "text": "Each reservation specifies the following:\n- reservation id\n- user id\n- trip type\n- flights\n- passengers\n- payment methods\n- created time\n- baggages\n- travel insurance information",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-032",
-          "text": "The travel insurance is 30 dollars per passenger and enables full refund if the user needs to cancel the flight given health or weather reasons.",
-          "section": "Travel insurance",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-050",
           "text": "First, the agent must obtain the user id and reservation id. \n- The user must provide their user id. \n- If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Cancel flight",
           "confidence": "high"
-        },
-        {
-          "id": "PS-055",
-          "text": "Refund:\n- The refund will go to original payment methods within 5 to 7 business days.",
-          "section": "Cancel flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-056",
-          "text": "Do not proactively offer a compensation unless the user explicitly asks for one.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-057",
-          "text": "Do not compensate if the user is regular member and has no travel insurance and flies (basic) economy.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-058",
-          "text": "Always confirms the facts before offering compensation.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-059",
-          "text": "Only compensate if the user is a silver/gold member or has travel insurance or flies business.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-060",
-          "text": "- If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $100 times the number of passengers.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-061",
-          "text": "- If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $50 times the number of passengers.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-062",
-          "text": "Do not offer compensation for any other reason than the ones listed above.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
         }
       ],
       "recall_paragraphs": [
@@ -318,7 +216,7 @@
       "precision": null,
       "recall": null,
       "f1": null,
-      "n_predicted": 7,
+      "n_predicted": 6,
       "n_gt": 0,
       "n_matched_pred": 0,
       "n_matched_gt": 0,
@@ -341,12 +239,6 @@
           "text": "You should deny user requests that are against this policy.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-006",
-          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
         },
         {
           "id": "PS-010",
@@ -374,35 +266,17 @@
       "precision": null,
       "recall": null,
       "f1": null,
-      "n_predicted": 13,
+      "n_predicted": 4,
       "n_gt": 0,
       "n_matched_pred": 0,
       "n_matched_gt": 0,
       "n_comp_matches": 0,
       "precision_paragraphs": [
         {
-          "id": "PS-003",
-          "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-004",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-006",
-          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
         },
         {
           "id": "PS-015",
@@ -411,52 +285,16 @@
           "confidence": "high"
         },
         {
-          "id": "PS-016",
-          "text": "There are two types of trip: **one way** and **round trip**.",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-035",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Modify flight",
           "confidence": "high"
         },
         {
-          "id": "PS-039",
-          "text": "The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!",
-          "section": "Change flights",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-050",
           "text": "First, the agent must obtain the user id and reservation id. \n- The user must provide their user id. \n- If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Cancel flight",
           "confidence": "high"
-        },
-        {
-          "id": "PS-054",
-          "text": "The API does not check that cancellation rules are met, so the agent must make sure the rules apply before calling the API!",
-          "section": "Cancel flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-058",
-          "text": "Always confirms the facts before offering compensation.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-060",
-          "text": "- If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $100 times the number of passengers.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-061",
-          "text": "- If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $50 times the number of passengers.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
         }
       ],
       "recall_paragraphs": [],
@@ -466,35 +304,17 @@
       "precision": null,
       "recall": null,
       "f1": null,
-      "n_predicted": 10,
+      "n_predicted": 5,
       "n_gt": 0,
       "n_matched_pred": 0,
       "n_matched_gt": 0,
       "n_comp_matches": 0,
       "precision_paragraphs": [
         {
-          "id": "PS-003",
-          "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-004",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-006",
-          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
         },
         {
           "id": "PS-007",
@@ -509,22 +329,10 @@
           "confidence": "high"
         },
         {
-          "id": "PS-025",
-          "text": "All payment methods must already be in user profile for safety reasons.",
-          "section": "Payment",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-035",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Modify flight",
           "confidence": "high"
-        },
-        {
-          "id": "PS-049",
-          "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method. The payment method must already be in user profile for safety reasons.",
-          "section": "Payment",
-          "confidence": "medium"
         },
         {
           "id": "PS-050",
@@ -540,29 +348,17 @@
       "precision": null,
       "recall": null,
       "f1": null,
-      "n_predicted": 3,
+      "n_predicted": 1,
       "n_gt": 0,
       "n_matched_pred": 0,
       "n_matched_gt": 0,
       "n_comp_matches": 0,
       "precision_paragraphs": [
         {
-          "id": "PS-003",
-          "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-004",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
         }
       ],
       "recall_paragraphs": [],
@@ -572,7 +368,7 @@
       "precision": null,
       "recall": null,
       "f1": null,
-      "n_predicted": 9,
+      "n_predicted": 6,
       "n_gt": 0,
       "n_matched_pred": 0,
       "n_matched_gt": 0,
@@ -595,12 +391,6 @@
           "text": "You should deny user requests that are against this policy.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-006",
-          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
         },
         {
           "id": "PS-010",
@@ -619,18 +409,6 @@
           "text": "For each date:\n- If the status is **available**, the flight has not taken off, available seats and prices are listed.\n- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.\n- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
           "section": "Flight",
           "confidence": "high"
-        },
-        {
-          "id": "PS-013",
-          "text": "There are three cabin classes: **basic economy**, **economy**, **business**. **basic economy** is its own class, completely distinct from **economy**.",
-          "section": "Flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-014",
-          "text": "Seat availability and prices are listed for each cabin class.",
-          "section": "Flight",
-          "confidence": "medium"
         }
       ],
       "recall_paragraphs": [],
@@ -640,7 +418,7 @@
       "precision": null,
       "recall": null,
       "f1": null,
-      "n_predicted": 7,
+      "n_predicted": 5,
       "n_gt": 0,
       "n_matched_pred": 0,
       "n_matched_gt": 0,
@@ -657,18 +435,6 @@
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-006",
-          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
         },
         {
           "id": "PS-010",
@@ -693,33 +459,15 @@
       "compositional_matches": []
     },
     "send_certificate": {
-      "precision": 0.5833,
+      "precision": 0.7778,
       "recall": 1.0,
-      "f1": 0.7368,
-      "n_predicted": 12,
+      "f1": 0.875,
+      "n_predicted": 9,
       "n_gt": 7,
       "n_matched_pred": 7,
       "n_matched_gt": 7,
       "n_comp_matches": 0,
       "precision_paragraphs": [
-        {
-          "id": "PS-003",
-          "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-004",
-          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
         {
           "id": "PS-007",
           "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
@@ -740,18 +488,12 @@
       "precision": null,
       "recall": null,
       "f1": null,
-      "n_predicted": 8,
+      "n_predicted": 3,
       "n_gt": 0,
       "n_matched_pred": 0,
       "n_matched_gt": 0,
       "n_comp_matches": 0,
       "precision_paragraphs": [
-        {
-          "id": "PS-003",
-          "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
         {
           "id": "PS-004",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
@@ -759,34 +501,10 @@
           "confidence": "high"
         },
         {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-006",
           "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-007",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
-          "section": "User",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-015",
-          "text": "Each reservation specifies the following:\n- reservation id\n- user id\n- trip type\n- flights\n- passengers\n- payment methods\n- created time\n- baggages\n- travel insurance information",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-048",
-          "text": "Even a human agent cannot modify the number of passengers.",
-          "section": "Change passengers",
-          "confidence": "medium"
         },
         {
           "id": "PS-052",
@@ -799,10 +517,10 @@
       "compositional_matches": []
     },
     "update_reservation_baggages": {
-      "precision": 0.3684,
+      "precision": 0.6364,
       "recall": 1.0,
-      "f1": 0.5385,
-      "n_predicted": 19,
+      "f1": 0.7778,
+      "n_predicted": 11,
       "n_gt": 7,
       "n_matched_pred": 7,
       "n_matched_gt": 7,
@@ -813,24 +531,6 @@
           "text": "As an airline agent, you can help users **book**, **modify**, or **cancel** flight reservations. You also handle **refunds and compensation**.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-004",
-          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-007",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
-          "section": "User",
-          "confidence": "medium"
         },
         {
           "id": "PS-008",
@@ -845,50 +545,20 @@
           "confidence": "high"
         },
         {
-          "id": "PS-023",
-          "text": "Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
-          "section": "Payment",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-025",
           "text": "All payment methods must already be in user profile for safety reasons.",
           "section": "Payment",
           "confidence": "high"
-        },
-        {
-          "id": "PS-033",
-          "text": "First, the agent must obtain the user id and reservation id.",
-          "section": "Modify flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-034",
-          "text": "The user must provide their user id.",
-          "section": "Modify flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-039",
-          "text": "The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!",
-          "section": "Change flights",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-049",
-          "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method. The payment method must already be in user profile for safety reasons.",
-          "section": "Payment",
-          "confidence": "medium"
         }
       ],
       "recall_paragraphs": [],
       "compositional_matches": []
     },
     "update_reservation_flights": {
-      "precision": 0.4167,
+      "precision": 0.5263,
       "recall": 0.7143,
-      "f1": 0.5263,
-      "n_predicted": 24,
+      "f1": 0.6061,
+      "n_predicted": 19,
       "n_gt": 14,
       "n_matched_pred": 10,
       "n_matched_gt": 10,
@@ -899,24 +569,6 @@
           "text": "As an airline agent, you can help users **book**, **modify**, or **cancel** flight reservations. You also handle **refunds and compensation**.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-004",
-          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-007",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
-          "section": "User",
-          "confidence": "medium"
         },
         {
           "id": "PS-008",
@@ -949,12 +601,6 @@
           "confidence": "high"
         },
         {
-          "id": "PS-023",
-          "text": "Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
-          "section": "Payment",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-025",
           "text": "All payment methods must already be in user profile for safety reasons.",
           "section": "Payment",
@@ -971,12 +617,6 @@
           "text": "The user must provide their user id.",
           "section": "Modify flight",
           "confidence": "high"
-        },
-        {
-          "id": "PS-035",
-          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
-          "section": "Modify flight",
-          "confidence": "medium"
         }
       ],
       "recall_paragraphs": [
@@ -1004,10 +644,10 @@
       "compositional_matches": []
     },
     "update_reservation_passengers": {
-      "precision": 0.25,
+      "precision": 0.4286,
       "recall": 1.0,
-      "f1": 0.4,
-      "n_predicted": 12,
+      "f1": 0.6,
+      "n_predicted": 7,
       "n_gt": 3,
       "n_matched_pred": 3,
       "n_matched_gt": 3,
@@ -1020,18 +660,6 @@
           "confidence": "high"
         },
         {
-          "id": "PS-004",
-          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-005",
-          "text": "You should deny user requests that are against this policy.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-015",
           "text": "Each reservation specifies the following:\n- reservation id\n- user id\n- trip type\n- flights\n- passengers\n- payment methods\n- created time\n- baggages\n- travel insurance information",
           "section": "Reservation",
@@ -1042,24 +670,6 @@
           "text": "Each reservation can have at most five passengers.",
           "section": "Passengers",
           "confidence": "high"
-        },
-        {
-          "id": "PS-033",
-          "text": "First, the agent must obtain the user id and reservation id.",
-          "section": "Modify flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-034",
-          "text": "The user must provide their user id.",
-          "section": "Modify flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-035",
-          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
-          "section": "Modify flight",
-          "confidence": "medium"
         },
         {
           "id": "PS-048",
