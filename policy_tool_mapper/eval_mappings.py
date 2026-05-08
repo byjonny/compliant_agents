@@ -24,7 +24,7 @@ Output JSON structure:
       "per_tool": {
         "<tool_id>": {
           "precision", "recall", "f1",
-          "n_predicted", "n_gt", "n_matched",
+          "n_predicted", "n_gt", "n_matched_pred", "n_matched_gt",
           "precision_paragraphs": [ ... ],   // predicted but NOT in GT  (false positives)
           "recall_paragraphs":    [ ... ]    // in GT but NOT predicted   (false negatives)
         }
@@ -56,12 +56,122 @@ def _normalise(text: str) -> str:
     import re
     t = text
     t = re.sub(r'^\s*[-*]\s+', ' ', t, flags=re.MULTILINE)  # strip bullet markers
+    t = re.sub(r'\*\*(.+?)\*\*', r'\1', t)                  # strip **bold**
+    t = re.sub(r'\*(.+?)\*',     r'\1', t)                  # strip *italic*
     t = re.sub(r'\s+', ' ', t)                               # collapse whitespace
     return t.strip().lower()
 
 
 def _overlap(a: str, b: str) -> float:
-    return SequenceMatcher(None, _normalise(a), _normalise(b)).ratio()
+    return SequenceMatcher(None, _normalise(a), _normalise(b), autojunk=False).ratio()
+
+
+def _containment(short: str, long: str) -> float:
+    """
+    Fraction of `short`'s normalised characters that are matched inside `long`.
+    Returns 1.0 if `short` is fully contained in `long`, 0.0 if nothing matches.
+    Asymmetric: measures coverage of the short text by the long one.
+    """
+    s = _normalise(short)
+    l = _normalise(long)
+    if not s:
+        return 0.0
+    sm = SequenceMatcher(None, s, l, autojunk=False)
+    matched = sum(block.size for block in sm.get_matching_blocks())
+    return matched / len(s)
+
+
+def _basket_coverage(container_norm: str, basket_norms: list[str]) -> float:
+    """
+    Fraction of container_norm covered by the union of basket items.
+
+    A basket item that fully *contains* the container counts as 100% coverage.
+    Basket items that are substrings of the container are accumulated by position.
+    Uses exact literal substring matching (after normalisation by caller).
+    """
+    if not container_norm:
+        return 0.0
+    if any(container_norm in b for b in basket_norms):
+        return 1.0
+    n = len(container_norm)
+    covered: set[int] = set()
+    for b in basket_norms:
+        pos = container_norm.find(b)
+        while pos != -1:
+            covered.update(range(pos, pos + len(b)))
+            pos = container_norm.find(b, pos + 1)
+    return len(covered) / n
+
+
+def _compositional_match(
+    pred_stmts: list[dict],
+    gt_stmts:   list[dict],
+    unmatched_pred: set[str],
+    unmatched_gt:   set[str],
+    threshold: float,
+) -> tuple[set[str], set[str], list[dict]]:
+    """
+    Second pass: literal-inclusion basket matching.
+
+    For each unmatched GT: collect all pred statements that share a literal
+    substring relationship in either direction (GT in pred, or pred in GT).
+    If the basket together covers ≥ threshold of the GT text → match.
+
+    Same logic in reverse for each unmatched pred.
+    """
+    pred_by_id = {s["id"]: s for s in pred_stmts}
+    gt_by_id   = {s["id"]: s for s in gt_stmts}
+
+    pred_norm = {s["id"]: _normalise(s["text"]) for s in pred_stmts}
+    gt_norm   = {s["id"]: _normalise(s["text"]) for s in gt_stmts}
+
+    comp_pred: set[str] = set()
+    comp_gt:   set[str] = set()
+    matches:   list[dict] = []
+
+    # ── For each unmatched GT: basket of preds with any literal overlap ───────
+    for gid in sorted(unmatched_gt):
+        g_n = gt_norm[gid]
+        basket_pids:   list[str] = []
+        basket_norms_: list[str] = []
+        for pid, p_n in pred_norm.items():
+            if g_n in p_n or p_n in g_n:   # literal inclusion either direction
+                basket_pids.append(pid)
+                basket_norms_.append(p_n)
+        if basket_pids and _basket_coverage(g_n, basket_norms_) >= threshold:
+            comp_gt.add(gid)
+            for pid in basket_pids:
+                if pid in unmatched_pred:
+                    comp_pred.add(pid)
+            matches.append({
+                "type":      "pred_contains_gt",
+                "container": pred_by_id[basket_pids[0]],
+                "contained": [gt_by_id[gid]],
+            })
+
+    # ── For each unmatched pred: basket of GTs with any literal overlap ───────
+    for pid in sorted(unmatched_pred):
+        if pid in comp_pred:
+            continue
+        p_n = pred_norm[pid]
+        basket_gids:   list[str] = []
+        basket_norms_: list[str] = []
+        for gid, g_n in gt_norm.items():
+            if p_n in g_n or g_n in p_n:   # literal inclusion either direction
+                basket_gids.append(gid)
+                basket_norms_.append(g_n)
+        if basket_gids and _basket_coverage(p_n, basket_norms_) >= threshold:
+            comp_pred.add(pid)
+            for gid in basket_gids:
+                if gid in unmatched_gt and gid not in comp_gt:
+                    comp_gt.add(gid)
+            matches.append({
+                "type":      "gt_contains_pred",
+                "container": gt_by_id[basket_gids[0]],
+                "contained": [pred_by_id[pid]],
+            })
+
+    return comp_pred, comp_gt, matches
 
 
 def _match_statements(
@@ -106,7 +216,7 @@ def evaluate_mappings(
     all_tool_ids = sorted(set(pred_by_tool) | set(gt_by_tool))
     per_tool: dict = {}
 
-    total_tp_pred = total_pred = total_gt = 0
+    total_tp_pred = total_tp_gt = total_pred = total_gt = 0
 
     for tool_id in all_tool_ids:
         pred_entry = pred_by_tool.get(tool_id)
@@ -124,23 +234,37 @@ def evaluate_mappings(
         matched_pred, matched_gt, unmatched_pred_ids, unmatched_gt_ids = \
             _match_statements(pred_stmts, gt_stmts, threshold)
 
-        n_pred    = len(pred_stmts)
-        n_gt      = len(gt_stmts)
-        n_matched = len(matched_pred)
+        # ── Compositional pass ────────────────────────────────────────────────
+        # Catches cases where one long statement on one side covers multiple
+        # shorter statements on the other side (e.g. PS-012 covers GT-024+025).
+        comp_pred, comp_gt, comp_matches = _compositional_match(
+            pred_stmts, gt_stmts, unmatched_pred_ids, unmatched_gt_ids, threshold
+        )
+        matched_pred       |= comp_pred
+        matched_gt         |= comp_gt
+        unmatched_pred_ids -= comp_pred
+        unmatched_gt_ids   -= comp_gt
 
-        # Both precision and recall are undefined (None) when there is no ground
-        # truth for this tool — they are excluded from all aggregations.
+        n_pred         = len(pred_stmts)
+        n_gt           = len(gt_stmts)
+        # Precision counts unique predicted statements that cover ≥1 GT statement.
+        # Recall counts unique GT statements that are covered by ≥1 prediction.
+        # These can differ when one statement compositionally covers multiple others.
+        n_matched_pred = len(matched_pred)
+        n_matched_gt   = len(matched_gt)
+
+        # Both undefined when no GT exists for this tool.
         if n_gt == 0:
             precision = None
             recall: float | None = None
             f1: float | None = None
         else:
-            precision = (n_matched / n_pred) if n_pred else 0.0
-            recall    = n_matched / n_gt
+            precision = (n_matched_pred / n_pred) if n_pred else 0.0
+            recall    = n_matched_gt / n_gt
             f1 = (2 * precision * recall / (precision + recall)
                   if (precision + recall) > 0 else 0.0)
 
-        # Build paragraph lists (include full statement objects for readability)
+        # Build paragraph lists — remaining unmatched after both passes
         pred_by_id = {s["id"]: s for s in pred_stmts}
         gt_by_id   = {s["id"]: s for s in gt_stmts}
 
@@ -151,16 +275,20 @@ def evaluate_mappings(
             "precision": round(precision, 4) if precision is not None else None,
             "recall":    round(recall,    4) if recall    is not None else None,
             "f1":        round(f1,        4) if f1        is not None else None,
-            "n_predicted":  n_pred,
-            "n_gt":         n_gt,
-            "n_matched":    n_matched,
-            "precision_paragraphs": precision_paragraphs,  # in pred but not GT
-            "recall_paragraphs":    recall_paragraphs,     # in GT but not pred
+            "n_predicted":   n_pred,
+            "n_gt":          n_gt,
+            "n_matched_pred": n_matched_pred,
+            "n_matched_gt":   n_matched_gt,
+            "n_comp_matches": len(comp_matches),
+            "precision_paragraphs":  precision_paragraphs,
+            "recall_paragraphs":     recall_paragraphs,
+            "compositional_matches": comp_matches,
         }
 
         total_pred    += n_pred
         total_gt      += n_gt
-        total_tp_pred += n_matched
+        total_tp_pred += n_matched_pred  # micro precision numerator
+        total_tp_gt   += n_matched_gt    # micro recall numerator
 
     # Macro: skip tools with no GT (None) from all averages
     p_vals = [v["precision"] for v in per_tool.values() if v["precision"] is not None]
@@ -173,7 +301,7 @@ def evaluate_mappings(
 
     # Micro: computed over tools that have GT statements
     micro_p = total_tp_pred / total_pred if total_pred else 0.0
-    micro_r = total_tp_pred / total_gt   if total_gt   else 0.0
+    micro_r = total_tp_gt   / total_gt   if total_gt   else 0.0
     micro_f = (2 * micro_p * micro_r / (micro_p + micro_r)
                if (micro_p + micro_r) else 0.0)
 
@@ -215,7 +343,7 @@ def print_eval(result: dict, predicted_file: str = "", gt_file: str = "") -> Non
         for tid, s in per_t.items():
             print(f"  {tid:35s}  P={s['precision']:.1%}  R={s['recall']:.1%}  "
                   f"F1={s['f1']:.1%}  "
-                  f"({s['n_matched']}/{s['n_gt']} GT matched, "
+                  f"({s['n_matched_gt']}/{s['n_gt']} GT matched, "
                   f"{len(s['precision_paragraphs'])} FP, "
                   f"{len(s['recall_paragraphs'])} FN)")
         return
@@ -254,7 +382,7 @@ def print_eval(result: dict, predicted_file: str = "", gt_file: str = "") -> Non
             tid,
             str(s["n_gt"]),
             str(s["n_predicted"]),
-            str(s["n_matched"]),
+            str(s["n_matched_gt"]),
             _fmt(p),
             _fmt(r),
             _fmt(f),
