@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Literal, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from tau2.data_model.message import Message, ToolCall
 from tau2.environment.environment import Environment
@@ -62,8 +62,27 @@ class GuardJudgement(BaseModel):
     """
 
     verdict: VerdictType
-    reason: str                          # one concise sentence explaining the decision
-    feedback: Optional[str] = None       # if DENY: actionable alternative for the agent
+    reason: str = Field(
+        description=(
+            "One concise sentence explaining the verdict. If blocking, name the "
+            "specific policy requirement that is not satisfied and the concrete "
+            "tool-call issue, such as an invalid argument, missing prerequisite, "
+            "or missing context. Do not include an action plan here."
+        )
+    )
+    feedback: Optional[str] = Field(
+        default=None,
+        description=(
+            "For DENY or ESCALATE, give the agent one actionable compliant next "
+            "step, such as what to ask the user, what information to verify, "
+            "which prerequisite tool to call first, or what policy-compliant "
+            "alternative to offer. If the decision is final because the policy "
+            "violation cannot be fixed by another conversation turn or more "
+            "information, explicitly say that the agent should not retry the "
+            "blocked tool call and should explain the final denial to the user "
+            "instead. Leave null for ALLOW."
+        ),
+    )
     intent_summary: str                  # what the user is trying to achieve
     policy_check: list[PolicyRuleCheck]  # per-passage assessment
 

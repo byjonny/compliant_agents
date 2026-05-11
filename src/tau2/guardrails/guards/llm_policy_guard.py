@@ -169,7 +169,8 @@ class LLMGuard(Guard):
         allowed = judgement.verdict == VerdictType.ALLOW
         reason = None if allowed else judgement.reason
         if judgement.feedback and not allowed:
-            reason = f"{judgement.reason} | Suggestion: {judgement.feedback}"
+            # reason = f"{judgement.reason} | Suggestion: {judgement.feedback}"
+            reason = f"{judgement.reason}"
 
         return GuardVerdict(allowed=allowed, reason=reason)
 

@@ -67,8 +67,7 @@ class GuardrailMiddleware(ABC):
             f"POLICY GUARDRAIL — {verdict.guard_name}\n"
             f"Tool call '{tool_call.name}' was blocked before execution.\n\n"
             f"Reason: {verdict.reason}\n\n"
-            f"The tool was NOT executed. You must resolve the policy violation "
-            f"before retrying this call."
+            f"The tool was NOT executed."
         )
         return ToolMessage(
             id=tool_call.id or str(uuid.uuid4()),
