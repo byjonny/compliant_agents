@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 from pydantic import BaseModel
 
 
@@ -30,6 +30,12 @@ class ToolMapping(BaseModel):
         return [s.id for s in self.statements]
 
 
+class RetrievalCandidate(BaseModel):
+    """Per-tool candidate statement IDs produced by the retriever node (mode: retrieval)."""
+    tool_id: str
+    statement_ids: list[str]
+
+
 class PipelineState(TypedDict):
     # Inputs
     raw_policy_text: str
@@ -41,9 +47,12 @@ class PipelineState(TypedDict):
     # After profiler
     tool_profiles: list[ToolProfile]
 
-    # After mapper
+    # After mapper (mode: llm) or judge (mode: retrieval)
     mappings: list[ToolMapping]
 
     # After sweeper
     final_mappings: list[ToolMapping]
     sweep_iterations: int
+
+    # After retriever — mode: retrieval only
+    retrieval_candidates: NotRequired[list[RetrievalCandidate]]

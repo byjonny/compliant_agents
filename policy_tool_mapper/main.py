@@ -12,7 +12,7 @@ load_dotenv(Path(__file__).parent / ".env")
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 from policy_tool_mapper.evaluator import DEFAULT_THRESHOLD, evaluate, print_summary
-from policy_tool_mapper.graph import app
+from policy_tool_mapper.graph import app as app_llm
 from policy_tool_mapper.utils.model import create_llm
 from policy_tool_mapper.utils.output_formatter import format_output
 
@@ -36,6 +36,30 @@ def main() -> None:
     parser.add_argument(
         "--model", default="claude-sonnet-4-6",
         help="LLM model identifier (default: claude-sonnet-4-6)",
+    )
+    parser.add_argument(
+        "--mode", choices=["llm", "retrieval"], default="llm",
+        help=(
+            "Pipeline architecture to use. "
+            "'llm' (default): chunker→profiler→mapper→sweeper. "
+            "'retrieval': chunker→profiler→BM25+bi-encoder+cross-encoder→LLM-judge→sweeper."
+        ),
+    )
+    parser.add_argument(
+        "--embed-model", default="text-embedding-3-large",
+        help="OpenAI embedding model for bi-encoder (retrieval mode only, default: text-embedding-3-large).",
+    )
+    parser.add_argument(
+        "--ce-model", default="cross-encoder/ms-marco-MiniLM-L-6-v2",
+        help=(
+            "Cross-encoder reranker model (retrieval mode only, "
+            "default: cross-encoder/ms-marco-MiniLM-L-6-v2). "
+            "Use 'none' to skip reranking."
+        ),
+    )
+    parser.add_argument(
+        "--ce-threshold", type=float, default=0.0,
+        help="Cross-encoder score threshold; lower = more recall (retrieval mode only, default: 0.0).",
     )
     parser.add_argument(
         "--evaluate", action="store_true",
@@ -80,6 +104,18 @@ def main() -> None:
         print(f"ERROR: {e}", file=sys.stderr)
         sys.exit(1)
 
+    # Choose pipeline
+    if args.mode == "retrieval":
+        from policy_tool_mapper.graph_retrieval import app_retrieval as app
+        extra_config = {
+            "embed_model":  args.embed_model,
+            "ce_model":     args.ce_model,
+            "ce_threshold": args.ce_threshold,
+        }
+    else:
+        app = app_llm
+        extra_config = {}
+
     initial_state = {
         "raw_policy_text": policy_text,
         "raw_openapi_spec": spec,
@@ -90,16 +126,19 @@ def main() -> None:
         "sweep_iterations": 0,
     }
 
-    print(f"Policy-Tool Mapper")
+    print(f"Policy-Tool Mapper  [mode: {args.mode}]")
     print(f"  Policy:   {args.policy}")
     print(f"  OpenAPI:  {args.openapi}")
     print(f"  Model:    {args.model}")
+    if args.mode == "retrieval":
+        print(f"  Embed:    {args.embed_model}")
+        print(f"  Reranker: {args.ce_model}  threshold={args.ce_threshold}")
     print()
 
     result = asyncio.run(
         app.ainvoke(
             initial_state,
-            config={"configurable": {"llm": llm}},
+            config={"configurable": {"llm": llm, **extra_config}},
         )
     )
 

@@ -15,9 +15,16 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-openai   = ["langchain-openai>=0.2"]
-google   = ["langchain-google-genai>=2.0"]
-mistral  = ["langchain-mistralai>=0.1"]
+openai     = ["langchain-openai>=0.2"]
+google     = ["langchain-google-genai>=2.0"]
+mistral    = ["langchain-mistralai>=0.1"]
+# Required for --mode retrieval (BM25 + cross-encoder)
+retrieval  = [
+    "rank-bm25>=0.2",
+    "sentence-transformers>=3.0",
+    "numpy>=1.24",
+    "langchain-openai>=0.2",   # bi-encoder via OpenAI embeddings
+]
 
 [project.scripts]
 policy-map      = "policy_tool_mapper.main:main"
