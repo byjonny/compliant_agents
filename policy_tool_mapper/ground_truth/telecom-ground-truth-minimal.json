@@ -1,0 +1,105 @@
+{
+  "mappings": [
+    {
+      "tool_id": "disable_roaming",
+      "tool_name": "disable_roaming",
+      "statements": [
+        {
+          "id": "GT-001",
+          "text": "If a line is roaming enabled, the user can use their phone's data connection in areas outside their home network.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "enable_roaming",
+      "tool_name": "enable_roaming",
+      "statements": [
+        {
+          "id": "GT-002",
+          "text": "If a user is traveling outside their home network, you should check if the line is roaming enabled. If it is not, you should enable it at no cost for the user.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "refuel_data",
+      "tool_name": "refuel_data",
+      "statements": [
+        {
+          "id": "GT-004",
+          "text": "If the user's data usage for a line exceeds the plan's data limit, data connectivity will be lost.",
+          "section": null
+        },
+        {
+          "id": "GT-005",
+          "text": "You can add more data to the line by 'refueling' data at a price per GB specified by the plan.",
+          "section": null
+        },
+        {
+          "id": "GT-006",
+          "text": "The maximum amount of data that can be refueled is 2GB.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "resume_line",
+      "tool_name": "resume_line",
+      "statements": [
+        {
+          "id": "GT-010",
+          "text": "You are allowed to lift the suspension after the user has paid all their overdue bills.",
+          "section": null
+        },
+        {
+          "id": "GT-011",
+          "text": "You are not allowed to lift the suspension if the line's contract end date is in the past, even if the user has paid all their overdue bills.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "send_payment_request",
+      "tool_name": "send_payment_request",
+      "statements": [
+        {
+          "id": "GT-013",
+          "text": "Check the bill status to make sure it is overdue.",
+          "section": null
+        },
+        {
+          "id": "GT-014",
+          "text": "A user can only have one bill in the AWAITING PAYMENT status at a time.",
+          "section": null
+        },
+        {
+          "id": "GT-015",
+          "text": "The send payement request tool will not check if the bill is overdue. You should always check that the bill is overdue before sending a payment request.",
+          "section": null
+        },
+        {
+          "id": "GT-016",
+          "text": "Inform the user that a payment request has been sent.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "suspend_line",
+      "tool_name": "suspend_line",
+      "statements": [
+        {
+          "id": "GT-017",
+          "text": "When a line is suspended, the user will not have service.",
+          "section": null
+        },
+        {
+          "id": "GT-018",
+          "text": "A line can be suspended for the following reasons: The user has an overdue bill. The line's contract end date is in the past.",
+          "section": null
+        }
+      ]
+    }
+  ]
+}

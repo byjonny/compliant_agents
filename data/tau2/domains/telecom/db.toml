@@ -448,3 +448,359 @@ description = "Suspension Fee - Line 555-123-2009"
 amount = 5.0
 date = "2025-02-05"
 item_type = "Fee"
+
+
+[[devices]]
+device_id = "D2001"
+device_type = "phone"
+model = "Compliance Test Phone A"
+imei = "200000000000001"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T10:00:00"
+
+[[devices]]
+device_id = "D2002"
+device_type = "phone"
+model = "Compliance Test Phone B"
+imei = "200000000000002"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T10:05:00"
+
+[[devices]]
+device_id = "D2003"
+device_type = "phone"
+model = "Compliance Test Phone C"
+imei = "200000000000003"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T10:10:00"
+
+[[devices]]
+device_id = "D2004"
+device_type = "phone"
+model = "Compliance Test Phone D"
+imei = "200000000000004"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T10:15:00"
+
+[[devices]]
+device_id = "D2005"
+device_type = "phone"
+model = "Compliance Test Phone E"
+imei = "200000000000005"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T10:20:00"
+
+[[devices]]
+device_id = "D2006"
+device_type = "phone"
+model = "Compliance Test Phone F"
+imei = "200000000000006"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T10:25:00"
+
+[[lines]]
+line_id = "L2001"
+phone_number = "555-223-3001"
+status = "Active"
+plan_id = "P1002"
+device_id = "D2001"
+data_used_gb = 4.1
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[lines]]
+line_id = "L2002"
+phone_number = "555-223-3002"
+status = "Active"
+plan_id = "P1001"
+device_id = "D2002"
+data_used_gb = 6.8
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[lines]]
+line_id = "L2003"
+phone_number = "555-223-3003"
+status = "Active"
+plan_id = "P1002"
+device_id = "D2003"
+data_used_gb = 3.0
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[lines]]
+line_id = "L2004"
+phone_number = "555-223-3004"
+status = "Active"
+plan_id = "P1002"
+device_id = "D2004"
+data_used_gb = 2.6
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[lines]]
+line_id = "L2005"
+phone_number = "555-223-3005"
+status = "Active"
+plan_id = "P1002"
+device_id = "D2005"
+data_used_gb = 2.4
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[lines]]
+line_id = "L2006"
+phone_number = "555-223-3006"
+status = "Suspended"
+plan_id = "P1002"
+device_id = "D2006"
+data_used_gb = 0.0
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2024-12-31"
+last_plan_change_date = "2024-01-20"
+suspension_start_date = "2025-02-10"
+
+[[customers]]
+customer_id = "C2001"
+full_name = "Alex Morgan"
+date_of_birth = "1988-03-12"
+email = "alex.morgan.compliance@example.com"
+phone_number = "555-223-3001"
+account_status = "Active"
+created_at = "2025-02-01T09:00:00"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L2001"]
+bill_ids = ["B2001"]
+[[customers.payment_methods]]
+method_type = "Credit Card"
+account_number_last_4 = "2001"
+expiration_date = "12/2027"
+
+[customers.address]
+street = "200 Test Ave"
+city = "Boston"
+state = "MA"
+zip_code = "02108"
+
+[[customers]]
+customer_id = "C2002"
+full_name = "Priya Shah"
+date_of_birth = "1992-07-04"
+email = "priya.shah.compliance@example.com"
+phone_number = "555-223-3002"
+account_status = "Active"
+created_at = "2025-02-01T09:05:00"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L2002"]
+bill_ids = ["B2002"]
+[[customers.payment_methods]]
+method_type = "Debit Card"
+account_number_last_4 = "2002"
+expiration_date = "11/2027"
+
+[customers.address]
+street = "201 Test Ave"
+city = "Seattle"
+state = "WA"
+zip_code = "98101"
+
+[[customers]]
+customer_id = "C2003"
+full_name = "Marcus Hill"
+date_of_birth = "1981-09-18"
+email = "marcus.hill.compliance@example.com"
+phone_number = "555-223-3003"
+account_status = "Active"
+created_at = "2025-02-01T09:10:00"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L2003"]
+bill_ids = ["B2003"]
+[[customers.payment_methods]]
+method_type = "Credit Card"
+account_number_last_4 = "2003"
+expiration_date = "10/2027"
+
+[customers.address]
+street = "202 Test Ave"
+city = "Austin"
+state = "TX"
+zip_code = "73301"
+
+[[customers]]
+customer_id = "C2004"
+full_name = "Dana Nguyen"
+date_of_birth = "1994-02-22"
+email = "dana.nguyen.compliance@example.com"
+phone_number = "555-223-3004"
+account_status = "Active"
+created_at = "2025-02-01T09:15:00"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L2004"]
+bill_ids = ["B2004"]
+[[customers.payment_methods]]
+method_type = "Credit Card"
+account_number_last_4 = "2004"
+expiration_date = "09/2027"
+
+[customers.address]
+street = "203 Test Ave"
+city = "Denver"
+state = "CO"
+zip_code = "80202"
+
+[[customers]]
+customer_id = "C2005"
+full_name = "Elena Ruiz"
+date_of_birth = "1979-12-09"
+email = "elena.ruiz.compliance@example.com"
+phone_number = "555-223-3005"
+account_status = "Active"
+created_at = "2025-02-01T09:20:00"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L2005"]
+bill_ids = ["B2005"]
+[[customers.payment_methods]]
+method_type = "PayPal"
+account_number_last_4 = "2005"
+expiration_date = "08/2027"
+
+[customers.address]
+street = "204 Test Ave"
+city = "Miami"
+state = "FL"
+zip_code = "33101"
+
+[[customers]]
+customer_id = "C2006"
+full_name = "Omar Bennett"
+date_of_birth = "1975-05-30"
+email = "omar.bennett.compliance@example.com"
+phone_number = "555-223-3006"
+account_status = "Suspended"
+created_at = "2025-02-01T09:25:00"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L2006"]
+bill_ids = ["B2006"]
+[[customers.payment_methods]]
+method_type = "Debit Card"
+account_number_last_4 = "2006"
+expiration_date = "07/2027"
+
+[customers.address]
+street = "205 Test Ave"
+city = "Portland"
+state = "OR"
+zip_code = "97201"
+
+[[bills]]
+bill_id = "B2001"
+customer_id = "C2001"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-02-19"
+status = "Paid"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-223-3001"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills]]
+bill_id = "B2002"
+customer_id = "C2002"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 40.0
+due_date = "2025-02-19"
+status = "Paid"
+[[bills.line_items]]
+description = "Basic Plan - Line 555-223-3002"
+amount = 40.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills]]
+bill_id = "B2003"
+customer_id = "C2003"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-02-19"
+status = "Paid"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-223-3003"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills]]
+bill_id = "B2004"
+customer_id = "C2004"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-03-10"
+status = "Issued"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-223-3004"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills]]
+bill_id = "B2005"
+customer_id = "C2005"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-02-19"
+status = "Disputed"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-223-3005"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills]]
+bill_id = "B2006"
+customer_id = "C2006"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-02-19"
+status = "Paid"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-223-3006"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills.line_items]]
+description = "Suspension Fee - Line 555-223-3006"
+amount = 5.0
+date = "2025-02-10"
+item_type = "Fee"

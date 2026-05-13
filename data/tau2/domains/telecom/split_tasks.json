@@ -2540,6 +2540,14 @@
         "[service_issue]break_apn_settings|lock_sim_card_pin[PERSONA:None]",
         "[service_issue]break_apn_settings|lock_sim_card_pin|overdue_bill_suspension[PERSONA:Easy]",
         "[service_issue]contract_end_suspension|unseat_sim_card[PERSONA:Hard]",
-        "[service_issue]overdue_bill_suspension|unseat_sim_card[PERSONA:Easy]"
+        "[service_issue]overdue_bill_suspension|unseat_sim_card[PERSONA:Easy]",
+        "telecom_new_001_enable_roaming_home",
+        "telecom_new_002_enable_roaming_future_trip",
+        "telecom_new_003_refuel_data_five_gb",
+        "telecom_new_004_refuel_data_three_gb",
+        "telecom_new_005_payment_request_paid_bill",
+        "telecom_new_006_payment_request_issued_bill",
+        "telecom_new_007_payment_request_disputed_bill",
+        "telecom_new_008_resume_line_contract_ended"
     ]
 }

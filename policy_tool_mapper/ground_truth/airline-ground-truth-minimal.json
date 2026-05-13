@@ -4,58 +4,18 @@
       "tool_id": "get_user_details",
       "tool_name": "get_user_details",
       "statements": [
-        {
-          "id": "GT-001",
-          "text": "The agent must first obtain the user id from the user.",
-          "section": null
-        },
-        {
-          "id": "GT-002",
-          "text": "The user must provide their user id.",
-          "section": null
-        },
-        {
-          "id": "GT-003",
-          "text": "Each user has a profile containing: user id, email, addresses, date of birth, payment methods, membership level, reservation numbers.",
-          "section": null
-        },
-        {
-          "id": "GT-004",
-          "text": "All payment methods must already be in user profile for safety reasons.",
-          "section": null
-        },
-        {
-          "id": "GT-005",
-          "text": "The payment method must already be in user profile for safety reasons.",
-          "section": null
-        }
       ]
     },
     {
       "tool_id": "get_reservation_details",
       "tool_name": "get_reservation_details",
       "statements": [
-        {
-          "id": "GT-006",
-          "text": "First, the agent must obtain the user id and reservation id.",
-          "section": null
-        },
-        {
-          "id": "GT-007",
-          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
-          "section": null
-        }
       ]
     },
     {
       "tool_id": "book_reservation",
       "tool_name": "book_reservation",
       "statements": [
-        {
-          "id": "GT-008",
-          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
-          "section": null
-        },
         {
           "id": "GT-009",
           "text": "Cabin class must be the same across all the flights in a reservation.",
@@ -79,11 +39,6 @@
         {
           "id": "GT-013",
           "text": "Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
-          "section": null
-        },
-        {
-          "id": "GT-014",
-          "text": "The remaining amount of a travel certificate is not refundable.",
           "section": null
         },
         {
@@ -132,13 +87,18 @@
           "section": null
         },
         {
+          "id": "GT-068",
+          "text": "If the status is **available**, the flight has not taken off, available seats and prices are listed.",
+          "section": null
+        },
+        {
           "id": "GT-024",
           "text": "If the status is delayed or on time, the flight has not taken off, cannot be booked.",
           "section": null
         },
         {
           "id": "GT-025",
-          "text": "If the status is flying, the flight has taken off but not landed, cannot be booked.",
+          "text": "If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
           "section": null
         },
         {
@@ -163,6 +123,11 @@
           "section": null
         },
         {
+          "id": "GT-031",
+          "text": "The API does not check that cancellation rules are met, so the agent must make sure the rules apply before calling the API!",
+          "section": null
+        },
+        {
           "id": "GT-067",
           "text": "The current time is 2024-05-15 15:00:00 EST.",
           "section": null
@@ -173,11 +138,6 @@
       "tool_id": "update_reservation_flights",
       "tool_name": "update_reservation_flights",
       "statements": [
-        {
-          "id": "GT-033",
-          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
-          "section": null
-        },
         {
           "id": "GT-034",
           "text": "Basic economy flights cannot be modified.",
@@ -250,11 +210,6 @@
       "tool_name": "update_reservation_baggages",
       "statements": [
         {
-          "id": "GT-047",
-          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
-          "section": null
-        },
-        {
           "id": "GT-048",
           "text": "The user can add but not remove checked bags.",
           "section": null
@@ -290,11 +245,6 @@
       "tool_id": "update_reservation_passengers",
       "tool_name": "update_reservation_passengers",
       "statements": [
-        {
-          "id": "GT-054",
-          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
-          "section": null
-        },
         {
           "id": "GT-055",
           "text": "The user can modify passengers but cannot modify the number of passengers.",
@@ -352,21 +302,6 @@
       "tool_id": "transfer_to_human_agents",
       "tool_name": "transfer_to_human_agents",
       "statements": [
-        {
-          "id": "GT-064",
-          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
-          "section": null
-        },
-        {
-          "id": "GT-065",
-          "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
-          "section": null
-        },
-        {
-          "id": "GT-066",
-          "text": "Even a human agent cannot modify the number of passengers.",
-          "section": null
-        }
       ]
     }
   ]

@@ -1,0 +1,47 @@
+{
+  "type": "sequential",
+  "guards": [
+    {
+      "type": "llm_guard",
+      "tool_name": "cancel_reservation",
+      "mappings_file": "policy_tool_mapper/output/airline-mappings-full-policy-text-redundant-long.json",
+      "llm": "gpt-5.4",
+      "history_window": 1000
+    },
+        {
+      "type": "llm_guard",
+      "tool_name": "send_certificate",
+      "mappings_file": "policy_tool_mapper/output/airline-mappings-full-policy-text-redundant-long.json",
+      "llm": "gpt-5.4",
+      "history_window": 1000
+    },
+        {
+      "type": "llm_guard",
+      "tool_name": "update_reservation_flights",
+      "mappings_file": "policy_tool_mapper/output/airline-mappings-full-policy-text-redundant-long.json",
+      "llm": "gpt-5.4",
+      "history_window": 1000
+    },
+        {
+      "type": "llm_guard",
+      "tool_name": "update_reservation_passengers",
+      "mappings_file": "policy_tool_mapper/output/airline-mappings-full-policy-text-redundant-long.json",
+      "llm": "gpt-5.4",
+      "history_window": 1000
+    },
+        {
+      "type": "llm_guard",
+      "tool_name": "update_reservation_baggages",
+      "mappings_file": "policy_tool_mapper/output/airline-mappings-full-policy-text-redundant-long.json",
+      "llm": "gpt-5.4",
+      "history_window": 1000
+    },
+        {
+      "type": "llm_guard",
+      "tool_name": "book_reservation",
+      "mappings_file": "policy_tool_mapper/output/airline-mappings-full-policy-text-redundant-long.json",
+      "llm": "gpt-5.4",
+      "history_window": 1000
+    }
+  ]
+}
