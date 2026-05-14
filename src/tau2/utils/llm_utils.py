@@ -103,6 +103,21 @@ else:
     litellm.disable_cache()
 
 
+LITELLM_MODEL_ALIASES = {
+    "haiku-4.5": "anthropic/claude-haiku-4-5-20251001",
+    "haiku-4-5": "anthropic/claude-haiku-4-5-20251001",
+    "claude-haiku-4.5": "anthropic/claude-haiku-4-5-20251001",
+    "claude-haiku-4-5": "anthropic/claude-haiku-4-5-20251001",
+    "claude-haiku-4-5-20251001": "anthropic/claude-haiku-4-5-20251001",
+}
+
+
+def resolve_litellm_model(model: str) -> str:
+    """Resolve local shorthand model names to provider-qualified LiteLLM names."""
+    key = (model or "").strip()
+    return LITELLM_MODEL_ALIASES.get(key.lower(), key)
+
+
 def _parse_ft_model_name(model: str) -> str:
     """
     Parse the ft model name from the litellm model name.
@@ -379,6 +394,9 @@ def generate(
     if kwargs.get("num_retries") is None:
         kwargs["num_retries"] = DEFAULT_MAX_RETRIES
 
+    requested_model = model
+    model = resolve_litellm_model(model)
+
     # Vertex AI Gemini 3 models require VERTEXAI_LOCATION="global"
     if model.startswith("vertex_ai/gemini-3") and not os.environ.get(
         "VERTEXAI_LOCATION"
@@ -394,6 +412,7 @@ def generate(
     formatted_messages = _format_messages_for_logging(litellm_messages)
     request_data = {
         "model": model,
+        "requested_model": requested_model,
         "messages": formatted_messages,
         "tools": tools_schema,
         "tool_choice": tool_choice,

@@ -131,6 +131,28 @@ OrderStatus = Literal[
 ]
 
 CancelReason = Literal["no longer needed", "ordered by mistake"]
+DeliveryClaimStatus = Literal["open", "closed", "credit applied"]
+DeliveryClaimShippingMethod = Literal["standard", "expedited"]
+
+
+class DeliveryClaim(BaseModel):
+    """Represents a customer's delivery credit claim for an order."""
+
+    claim_id: str = Field(description="Unique identifier for the delivery claim")
+    user_id: str = Field(description="User ID associated with the claim")
+    order_id: str = Field(description="Order ID associated with the claim")
+    promised_delivery_date: str = Field(
+        description="Promised delivery date in YYYY-MM-DD format"
+    )
+    delivery_date: str = Field(description="Actual delivery date in YYYY-MM-DD format")
+    claim_date: str = Field(description="Date the claim was filed in YYYY-MM-DD format")
+    shipping_method: DeliveryClaimShippingMethod = Field(
+        description="Shipping method used for the order"
+    )
+    status: DeliveryClaimStatus = Field(description="Current status of the claim")
+    credit_applied: bool = Field(
+        description="Whether the delivery credit has been applied"
+    )
 
 
 class BaseOrder(BaseModel):
@@ -216,6 +238,10 @@ class RetailDB(DB):
     )
     orders: Dict[str, Order] = Field(
         description="Dictionary of all orders indexed by order ID"
+    )
+    delivery_claims: Dict[str, DeliveryClaim] = Field(
+        default_factory=dict,
+        description="Dictionary of delivery credit claims indexed by claim ID",
     )
 
     def get_statistics(self) -> dict[str, Any]:

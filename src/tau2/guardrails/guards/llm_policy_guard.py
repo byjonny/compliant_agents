@@ -35,7 +35,7 @@ from tau2.guardrails.guard import (
     PolicyPassage,
     VerdictType,
 )
-from tau2.utils.llm_utils import generate
+from tau2.utils.llm_utils import generate, resolve_litellm_model
 
 logger = logging.getLogger(__name__)
 
@@ -181,7 +181,7 @@ class LLMGuard(Guard):
         ]
 
         response = completion(
-            model=self._llm,
+            model=resolve_litellm_model(self._llm),
             messages=litellm_messages,
             tools=[self._tool_schema],
             tool_choice="required",

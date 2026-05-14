@@ -4,6 +4,7 @@ import json
 from typing import List
 
 from tau2.domains.retail.data_model import (
+    DeliveryClaim,
     GiftCard,
     Order,
     OrderPayment,
@@ -41,6 +42,22 @@ class RetailTools(ToolKitBase):  # Tools
         if order_id not in self.db.orders:
             raise ValueError("Order not found")
         return self.db.orders[order_id]
+
+    def _get_delivery_claim(self, claim_id: str) -> DeliveryClaim:
+        """Get a delivery claim from the database.
+
+        Args:
+            claim_id: The delivery claim id, such as 'DC1001'.
+
+        Returns:
+            The delivery claim.
+
+        Raises:
+            ValueError: If the delivery claim is not found.
+        """
+        if claim_id not in self.db.delivery_claims:
+            raise ValueError("Delivery claim not found")
+        return self.db.delivery_claims[claim_id]
 
     def _get_user(self, user_id: str) -> User:
         """Get the user from the database.
@@ -394,6 +411,23 @@ class RetailTools(ToolKitBase):  # Tools
         return user
 
     @is_tool(ToolType.READ)
+    def get_delivery_claim(self, claim_id: str) -> DeliveryClaim:
+        """Get the details of a delivery credit claim.
+
+        Args:
+            claim_id: The delivery claim id, such as 'DC1001'.
+
+        Returns:
+            DeliveryClaim: The delivery claim details, including the linked user,
+            order, promised delivery date, actual delivery date, claim date,
+            shipping method, status, and whether the credit has already been applied.
+
+        Raises:
+            ValueError: If the delivery claim is not found.
+        """
+        return self._get_delivery_claim(claim_id)
+
+    @is_tool(ToolType.READ)
     def list_all_product_types(self) -> str:
         """List the name and product id of all product types.
         Each product type has a variety of different items with unique item ids and options.
@@ -712,6 +746,29 @@ class RetailTools(ToolKitBase):  # Tools
         order.return_payment_method_id = payment_method_id
 
         return order
+
+    @is_tool(ToolType.WRITE)
+    def apply_delivery_credit(self, claim_id: str) -> DeliveryClaim:
+        """Apply a delivery credit for a delivery claim.
+
+        The agent must check the delivery credit policy before using this tool.
+        This tool applies the credit to the claim and changes the claim status to
+        'credit applied'. The tool itself does not determine whether the claim is
+        policy-eligible.
+
+        Args:
+            claim_id: The delivery claim id, such as 'DC1001'.
+
+        Returns:
+            DeliveryClaim: The delivery claim after the credit is applied.
+
+        Raises:
+            ValueError: If the delivery claim is not found.
+        """
+        claim = self._get_delivery_claim(claim_id)
+        claim.credit_applied = True
+        claim.status = "credit applied"
+        return claim
 
     # @is_tool(ToolType.THINK)
     # def think(self, thought: str) -> str:

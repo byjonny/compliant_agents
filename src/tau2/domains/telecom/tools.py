@@ -431,17 +431,7 @@ class TelecomTools(ToolKitBase):
         except ValueError as exc:
             raise ValueError("new_due_date must be in YYYY-MM-DD format") from exc
 
-        if requested_due_date <= bill.due_date:
-            raise ValueError("New due date must be after the current due date")
-        if requested_due_date > bill.due_date + timedelta(days=14):
-            raise ValueError("New due date cannot be more than 14 days after the current due date")
-
         today = get_today()
-        if (
-            customer.last_extension_date is not None
-            and today - customer.last_extension_date < timedelta(days=90)
-        ):
-            raise ValueError("Customer received a payment extension within the last 90 days")
 
         old_due_date = bill.due_date
         bill.due_date = requested_due_date

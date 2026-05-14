@@ -134,3 +134,26 @@ For a delivered order, each item can be exchanged to an available new item of th
 The user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.
 
 After user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.
+
+## Delivery credit claims
+
+You can help a user apply a delivery credit for a delivery claim.
+
+To do so, you need to follow these steps:
+- Authenticate the user.
+- Check the delivery claim details.
+- Check that the delivery claim belongs to the authenticated user.
+- Check the linked order if needed.
+- Confirm with the user before applying the delivery credit.
+
+A delivery credit can be applied only if all of the following are true:
+- The delivery claim status is 'open'.
+- The claim was filed within 14 days after the actual delivery date.
+- At least one of the following is true:
+  - The actual delivery date was more than 3 days after the promised delivery date.
+  - The customer paid for expedited shipping.
+  - The claim was filed within 48 hours after the actual delivery date.
+
+Do not apply the delivery credit if the claim status is 'closed' or 'credit applied'.
+Do not apply the delivery credit if the claim was filed more than 14 days after the actual delivery date, even if another condition is true.
+Do not apply the delivery credit if none of the qualifying conditions are true.
