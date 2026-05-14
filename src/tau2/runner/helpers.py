@@ -192,6 +192,8 @@ def get_info(config: RunConfig, **overrides) -> Info:
         user_info=user_info,
         agent_info=agent_info,
         environment_info=environment_info,
+        guardrail_config_path=getattr(config, "guardrail_config_path", None),
+        guard_llm=getattr(config, "guard_llm", None),
         seed=config.seed,
         speech_complexity=speech_complexity,
         audio_native_config=getattr(config, "audio_native_config", None),

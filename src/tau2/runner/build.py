@@ -402,7 +402,10 @@ def build_text_orchestrator(
     # Resolve guardrail middleware: explicit param > config file > None (= NullGuardrailMiddleware)
     resolved_middleware = guardrail_middleware
     if resolved_middleware is None and config.guardrail_config_path:
-        resolved_middleware = load_middleware_from_file(config.guardrail_config_path)
+        resolved_middleware = load_middleware_from_file(
+            config.guardrail_config_path,
+            llm_override=config.guard_llm,
+        )
 
     orchestrator = Orchestrator(
         domain=domain,

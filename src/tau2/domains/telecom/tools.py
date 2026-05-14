@@ -392,6 +392,70 @@ class TelecomTools(ToolKitBase):
         bill.status = BillStatus.AWAITING_PAYMENT
         return f"Payment request sent to the customer for bill {bill.bill_id}"
 
+    @is_tool(ToolType.WRITE)
+    def extend_payment_due_date(
+        self, customer_id: str, bill_id: str, new_due_date: str
+    ) -> Dict[str, Any]:
+        """
+        Extends the due date for an issued or overdue bill.
+        Checks:
+            - Customer exists
+            - Bill exists and belongs to the customer
+            - Bill status is Issued or Overdue
+            - New due date is after the current due date and no more than 14 days later
+            - Customer has not received a payment extension in the last 90 days
+        Logic: Updates bill due_date and records today's date as the customer's
+        last extension date.
+
+        Args:
+            customer_id: ID of the customer who owns the bill.
+            bill_id: ID of the bill to extend.
+            new_due_date: New due date in YYYY-MM-DD format.
+
+        Returns:
+            Dictionary with success message and updated bill.
+
+        Raises:
+            ValueError: If customer or bill not found, or if extension is ineligible.
+        """
+        customer = self.get_customer_by_id(customer_id)
+        if bill_id not in customer.bill_ids:
+            raise ValueError(f"Bill {bill_id} not found for customer {customer_id}")
+
+        bill = self._get_bill_by_id(bill_id)
+        if bill.status not in [BillStatus.ISSUED, BillStatus.OVERDUE]:
+            raise ValueError("Bill must be issued or overdue to extend the due date")
+
+        try:
+            requested_due_date = date.fromisoformat(new_due_date)
+        except ValueError as exc:
+            raise ValueError("new_due_date must be in YYYY-MM-DD format") from exc
+
+        if requested_due_date <= bill.due_date:
+            raise ValueError("New due date must be after the current due date")
+        if requested_due_date > bill.due_date + timedelta(days=14):
+            raise ValueError("New due date cannot be more than 14 days after the current due date")
+
+        today = get_today()
+        if (
+            customer.last_extension_date is not None
+            and today - customer.last_extension_date < timedelta(days=90)
+        ):
+            raise ValueError("Customer received a payment extension within the last 90 days")
+
+        old_due_date = bill.due_date
+        bill.due_date = requested_due_date
+        customer.last_extension_date = today
+
+        logger.info(
+            f"Payment due date extended for bill {bill_id}: {old_due_date} -> {requested_due_date}"
+        )
+
+        return {
+            "message": f"Due date for bill {bill_id} extended to {requested_due_date}",
+            "bill": bill,
+        }
+
     def _get_bills_awaiting_payment(self, customer: Customer) -> List[Bill]:
         """
         Returns the bills in the customer's bill_ids list that are in the AWAITING_PAYMENT status.

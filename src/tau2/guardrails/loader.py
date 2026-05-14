@@ -63,7 +63,7 @@ _SIMPLE_GUARD_REGISTRY: dict[str, type[Guard]] = {
 }
 
 
-def _build_llm_guard(cfg: dict) -> LLMGuard:
+def _build_llm_guard(cfg: dict, llm_override: str | None = None) -> LLMGuard:
     """Construct an LLMGuard by loading policy passages from the mappings file."""
     tool_name = cfg["tool_name"]
 
@@ -98,7 +98,7 @@ def _build_llm_guard(cfg: dict) -> LLMGuard:
         tool_name=tool_name,
         tool_description=entry.get("tool_name", tool_name),
         policy_passages=passages,
-        llm=cfg.get("llm", "claude-haiku-4-5-20251001"),
+        llm=llm_override or cfg.get("llm", "claude-haiku-4-5-20251001"),
         llm_args=cfg.get("llm_args"),
         template_path=cfg.get("template_path"),
         history_window=cfg.get("history_window", 10),
@@ -106,11 +106,11 @@ def _build_llm_guard(cfg: dict) -> LLMGuard:
     )
 
 
-def _build_guard(cfg: dict) -> Guard:
+def _build_guard(cfg: dict, llm_override: str | None = None) -> Guard:
     guard_type = cfg.get("type")
 
     if guard_type == "llm_guard":
-        return _build_llm_guard(cfg)
+        return _build_llm_guard(cfg, llm_override=llm_override)
 
     cls = _SIMPLE_GUARD_REGISTRY.get(guard_type)
     if cls is None:
@@ -119,10 +119,16 @@ def _build_guard(cfg: dict) -> Guard:
             f"Unknown guard type '{guard_type}'. Known types: {known}"
         )
     kwargs = {k: v for k, v in cfg.items() if k != "type"}
+    if llm_override is not None and guard_type == "llm_policy":
+        kwargs["llm"] = llm_override
     return cls(**kwargs)
 
 
-def build_middleware_from_config(cfg: dict) -> GuardrailMiddleware:
+def build_middleware_from_config(
+    cfg: dict,
+    *,
+    llm_override: str | None = None,
+) -> GuardrailMiddleware:
     """Construct a GuardrailMiddleware from a plain-dict config."""
     middleware_type = cfg.get("type", "null")
 
@@ -130,7 +136,10 @@ def build_middleware_from_config(cfg: dict) -> GuardrailMiddleware:
         return NullGuardrailMiddleware()
 
     if middleware_type == "sequential":
-        guards = [_build_guard(g) for g in cfg.get("guards", [])]
+        guards = [
+            _build_guard(g, llm_override=llm_override)
+            for g in cfg.get("guards", [])
+        ]
         return SequentialGuardrailMiddleware(guards=guards)
 
     raise ValueError(
@@ -138,8 +147,12 @@ def build_middleware_from_config(cfg: dict) -> GuardrailMiddleware:
     )
 
 
-def load_middleware_from_file(path: Union[str, Path]) -> GuardrailMiddleware:
+def load_middleware_from_file(
+    path: Union[str, Path],
+    *,
+    llm_override: str | None = None,
+) -> GuardrailMiddleware:
     """Load a GuardrailMiddleware from a JSON config file."""
     with open(path) as f:
         cfg = json.load(f)
-    return build_middleware_from_config(cfg)
+    return build_middleware_from_config(cfg, llm_override=llm_override)

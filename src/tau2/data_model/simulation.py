@@ -545,6 +545,16 @@ class TextRunConfig(BaseRunConfig):
             default=None,
         ),
     ]
+    guard_llm: Annotated[
+        Optional[str],
+        Field(
+            description=(
+                "Optional model override for all LLM-based guards loaded from "
+                "guardrail_config_path. When set, this replaces each guard's configured llm."
+            ),
+            default=None,
+        ),
+    ]
 
     # ---- Text-specific ----
     max_steps: Annotated[
@@ -1235,6 +1245,14 @@ class Info(BaseModel):
     user_info: UserInfo = Field(description="User information.")
     agent_info: AgentInfo = Field(description="Agent information.")
     environment_info: EnvironmentInfo = Field(description="Environment information.")
+    guardrail_config_path: Optional[str] = Field(
+        description="Guardrail config path used for the run, if any.",
+        default=None,
+    )
+    guard_llm: Optional[str] = Field(
+        description="LLM override used for guardrails in the run, if any.",
+        default=None,
+    )
     seed: Optional[int] = Field(
         description="The seed used for the simulation.", default=None
     )

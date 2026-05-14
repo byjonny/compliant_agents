@@ -402,6 +402,15 @@ def add_run_args(parser):
             "config format. Example: --guardrail-config guardrail_configs/airline_defaults.json"
         ),
     )
+    parser.add_argument(
+        "--guard-llm",
+        type=str,
+        default=None,
+        help=(
+            "Override the model used by all LLM-based guards loaded from "
+            "--guardrail-config. Leaves every other guard config option unchanged."
+        ),
+    )
 
     # Resume mode
     parser.add_argument(
@@ -684,6 +693,7 @@ def main():
                 max_steps=args.max_steps,
                 enforce_communication_protocol=args.enforce_communication_protocol,
                 guardrail_config_path=getattr(args, "guardrail_config", None),
+                guard_llm=getattr(args, "guard_llm", None),
             )
 
         return run_domain(config)
