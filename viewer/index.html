@@ -1,0 +1,3474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>τ Trajectory Viewer</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Role colors */
+      --agent:    #1d4ed8;
+      --agent-bg: #eff6ff;
+      --agent-bd: #93c5fd;
+
+      --user:     #047857;
+      --user-bg:  #f0fdf4;
+      --user-bd:  #6ee7b7;
+
+      --tool:     #b45309;
+      --tool-bg:  #fffbeb;
+      --tool-bd:  #fcd34d;
+
+      /* Status */
+      --pass:     #15803d;
+      --pass-bg:  #dcfce7;
+      --fail:     #dc2626;
+      --fail-bg:  #fee2e2;
+      --warn:     #d97706;
+      --warn-bg:  #fef9c3;
+
+      /* Layout */
+      --bg:       #f1f5f9;
+      --card:     #ffffff;
+      --border:   #e2e8f0;
+      --text:     #0f172a;
+      --muted:    #64748b;
+      --radius:   10px;
+      --shadow:   0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .header {
+      position: sticky; top: 0; z-index: 20;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      height: 54px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+
+    .logo {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .logo em { color: var(--agent); font-style: normal; }
+
+    /* ── Header nav buttons ── */
+    .header-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-nav-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: none; border: 1px solid var(--border);
+      border-radius: 7px; padding: 5px 12px;
+      font-size: 13px; color: var(--muted); cursor: pointer;
+      transition: all .12s;
+    }
+    .header-nav-btn:hover,
+    .header-nav-btn.active { border-color: var(--agent); color: var(--agent); }
+
+    /* ── Budget view ── */
+    .budget-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .budget-kpi {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .budget-kpi-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      color: var(--muted); margin-bottom: 6px;
+    }
+    .budget-kpi-value {
+      font-size: 22px; font-weight: 800; letter-spacing: -.5px;
+    }
+    .budget-kpi-value.agent { color: var(--agent); }
+    .budget-kpi-value.user  { color: var(--user); }
+    .budget-kpi-value.guard { color: var(--muted); }
+    .budget-kpi-value.grand { color: var(--text); }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .chart-card canvas { max-height: 320px; }
+    .budget-note {
+      font-size: 11px; color: var(--muted);
+      margin-top: 8px; font-style: italic;
+    }
+
+    /* ── Guard architecture analyzer ── */
+    .analyzer-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .analyzer-top {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .analyzer-domain {
+      display: grid;
+      gap: 6px;
+      min-width: 220px;
+    }
+    .analyzer-domain label,
+    .pair-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .analyzer-domain select,
+    .pair-card select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      padding: 8px 10px;
+      font: inherit;
+      color: var(--text);
+    }
+    .analysis-select-btn {
+      width: 100%;
+      min-height: 92px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--text);
+      text-align: left;
+      padding: 10px 11px;
+      cursor: pointer;
+      display: grid;
+      align-content: start;
+      gap: 7px;
+      transition: border-color .12s, box-shadow .12s;
+    }
+    .analysis-select-btn:hover,
+    .analysis-select-btn:focus {
+      outline: none;
+      border-color: var(--agent);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, .12);
+    }
+    .analysis-select-title {
+      font-size: 12px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+      line-height: 1.25;
+    }
+    .analysis-select-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .analysis-empty-choice {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .pair-grid {
+      display: grid;
+      grid-template-columns: minmax(170px, .7fr) minmax(240px, 1fr) minmax(240px, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+    .pair-head {
+      background: #0f5f78;
+      border: 1px solid #0b3f52;
+      color: white;
+      border-radius: 6px;
+      padding: 11px 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+    .pair-card {
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 10px;
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+    }
+    .pair-model {
+      display: flex;
+      align-items: center;
+      font-weight: 800;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .analysis-chart {
+      min-width: 0;
+    }
+    .analysis-chart canvas {
+      max-height: 260px;
+    }
+    .insight-list {
+      margin-top: 12px;
+      display: grid;
+      gap: 7px;
+    }
+    .insight {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--muted);
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 8px 10px;
+    }
+    .mapper-controls {
+      display: grid;
+      grid-template-columns: minmax(180px, 240px) repeat(3, minmax(180px, 1fr));
+      gap: 14px;
+      align-items: start;
+    }
+    .mapper-control {
+      display: grid;
+      gap: 8px;
+    }
+    .mapper-control label,
+    .check-group-title {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .mapper-control select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      padding: 8px 10px;
+      font: inherit;
+      color: var(--text);
+    }
+    .check-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .check-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+    }
+    .check-pill input { accent-color: var(--agent); }
+    .mapper-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 14px;
+    }
+    .mapper-chart canvas {
+      max-height: 300px;
+    }
+    .mapper-table code {
+      font-size: 11px;
+    }
+    .fp-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .fp-row {
+      display: grid;
+      grid-template-columns: minmax(150px, .7fr) minmax(0, 1.6fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #f8fafc;
+      font-size: 12px;
+    }
+    .fp-reason {
+      color: var(--muted);
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+    .analysis-picker {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+    .analysis-picker.open { display: block; }
+    .analysis-picker-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, .45);
+    }
+    .analysis-picker-panel {
+      position: relative;
+      width: min(1600px, calc(100vw - 24px));
+      height: calc(100vh - 28px);
+      max-height: calc(100vh - 28px);
+      overflow: hidden;
+      margin: 14px auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 20px 55px rgba(15, 23, 42, .28);
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    .analysis-picker-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .analysis-picker-title {
+      font-weight: 900;
+      font-size: 16px;
+    }
+    .analysis-picker-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .analysis-picker-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .analysis-picker-body {
+      overflow: auto;
+      padding: 0;
+      min-height: 0;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+    .analysis-picker-body .table-wrap {
+      min-width: 1220px;
+      max-height: none;
+      overflow: visible;
+    }
+    .analysis-picker-body table {
+      min-width: 1220px;
+    }
+    .analysis-picker-row {
+      cursor: pointer;
+    }
+    .analysis-picker-row:hover {
+      background: #f8fafc;
+    }
+    .analysis-picker-row.selected {
+      background: #eff6ff;
+      box-shadow: inset 3px 0 0 var(--agent);
+    }
+
+    /* ── Experiment runner ── */
+    .experiment-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(340px, .8fr);
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+    .experiment-form,
+    .command-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .experiment-form {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+    .field.wide { grid-column: span 2; }
+    .field label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      color: var(--muted);
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      min-height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 9px;
+      font: inherit;
+      font-size: 13px;
+      color: var(--text);
+      background: #fff;
+      width: 100%;
+    }
+    .field textarea {
+      min-height: 76px;
+      resize: vertical;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: 2px solid #bfdbfe;
+      border-color: var(--agent);
+    }
+    .btn-run {
+      grid-column: span 2;
+      align-self: end;
+      min-height: 36px;
+      border: 0;
+      border-radius: 7px;
+      background: var(--agent);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    .btn-run:disabled {
+      background: #94a3b8;
+      cursor: wait;
+    }
+    .command-card {
+      position: sticky;
+      top: 70px;
+    }
+    .command-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .command-title h3 {
+      font-size: 13px;
+      margin: 0;
+    }
+    .btn-small {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--card);
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 5px 9px;
+    }
+    .command-pre {
+      background: #0f172a;
+      color: #dbeafe;
+      border-radius: 7px;
+      padding: 12px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      line-height: 1.55;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .st-queued { background: var(--warn-bg); color: var(--warn); }
+    .st-running { background: var(--agent-bg); color: var(--agent); }
+    .st-done { background: var(--pass-bg); color: var(--pass); }
+    .st-failed { background: var(--fail-bg); color: var(--fail); }
+    .st-cancelling { background: var(--warn-bg); color: var(--warn); }
+    .st-cancelled { background: #f1f5f9; color: var(--muted); }
+    .btn-danger {
+      border-color: #fca5a5;
+      background: var(--fail-bg);
+      color: var(--fail);
+      font-weight: 700;
+    }
+    .btn-danger:hover {
+      border-color: var(--fail);
+    }
+    .result-id {
+      max-width: 260px;
+      overflow-wrap: anywhere;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      overflow: hidden;
+    }
+    .bc-sep { color: var(--border); }
+    .bc-link {
+      color: var(--agent);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .bc-link:hover { text-decoration: underline; }
+    .bc-current {
+      color: var(--text);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ── Main ── */
+    .main { max-width: 1440px; margin: 0 auto; padding: 28px 20px; }
+    body.wide-view .main {
+      width: 80vw;
+      max-width: none;
+    }
+
+    /* ── Views ── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── Page header ── */
+    .ph { margin-bottom: 18px; }
+    .ph-title { font-size: 19px; font-weight: 700; margin-bottom: 3px; }
+    .ph-sub { color: var(--muted); font-size: 13px; }
+
+    /* ── Back button ── */
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 18px;
+      transition: border-color .15s, color .15s;
+    }
+    .btn-back:hover { border-color: var(--agent); color: var(--agent); }
+
+    /* ── Info bar (sim metadata) ── */
+    .info-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      min-width: 110px;
+      box-shadow: var(--shadow);
+    }
+    .info-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .info-value {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* ── Table ── */
+    .table-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .table-wrap.scroll-x {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    .wide-table {
+      min-width: 1500px;
+      table-layout: fixed;
+    }
+    .wide-table th,
+    .wide-table td {
+      overflow-wrap: anywhere;
+    }
+    .wide-table th:nth-child(1), .wide-table td:nth-child(1) { width: 220px; }
+    .wide-table th:nth-child(2), .wide-table td:nth-child(2) { width: 220px; }
+    .wide-table th:nth-child(3), .wide-table td:nth-child(3) { width: 110px; }
+    .wide-table th:nth-child(4), .wide-table td:nth-child(4) { width: 160px; }
+    .wide-table th:nth-child(5), .wide-table td:nth-child(5) { width: 100px; }
+    .wide-table th:nth-child(6), .wide-table td:nth-child(6) { width: 130px; }
+    .wide-table th:nth-child(7), .wide-table td:nth-child(7) { width: 110px; }
+    .wide-table th:nth-child(8), .wide-table td:nth-child(8) { width: 110px; }
+    .wide-table th:nth-child(9), .wide-table td:nth-child(9) { width: 95px; }
+    .wide-table th:nth-child(10), .wide-table td:nth-child(10) { width: 110px; }
+    .wide-table th:nth-child(11), .wide-table td:nth-child(11) { width: 210px; }
+    .wide-table th:nth-child(12), .wide-table td:nth-child(12) { width: 90px; }
+    .wide-table th:nth-child(13), .wide-table td:nth-child(13) { width: 150px; }
+    .wide-table th:nth-child(14), .wide-table td:nth-child(14) { width: 100px; }
+    .sim-runs-table {
+      min-width: 1280px;
+      table-layout: fixed;
+    }
+    .sim-runs-table th,
+    .sim-runs-table td {
+      overflow-wrap: anywhere;
+    }
+    .sim-runs-table th:nth-child(1), .sim-runs-table td:nth-child(1) { width: 260px; }
+    .sim-runs-table th:nth-child(2), .sim-runs-table td:nth-child(2) { width: 160px; }
+    .sim-runs-table th:nth-child(3), .sim-runs-table td:nth-child(3) { width: 110px; }
+    .sim-runs-table th:nth-child(4), .sim-runs-table td:nth-child(4) { width: 160px; }
+    .sim-runs-table th:nth-child(5), .sim-runs-table td:nth-child(5) { width: 130px; }
+    .sim-runs-table th:nth-child(6), .sim-runs-table td:nth-child(6) { width: 130px; }
+    .sim-runs-table th:nth-child(7), .sim-runs-table td:nth-child(7) { width: 100px; }
+    .sim-runs-table th:nth-child(8), .sim-runs-table td:nth-child(8) { width: 110px; }
+    .sim-runs-table th:nth-child(9), .sim-runs-table td:nth-child(9) { width: 90px; }
+    .sim-runs-table th:nth-child(10), .sim-runs-table td:nth-child(10) { width: 95px; }
+    .sim-runs-table th:nth-child(11), .sim-runs-table td:nth-child(11) { width: 80px; }
+    .sim-runs-table th:nth-child(12), .sim-runs-table td:nth-child(12) { width: 50px; }
+    thead th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      padding: 9px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr { cursor: pointer; transition: background .12s; }
+    tbody tr:hover { background: #f8fafc; }
+    .task-table {
+      table-layout: fixed;
+    }
+    .task-table th:nth-child(1), .task-table td:nth-child(1) { width: 28%; }
+    .task-table th:nth-child(2), .task-table td:nth-child(2) { width: 36%; }
+    .task-table th:nth-child(3), .task-table td:nth-child(3) { width: 8%; }
+    .task-table th:nth-child(4), .task-table td:nth-child(4) { width: 11%; }
+    .task-table th:nth-child(5), .task-table td:nth-child(5) { width: 7%; }
+    .task-table th:nth-child(6), .task-table td:nth-child(6) { width: 8%; }
+    .task-table th:nth-child(7), .task-table td:nth-child(7) { width: 2%; }
+    .task-id-cell {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .task-desc-cell {
+      min-width: 0;
+      line-height: 1.45;
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .b-agent  { background: var(--agent-bg); color: var(--agent); }
+    .b-user   { background: var(--user-bg);  color: var(--user);  }
+    .b-tool   { background: var(--tool-bg);  color: var(--tool);  }
+    .b-pass   { background: var(--pass-bg);  color: var(--pass);  }
+    .b-fail   { background: var(--fail-bg);  color: var(--fail);  }
+    .b-warn   { background: var(--warn-bg);  color: var(--warn);  }
+    .b-gray   { background: #f1f5f9;         color: var(--muted); }
+
+    /* ── Reward bar ── */
+    .reward-wrap { display: flex; align-items: center; gap: 8px; }
+    .reward-bar  { width: 60px; height: 5px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+    .reward-fill { height: 100%; border-radius: 3px; }
+    .rf-pass { background: var(--pass); }
+    .rf-warn { background: var(--warn); }
+    .rf-fail { background: var(--fail); }
+
+    /* ── Task detail header ── */
+    .task-header-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .task-title-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .task-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .task-desc {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.55;
+      margin-bottom: 10px;
+    }
+    .task-scenario {
+      background: var(--user-bg);
+      border: 1px solid var(--user-bd);
+      border-left: 3px solid var(--user);
+      border-radius: 6px;
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--user);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .task-scenario strong { display: block; margin-bottom: 2px; }
+    .actions-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .action-chip {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2px 8px;
+      color: var(--muted);
+    }
+    .action-chip .who {
+      font-family: inherit;
+      color: var(--agent);
+      font-weight: 600;
+    }
+    .action-chip .who.user { color: var(--user); }
+
+    /* ── Trial selector ── */
+    .trial-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .trial-label { font-size: 12px; color: var(--muted); font-weight: 600; }
+    .trial-btn {
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--muted);
+      transition: all .12s;
+    }
+    .trial-btn:hover { border-color: var(--agent); color: var(--agent); }
+    .trial-btn.active { background: var(--agent); color: #fff; border-color: var(--agent); }
+    .trial-btn.pass { border-color: var(--pass); }
+    .trial-btn.fail { border-color: var(--fail); }
+
+    /* ── Conversation ── */
+    .convo { display: flex; flex-direction: column; gap: 10px; }
+
+    /* ── Message card ── */
+    .msg {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .msg.m-assistant { border-left: 3px solid var(--agent); }
+    .msg.m-user      { border-left: 3px solid var(--user);  }
+    .msg.m-tool      { border-left: 3px solid var(--tool);  }
+
+    .msg-head {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .msg-head.m-assistant { background: var(--agent-bg); color: var(--agent); }
+    .msg-head.m-user      { background: var(--user-bg);  color: var(--user);  }
+    .msg-head.m-tool      { background: var(--tool-bg);  color: var(--tool);  }
+
+    .msg-role-icon { font-size: 13px; }
+    .msg-meta {
+      margin-left: auto;
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 11px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .msg-body {
+      padding: 11px 14px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 13px;
+    }
+    .msg-body.empty { color: var(--muted); font-style: italic; }
+
+    /* ── Tool call blocks ── */
+    .tool-calls { border-top: 1px solid var(--border); }
+
+    .tc {
+      border-bottom: 1px solid var(--border);
+    }
+    .tc:last-child { border-bottom: none; }
+
+    .tc-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      cursor: pointer;
+      background: #fafafa;
+      user-select: none;
+      transition: background .12s;
+    }
+    .tc-head:hover { background: #f1f5f9; }
+
+    .tc-icon { font-size: 13px; }
+
+    .tc-name {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--tool);
+    }
+
+    .tc-hint {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .tc-chevron {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 11px;
+      transition: transform .18s;
+    }
+    .tc-chevron.open { transform: rotate(90deg); }
+
+    .tc-body {
+      display: none;
+      border-top: 1px solid var(--border);
+      background: #f8fafc;
+    }
+    .tc-body.open { display: block; }
+
+    .tc-section {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .tc-section:last-child { border-bottom: none; }
+
+    .tc-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--muted);
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ── JSON display ── */
+    .json-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+      color: var(--text);
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    .jk { color: #7c3aed; }   /* key */
+    .js { color: #059669; }   /* string value */
+    .jn { color: #2563eb; }   /* number */
+    .jb { color: #d97706; }   /* boolean */
+    .jl { color: var(--muted); } /* null */
+
+    .result-block {
+      background: var(--card);
+      border: 1px solid var(--tool-bd);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: var(--tool);
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    /* ── Guardrail styles ── */
+    .tc.blocked { border-left: 3px solid var(--fail); }
+    .tc-head.blocked { background: var(--fail-bg); }
+    .tc-head.blocked .tc-name { color: var(--fail); }
+    .tc-head.blocked .tc-icon { filter: none; }
+
+    .guardrail-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      background: var(--fail-bg); color: var(--fail);
+      font-size: 10px; font-weight: 700;
+      padding: 1px 6px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: .04em;
+    }
+
+    .guardrail-reason-block {
+      background: var(--fail-bg);
+      border: 1px solid #fca5a5;
+      border-left: 3px solid var(--fail);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #7f1d1d;
+    }
+
+    .guardrail-summary {
+      background: var(--fail-bg);
+      border: 1px solid #fca5a5;
+      border-left: 3px solid var(--fail);
+      border-radius: 6px;
+      padding: 10px 13px;
+      margin-top: 10px;
+    }
+    .guardrail-summary-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      color: var(--fail); margin-bottom: 6px;
+    }
+    .guardrail-event-row {
+      font-size: 12px; color: #7f1d1d;
+      margin-bottom: 3px; line-height: 1.5;
+    }
+    .guardrail-event-row:last-child { margin-bottom: 0; }
+
+    /* ── Guardrail interception card (standalone in conversation) ── */
+    .msg.m-guardrail {
+      border-left: 3px solid var(--fail);
+      margin-left: 32px;    /* indent under the agent message that triggered it */
+    }
+    .msg-head.m-guardrail {
+      background: var(--fail-bg);
+      color: var(--fail);
+    }
+    .guardrail-tool-ref {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      background: #fca5a550;
+      border-radius: 3px;
+      padding: 1px 5px;
+      color: var(--fail);
+    }
+    .guardrail-feedback-body {
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #7f1d1d;
+      background: #fff8f8;
+    }
+    .guardrail-feedback-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--fail);
+      margin-bottom: 7px;
+    }
+
+    /* ── Policy compliance panel ── */
+    .compliance-panel { margin-top: 12px; }
+    .compliance-panel-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      color: var(--muted); margin-bottom: 7px;
+    }
+    .compliance-entry {
+      border-radius: 6px;
+      padding: 9px 12px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .compliance-entry:last-child { margin-bottom: 0; }
+    .compliance-entry.violated {
+      background: var(--fail-bg);
+      border: 1px solid #fca5a5;
+      border-left: 3px solid var(--fail);
+      color: #7f1d1d;
+    }
+    .compliance-entry.guarded {
+      background: var(--pass-bg);
+      border: 1px solid #86efac;
+      border-left: 3px solid var(--pass);
+      color: #14532d;
+    }
+    .compliance-entry-hdr {
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 5px; font-weight: 700;
+    }
+    .ce-tool {
+      font-family: 'SF Mono','Fira Code',monospace;
+      font-size: 11px;
+      background: rgba(0,0,0,.08);
+      border-radius: 4px; padding: 1px 6px;
+    }
+    .ce-check-id {
+      font-size: 10px; font-weight: 400;
+      opacity: .6; font-family: 'SF Mono','Fira Code',monospace;
+    }
+    .ce-desc {
+      margin-bottom: 4px;
+    }
+    .ce-detail {
+      font-size: 11px; opacity: .75; font-style: italic;
+    }
+
+    /* ── Loading / empty ── */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 60px;
+      color: var(--muted);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--agent);
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 52px 20px;
+      color: var(--muted);
+    }
+    .empty-icon { font-size: 36px; margin-bottom: 12px; }
+    .empty-title { font-size: 15px; font-weight: 600; margin-bottom: 5px; color: var(--text); }
+    .empty-sub { font-size: 13px; }
+
+    /* ── Monospace inline ── */
+    code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 960px) {
+      body.wide-view .main { width: 100%; }
+      .experiment-layout { grid-template-columns: 1fr; }
+      .command-card { position: static; }
+      .experiment-form { grid-template-columns: 1fr 1fr; }
+      .analysis-grid { grid-template-columns: 1fr; }
+      .pair-grid { grid-template-columns: 1fr; }
+      .pair-head { text-align: left; }
+      .mapper-controls { grid-template-columns: 1fr; }
+      .mapper-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .header { padding: 0 12px; }
+      .header-actions { gap: 5px; }
+      .header-nav-btn { padding: 5px 8px; }
+      .main { padding: 20px 12px; }
+      .experiment-form { grid-template-columns: 1fr; }
+      .field.wide, .btn-run { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+<header class="header">
+  <div class="logo">τ<em>bench</em> Viewer</div>
+  <nav class="breadcrumb" id="bc"></nav>
+  <div class="header-actions">
+    <button class="header-nav-btn" id="btn-analyzer" onclick="goAnalyzer()">📈 Analyzer</button>
+    <button class="header-nav-btn" id="btn-mapper" onclick="goMapper()">🧭 Mapper</button>
+    <button class="header-nav-btn" id="btn-experiments" onclick="goExperiments()">⚙ Experiments</button>
+    <button class="header-nav-btn" id="btn-budget" onclick="gobudget()">💰 Budget</button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ MAIN ════════════════════════════ -->
+<main class="main">
+
+  <!-- VIEW 1: Simulation list -->
+  <div class="view active" id="v-sims">
+    <div class="ph">
+      <div class="ph-title">Simulation Runs</div>
+      <div class="ph-sub" id="sims-sub">Loading…</div>
+    </div>
+    <div id="sims-content">
+      <div class="loading"><div class="spinner"></div> Loading simulations…</div>
+    </div>
+  </div>
+
+  <!-- VIEW 1B: Experiment scheduler -->
+  <div class="view" id="v-experiments">
+    <div class="ph">
+      <div class="ph-title">Experiments</div>
+      <div class="ph-sub">Define tau2 runs and queue them sequentially</div>
+    </div>
+
+    <div class="experiment-layout">
+      <form class="experiment-form" id="experiment-form">
+        <div class="field wide">
+          <label for="ex-name">Name</label>
+          <input id="ex-name" value="Telecom guard run">
+        </div>
+        <div class="field">
+          <label for="ex-domain">Domain</label>
+          <select id="ex-domain"></select>
+        </div>
+        <div class="field wide">
+          <label for="ex-guard">Guardrail Config</label>
+          <select id="ex-guard"></select>
+        </div>
+        <div class="field">
+          <label for="ex-agent">Agent</label>
+          <select id="ex-agent"></select>
+        </div>
+        <div class="field">
+          <label for="ex-agent-llm">Agent Model</label>
+          <input id="ex-agent-llm" value="gpt-4.1-mini" list="model-options">
+        </div>
+        <div class="field">
+          <label for="ex-user-llm">User Model</label>
+          <input id="ex-user-llm" value="gpt-5.1" list="model-options">
+        </div>
+        <div class="field">
+          <label for="ex-guard-llm">Guard Model</label>
+          <input id="ex-guard-llm" value="gpt-4.1-mini" list="model-options">
+        </div>
+        <div class="field">
+          <label for="ex-trials">Trials</label>
+          <input id="ex-trials" type="number" min="1" max="50" value="3">
+        </div>
+        <div class="field">
+          <label for="ex-concurrency">Concurrency</label>
+          <input id="ex-concurrency" type="number" min="1" max="32" value="3">
+        </div>
+        <div class="field">
+          <label for="ex-split">Task Split</label>
+          <input id="ex-split" placeholder="base">
+        </div>
+        <div class="field">
+          <label for="ex-num-tasks">Num Tasks</label>
+          <input id="ex-num-tasks" type="number" min="1">
+        </div>
+        <div class="field wide">
+          <label for="ex-task-ids">Task IDs</label>
+          <textarea id="ex-task-ids" placeholder="0 1 4 5"></textarea>
+        </div>
+        <div class="field">
+          <label for="ex-prompt">Prompt</label>
+          <input id="ex-prompt" value="LLM Guard">
+        </div>
+        <div class="field">
+          <label for="ex-dataset">Dataset</label>
+          <input id="ex-dataset" value="telecom">
+        </div>
+        <button class="btn-run" id="btn-schedule" type="submit">Schedule Experiment</button>
+      </form>
+
+      <aside class="command-card">
+        <div class="command-title">
+          <h3>Command</h3>
+          <button class="btn-small" type="button" onclick="copyCommand()">Copy</button>
+        </div>
+        <pre class="command-pre" id="command-preview"></pre>
+      </aside>
+    </div>
+
+    <div id="experiments-content">
+      <div class="loading"><div class="spinner"></div> Loading experiments…</div>
+    </div>
+  </div>
+
+  <!-- VIEW 1C: Guard architecture analyzer -->
+  <div class="view" id="v-analyzer">
+    <div class="ph">
+      <div class="ph-title">Experiment Analyzer</div>
+      <div class="ph-sub">Compare guarded and unguarded architectures by model and domain</div>
+    </div>
+
+    <section class="analyzer-panel">
+      <div class="analyzer-top">
+        <div class="analyzer-domain">
+          <label for="analysis-domain">Domain</label>
+          <select id="analysis-domain"></select>
+        </div>
+        <button class="btn-run" type="button" onclick="renderAnalyzer()">Analyze Selection</button>
+      </div>
+      <div class="pair-grid" id="analysis-pairs">
+        <div class="loading"><div class="spinner"></div> Loading runs…</div>
+      </div>
+    </section>
+
+    <div id="analysis-content">
+      <div class="empty-state">
+        <div class="empty-title">Choose experiment pairs</div>
+        <div class="empty-sub">Select one or more runs for each model on both sides.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 1D: Policy mapper analyzer -->
+  <div class="view" id="v-mapper">
+    <div class="ph">
+      <div class="ph-title">Policy Mapper Analyzer</div>
+      <div class="ph-sub">Compare mapper precision, recall, and F1 by model, mode, and confidence scope</div>
+    </div>
+
+    <div class="experiment-layout">
+      <form class="experiment-form" id="mapper-run-form">
+        <div class="field wide">
+          <label for="mapper-run-name">Name</label>
+          <input id="mapper-run-name" value="Airline mapper run">
+        </div>
+        <div class="field">
+          <label for="mapper-run-domain">Domain</label>
+          <select id="mapper-run-domain"></select>
+        </div>
+        <div class="field">
+          <label for="mapper-run-mode">Mode</label>
+          <select id="mapper-run-mode"></select>
+        </div>
+        <div class="field wide">
+          <label for="mapper-run-models">Models</label>
+          <textarea id="mapper-run-models" placeholder="gpt-4.1-mini gpt-4.1 gpt-5.1">gpt-4.1-mini</textarea>
+        </div>
+        <div class="field wide">
+          <label for="mapper-run-embed">Embedding Model</label>
+          <input id="mapper-run-embed" value="text-embedding-3-large">
+        </div>
+        <div class="field wide">
+          <label for="mapper-run-ce-model">Cross Encoder</label>
+          <input id="mapper-run-ce-model" value="cross-encoder/ms-marco-MiniLM-L-6-v2">
+        </div>
+        <div class="field">
+          <label for="mapper-run-ce-top-k">CE Top K</label>
+          <input id="mapper-run-ce-top-k" type="number" min="1" max="200" value="20">
+        </div>
+        <label class="check-pill" style="align-self:end;min-height:34px;border-radius:7px">
+          <input id="mapper-run-skip" type="checkbox">
+          Skip mapping
+        </label>
+        <button class="btn-run" id="btn-schedule-mapper" type="submit">Schedule Mapper Run</button>
+      </form>
+
+      <aside class="command-card">
+        <div class="command-title">
+          <h3>Mapper Command</h3>
+          <button class="btn-small" type="button" onclick="copyMapperCommand()">Copy</button>
+        </div>
+        <pre class="command-pre" id="mapper-command-preview"></pre>
+      </aside>
+    </div>
+
+    <div id="mapper-runs-content">
+      <div class="loading"><div class="spinner"></div> Loading mapper runs…</div>
+    </div>
+
+    <section class="analyzer-panel">
+      <div class="mapper-controls">
+        <div class="mapper-control">
+          <label for="mapper-domain">Domain</label>
+          <select id="mapper-domain"></select>
+        </div>
+        <div class="mapper-control">
+          <div class="check-group-title">Metrics</div>
+          <div class="check-group" id="mapper-metrics"></div>
+        </div>
+        <div class="mapper-control">
+          <div class="check-group-title">Mode</div>
+          <div class="check-group" id="mapper-modes"></div>
+        </div>
+        <div class="mapper-control">
+          <div class="check-group-title">Confidence</div>
+          <div class="check-group" id="mapper-confs"></div>
+        </div>
+      </div>
+    </section>
+
+    <div id="mapper-content">
+      <div class="loading"><div class="spinner"></div> Loading mapper results…</div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: Task list -->
+  <div class="view" id="v-tasks">
+    <button class="btn-back" id="btn-to-sims">← All Simulations</button>
+    <div class="info-bar" id="sim-info"></div>
+    <div class="ph">
+      <div class="ph-title">Tasks</div>
+      <div class="ph-sub" id="tasks-sub"></div>
+    </div>
+    <div id="tasks-content">
+      <div class="loading"><div class="spinner"></div></div>
+    </div>
+  </div>
+
+  <!-- VIEW 4: Budget -->
+  <div class="view" id="v-budget">
+    <div class="ph">
+      <div class="ph-title">Token Budget</div>
+      <div class="ph-sub">Cumulative LLM cost per day across all simulation runs</div>
+    </div>
+    <div id="budget-content">
+      <div class="loading"><div class="spinner"></div> Loading…</div>
+    </div>
+  </div>
+
+  <datalist id="model-options">
+    <option value="gpt-4.1-mini"></option>
+    <option value="gpt-4.1"></option>
+    <option value="gpt-5.1"></option>
+    <option value="gpt-5.4"></option>
+  </datalist>
+
+  <!-- VIEW 3: Conversation -->
+  <div class="view" id="v-convo">
+    <button class="btn-back" id="btn-to-tasks">← All Tasks</button>
+    <div id="task-hdr"></div>
+    <div id="trial-bar"></div>
+    <div class="convo" id="convo"></div>
+  </div>
+
+</main>
+
+<div class="analysis-picker" id="analysis-picker" aria-hidden="true">
+  <div class="analysis-picker-backdrop" onclick="closeAnalysisPicker()"></div>
+  <div class="analysis-picker-panel">
+    <div class="analysis-picker-head">
+      <div>
+        <div class="analysis-picker-title" id="analysis-picker-title">Choose Experiment</div>
+        <div class="analysis-picker-sub" id="analysis-picker-sub"></div>
+      </div>
+      <div class="analysis-picker-actions">
+        <button class="btn-small" type="button" id="analysis-picker-clear">Clear</button>
+        <button class="btn-small" type="button" onclick="closeAnalysisPicker()">Close</button>
+      </div>
+    </div>
+    <div class="analysis-picker-body" id="analysis-picker-body"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════
+let _sims      = [];       // summary list from /api/simulations
+let _simId     = null;     // currently selected sim directory name
+let _simData   = null;     // full results.json for selected sim
+let _taskId    = null;     // currently selected task id (as string)
+let _trialIdx  = 0;        // which trial/simulation to show
+let _experiments = [];
+let _experimentOptions = null;
+let _analysisRuns = [];
+let _analysisCharts = [];
+let _analysisSelections = {};
+let _analysisPickerTarget = null;
+let _mapperResults = [];
+let _mapperCharts = [];
+let _mapperExperiments = [];
+let _mapperOptions = null;
+
+// ════════════════════════════════════════════════════════════
+// UTILITIES
+// ════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  $('v-' + name).classList.add('active');
+}
+
+async function api(path) {
+  const r = await fetch(path);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Reward helpers
+function rewardClass(r) {
+  if (r == null) return 'gray';
+  if (r >= 0.95) return 'pass';
+  if (r >= 0.4)  return 'warn';
+  return 'fail';
+}
+function rewardBadge(r) {
+  if (r == null) return badge('—', 'gray');
+  const cls = rewardClass(r);
+  const icon = cls === 'pass' ? '✓' : cls === 'fail' ? '✗' : '~';
+  return badge(`${icon} ${(r*100).toFixed(0)}%`, cls);
+}
+function termBadge(t) {
+  const map = {
+    agent_stop:      ['pass', '✓ Completed'],
+    user_stop:       ['pass', '✓ User done'],
+    max_steps:       ['warn', '⚠ Max steps'],
+    too_many_errors: ['fail', '✗ Too many errors'],
+    agent_error:     ['fail', '✗ Agent error'],
+    user_error:      ['fail', '✗ User error'],
+    timeout:         ['warn', '⏱ Timeout'],
+  };
+  const [cls, label] = map[t] || ['gray', t || '—'];
+  return badge(label, cls);
+}
+function badge(text, cls) {
+  return `<span class="badge b-${cls}">${text}</span>`;
+}
+function cost$(c) { return c != null ? `$${Number(c).toFixed(4)}` : '—'; }
+function pct(r) { return r != null ? `${(Number(r) * 100).toFixed(1)}%` : '—'; }
+function seconds(s) { return s != null ? `${Number(s).toFixed(2)}s` : '—'; }
+function statusPill(status) {
+  return `<span class="status-pill st-${esc(status || 'queued')}">${esc(status || 'queued')}</span>`;
+}
+function guardCell(guardModel, guardrailConfig) {
+  const hasGuardConfig = guardrailConfig && !guardrailConfig.endsWith('/null.json');
+  const guardLabel = guardModel || (hasGuardConfig ? 'configured' : 'not recorded');
+  return `
+    <div style="font-weight:700;margin-bottom:2px">${badge(esc(guardLabel), hasGuardConfig || guardModel ? 'fail' : 'gray')}</div>
+    ${guardrailConfig ? `<div style="font-size:10px;color:var(--muted);margin-top:1px">${esc(guardrailConfig)}</div>` : ''}
+  `;
+}
+function agentCell(agent) {
+  return `<code>${esc(agent || 'llm_agent')}</code>`;
+}
+
+function avg(values) {
+  const nums = values.filter(v => v != null && Number.isFinite(Number(v))).map(Number);
+  return nums.length ? nums.reduce((a,b) => a + b, 0) / nums.length : null;
+}
+
+function pctSigned(v) {
+  if (v == null || !Number.isFinite(Number(v))) return '—';
+  const n = Number(v);
+  return `${n >= 0 ? '+' : ''}${n.toFixed(1)}%`;
+}
+
+function modelRank(model) {
+  const m = String(model || '').toLowerCase();
+  if (m.includes('4.1-mini')) return 10;
+  if (m.includes('4.1')) return 20;
+  if (m.includes('5.1')) return 30;
+  if (m.includes('5.4')) return 40;
+  return 100;
+}
+
+// ════════════════════════════════════════════════════════════
+// BREADCRUMB
+// ════════════════════════════════════════════════════════════
+function updateBreadcrumb() {
+  const parts = [];
+  if (_simId) {
+    parts.push(`<span class="bc-link" onclick="goSims()">All Simulations</span>`);
+    parts.push(`<span class="bc-sep">›</span>`);
+    const meta = _sims.find(s => s.id === _simId);
+    const simLabel = meta ? `${meta.model} / ${meta.domain}` : _simId.slice(0,35);
+    if (_taskId) {
+      parts.push(`<span class="bc-link" onclick="goTasks()">${esc(simLabel)}</span>`);
+      parts.push(`<span class="bc-sep">›</span>`);
+      parts.push(`<span class="bc-current">Task #${esc(_taskId)}</span>`);
+    } else {
+      parts.push(`<span class="bc-current">${esc(simLabel)}</span>`);
+    }
+  } else {
+    parts.push(`<span class="bc-current">All Simulations</span>`);
+  }
+  $('bc').innerHTML = parts.join('');
+}
+
+// ════════════════════════════════════════════════════════════
+// JSON HIGHLIGHTING
+// ════════════════════════════════════════════════════════════
+function hlJson(val) {
+  let obj;
+  if (typeof val === 'object' && val !== null) {
+    obj = val;
+  } else {
+    try { obj = JSON.parse(val); } catch { obj = null; }
+  }
+  if (obj === null && typeof val !== 'object') {
+    return `<div class="result-block">${esc(String(val))}</div>`;
+  }
+  const str = JSON.stringify(obj ?? val, null, 2);
+  // Highlight via regex (covers the common cases well)
+  const html = esc(str)
+    .replace(/(&quot;[^&]*&quot;)\s*:/g, '<span class="jk">$1</span>:')
+    .replace(/:\s*(&quot;[^&]*&quot;)/g, ': <span class="js">$1</span>')
+    .replace(/:\s*(-?\d+\.?\d*(?:[eE][+-]?\d+)?)/g, ': <span class="jn">$1</span>')
+    .replace(/:\s*(true|false)/g, ': <span class="jb">$1</span>')
+    .replace(/:\s*(null)/g, ': <span class="jl">$1</span>');
+  return `<div class="json-block">${html}</div>`;
+}
+
+function tryJson(v) {
+  if (typeof v === 'object') return v;
+  try { return JSON.parse(v); } catch { return null; }
+}
+
+// ════════════════════════════════════════════════════════════
+// EXPERIMENT SCHEDULER
+// ════════════════════════════════════════════════════════════
+function setHeaderActive(activeId) {
+  document.querySelectorAll('.header-nav-btn').forEach(b => b.classList.remove('active'));
+  if (activeId) $(activeId)?.classList.add('active');
+}
+
+async function goExperiments() {
+  _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
+  updateBreadcrumb();
+  showView('experiments');
+  setHeaderActive('btn-experiments');
+  document.body.classList.add('wide-view');
+  await loadExperimentOptions();
+  await loadExperiments();
+}
+
+async function loadExperimentOptions() {
+  if (_experimentOptions) return;
+  _experimentOptions = await api('/api/experiment-options');
+
+  $('ex-domain').innerHTML = _experimentOptions.domains.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
+  $('ex-agent').innerHTML = _experimentOptions.agents.map(a => `<option value="${esc(a)}">${esc(a)}</option>`).join('');
+  $('ex-guard').innerHTML = _experimentOptions.guardrail_configs.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+
+  $('ex-domain').value = 'telecom';
+  $('ex-agent').value = 'llm_agent';
+  applyDomainDefaults();
+  updateCommandPreview();
+}
+
+function inferPromptLabel(config) {
+  const name = String(config || '').split('/').pop();
+  if (name === 'null.json') return 'No Guard';
+  if (name.includes('minimal')) return 'Minimal Policy';
+  if (name.includes('full')) return 'Full Policy';
+  if (name.includes('tool_results')) return 'Tool Results';
+  return 'LLM Guard';
+}
+
+function applyDomainDefaults() {
+  const domain = $('ex-domain').value;
+  const guard = _experimentOptions?.default_guardrails?.[domain] || `guardrail_configs/${domain}_llm_guard.json`;
+  if ([...$('ex-guard').options].some(o => o.value === guard)) {
+    $('ex-guard').value = guard;
+  }
+  $('ex-dataset').value = domain;
+  $('ex-name').value = `${domain[0].toUpperCase()}${domain.slice(1)} guard run`;
+  $('ex-prompt').value = inferPromptLabel($('ex-guard').value);
+}
+
+function getExperimentPayload() {
+  return {
+    name: $('ex-name').value,
+    domain: $('ex-domain').value,
+    agent: $('ex-agent').value,
+    guardrail_config: $('ex-guard').value,
+    agent_llm: $('ex-agent-llm').value,
+    user_llm: $('ex-user-llm').value,
+    guard_llm: $('ex-guard-llm').value,
+    num_trials: Number($('ex-trials').value || 1),
+    max_concurrency: Number($('ex-concurrency').value || 1),
+    task_split_name: $('ex-split').value,
+    num_tasks: $('ex-num-tasks').value,
+    task_ids: $('ex-task-ids').value,
+    prompt_label: $('ex-prompt').value,
+    dataset_label: $('ex-dataset').value,
+  };
+}
+
+function buildCommand(payload = getExperimentPayload()) {
+  const parts = [
+    'uv run tau2 run',
+    `--domain ${payload.domain}`,
+    `--agent ${payload.agent}`,
+    `--guardrail-config ${payload.guardrail_config}`,
+    `--agent-llm ${payload.agent_llm}`,
+    `--user-llm ${payload.user_llm}`,
+  ];
+  if (payload.guard_llm) parts.push(`--guard-llm ${payload.guard_llm}`);
+  parts.push(`--num-trials ${payload.num_trials}`);
+  parts.push(`--max-concurrency ${payload.max_concurrency}`);
+  if (payload.task_split_name) parts.push(`--task-split-name ${payload.task_split_name}`);
+  if (payload.num_tasks) parts.push(`--num-tasks ${payload.num_tasks}`);
+  if (String(payload.task_ids || '').trim()) parts.push(`--task-ids ${String(payload.task_ids).trim()}`);
+  return parts.join(' \\\n  ');
+}
+
+function updateCommandPreview() {
+  $('command-preview').textContent = buildCommand();
+}
+
+function copyCommand() {
+  navigator.clipboard?.writeText($('command-preview').textContent);
+}
+
+async function scheduleExperiment(event) {
+  event.preventDefault();
+  $('btn-schedule').disabled = true;
+  try {
+    const response = await fetch('/api/experiments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(getExperimentPayload()),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Could not schedule experiment');
+    await loadExperiments();
+  } catch (e) {
+    $('experiments-content').innerHTML = errState(e.message);
+  } finally {
+    $('btn-schedule').disabled = false;
+  }
+}
+
+async function loadExperiments() {
+  try {
+    _experiments = await api('/api/experiments');
+    renderExperiments();
+  } catch (e) {
+    $('experiments-content').innerHTML = errState(e.message);
+  }
+}
+
+async function cancelExperiment(event, experimentId) {
+  event.preventDefault();
+  event.stopPropagation();
+  if (!confirm('Cancel this experiment?')) return;
+  try {
+    const response = await fetch(`/api/experiments/${encodeURIComponent(experimentId)}/cancel`, { method: 'POST' });
+    let payload = {};
+    try {
+      payload = await response.json();
+    } catch (_) {
+      payload = {};
+    }
+    if (!response.ok) {
+      throw new Error(payload.error || `Cancel failed (${response.status})`);
+    }
+    await loadExperiments();
+  } catch (e) {
+    $('experiments-content').innerHTML = errState(e.message);
+  }
+}
+
+function renderExperiments() {
+  if (!_experiments.length) {
+    $('experiments-content').innerHTML = emptyState('⚙', 'No experiments scheduled', 'Use the form above to queue a tau2 run');
+    return;
+  }
+
+  const rows = _experiments.slice().reverse().map(e => {
+    const m = e.metrics || {};
+    const rowClick = e.status === 'done' && e.result_id ? `loadTasks('${esc(e.result_id)}')` : '';
+    const canCancel = ['queued', 'running', 'cancelling'].includes(e.status);
+    const cancelButton = canCancel
+      ? `<button class="btn-small btn-danger" type="button" onclick="cancelExperiment(event, '${esc(e.id)}')" ${e.status === 'cancelling' ? 'disabled' : ''}>Cancel</button>`
+      : '';
+    return `
+      <tr onclick="${rowClick}">
+        <td><div style="font-weight:700">${esc(e.name)}</div><div style="font-size:11px;color:var(--muted)">${esc(e.guardrail_config)}</div></td>
+        <td>${guardCell(e.guard_llm, e.guardrail_config)}</td>
+        <td>${agentCell(e.agent)}</td>
+        <td><code>${esc(e.agent_llm)}</code></td>
+        <td>${m.reward != null ? pct(m.reward) : '—'}</td>
+        <td>${m.policy_violation_rate != null ? pct(m.policy_violation_rate) : '—'}</td>
+        <td>${badge(esc(e.dataset_label || e.domain), 'agent')}</td>
+        <td style="font-size:11px;color:var(--muted)">${esc(e.created_at || '')}</td>
+        <td style="text-align:center">${m.samples ?? '—'}</td>
+        <td><code>${esc(e.user_llm)}</code></td>
+        <td><div class="result-id">${esc(e.result_id || '')}</div></td>
+        <td>${seconds(m.latency)}</td>
+        <td>${statusPill(e.status)}${e.error ? `<div style="font-size:11px;color:var(--fail);margin-top:4px">${esc(e.error)}</div>` : ''}</td>
+        <td>${cancelButton}</td>
+      </tr>`;
+  }).join('');
+
+  $('experiments-content').innerHTML = `
+    <div class="table-wrap scroll-x">
+      <table class="wide-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Guard</th>
+            <th>Agent</th>
+            <th>Agent Model</th>
+            <th>Reward</th>
+            <th>Policy Violation Rate</th>
+            <th>Dataset</th>
+            <th>Date</th>
+            <th style="text-align:center">Samples</th>
+            <th>User Model</th>
+            <th>Result</th>
+            <th>Latency</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════════
+// GUARD ARCHITECTURE ANALYZER
+// ════════════════════════════════════════════════════════════
+async function goAnalyzer() {
+  _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
+  updateBreadcrumb();
+  showView('analyzer');
+  setHeaderActive('btn-analyzer');
+  document.body.classList.remove('wide-view');
+  await loadAnalyzer();
+}
+
+async function loadAnalyzer() {
+  try {
+    let data;
+    try {
+      data = await api('/api/analysis-runs');
+    } catch (e) {
+      if (!String(e.message || '').includes('HTTP 404')) throw e;
+      const sims = await api('/api/simulations');
+      data = {
+        domains: [...new Set(sims.map(s => s.domain).filter(Boolean))].sort(),
+        models: [...new Set(sims.map(s => s.model).filter(Boolean))].sort(),
+        runs: sims.map(s => ({
+          id: s.id,
+          label: s.display_name || s.id,
+          date: s.date,
+          domain: s.domain,
+          model: s.model,
+          user_model: s.user_model,
+          guard_model: s.guard_model,
+          guardrail_config: s.guardrail_config,
+          has_guard: Boolean(s.guard_model) || Boolean(s.guardrail_config && !String(s.guardrail_config).endsWith('/null.json')),
+          avg_reward: s.avg_reward,
+          policy_violation_rate: s.policy_violation_rate,
+          guard_block_count: s.guard_block_count || 0,
+          guard_false_positive_count: s.guard_false_positive_count || 0,
+          guard_false_positive_rate: s.guard_false_positive_rate || 0,
+          guard_false_positive_events: s.guard_false_positive_events || [],
+          avg_latency: s.avg_latency,
+          task_latencies: {},
+          num_tasks: s.num_tasks,
+          num_simulations: s.num_simulations,
+        })),
+      };
+    }
+    _analysisRuns = data.runs || [];
+    const domains = data.domains || [];
+    $('analysis-domain').innerHTML = domains.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
+    if (domains.includes('telecom')) $('analysis-domain').value = 'telecom';
+    renderAnalysisPairs();
+    renderAnalyzer();
+  } catch (e) {
+    $('analysis-pairs').innerHTML = errState(e.message);
+  }
+}
+
+function analysisRunLabel(run) {
+  const guard = run.has_guard ? `guard ${run.guard_model || 'configured'}` : 'no guard';
+  const reward = run.avg_reward != null ? `reward ${(run.avg_reward * 100).toFixed(0)}%` : 'reward —';
+  const vio = run.policy_violation_rate != null ? `viol ${(run.policy_violation_rate * 100).toFixed(1)}%` : 'viol —';
+  const fp = run.has_guard ? `fp ${pct(run.guard_false_positive_rate || 0)}` : 'fp —';
+  return `${run.label || run.id} · ${guard} · ${reward} · ${vio} · ${fp}`;
+}
+
+function analysisKey(domain, model, side) {
+  return `${domain}||${model}||${side}`;
+}
+
+function analysisCandidates(domain, model, side) {
+  const wantGuard = side === 'with';
+  return _analysisRuns
+    .filter(r => r.domain === domain && r.model === model && Boolean(r.has_guard) === wantGuard)
+    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.id).localeCompare(String(a.id)));
+}
+
+function selectedAnalysisRun(domain, model, side) {
+  const key = analysisKey(domain, model, side);
+  const id = _analysisSelections[key];
+  return _analysisRuns.find(r => r.id === id) || null;
+}
+
+function selectedRunCard(run, candidatesCount) {
+  if (!run) {
+    return `
+      <div class="analysis-empty-choice">Choose experiment json</div>
+      <div class="analysis-select-meta">${candidatesCount ? `${candidatesCount} run${candidatesCount === 1 ? '' : 's'} available` : 'No matching runs'}</div>
+    `;
+  }
+  return `
+    <div class="analysis-select-title">${esc(run.label || run.id)}</div>
+    <div class="analysis-select-meta">
+      ${rewardBadge(run.avg_reward)}
+      ${badge(`viol ${pct(run.policy_violation_rate)}`, run.policy_violation_rate > 0 ? 'warn' : 'pass')}
+      ${run.has_guard ? badge(`fp ${pct(run.guard_false_positive_rate || 0)}`, (run.guard_false_positive_rate || 0) > 0 ? 'warn' : 'pass') : ''}
+      ${badge(seconds(run.avg_latency), 'gray')}
+      ${badge(`${run.num_tasks || '—'} tasks`, 'agent')}
+    </div>
+    <div class="result-id">${esc(run.id)}</div>
+  `;
+}
+
+function renderAnalysisPairs() {
+  const domain = $('analysis-domain').value;
+  const runs = _analysisRuns.filter(r => r.domain === domain);
+  const models = [...new Set(runs.map(r => r.model).filter(Boolean))]
+    .sort((a, b) => modelRank(a) - modelRank(b) || a.localeCompare(b));
+
+  if (!models.length) {
+    $('analysis-pairs').innerHTML = emptyState('📭', 'No completed runs for this domain', 'Run or select experiments first');
+    return;
+  }
+
+  const rows = [
+    '<div class="pair-head">Agent + Guard Model</div>',
+    '<div class="pair-head">Without Guard</div>',
+    '<div class="pair-head">With Guard</div>',
+  ];
+  models.forEach((model) => {
+    const without = analysisCandidates(domain, model, 'without');
+    const withGuard = analysisCandidates(domain, model, 'with');
+    for (const side of ['without', 'with']) {
+      const key = analysisKey(domain, model, side);
+      const candidates = side === 'without' ? without : withGuard;
+      if (!_analysisSelections[key] && candidates[0]) _analysisSelections[key] = candidates[0].id;
+      if (_analysisSelections[key] && !candidates.some(r => r.id === _analysisSelections[key])) {
+        _analysisSelections[key] = candidates[0]?.id || '';
+      }
+    }
+    const selectedWithout = selectedAnalysisRun(domain, model, 'without');
+    const selectedWith = selectedAnalysisRun(domain, model, 'with');
+    rows.push(`
+      <div class="pair-card pair-model">
+        <div>
+          <div>${esc(model)}</div>
+          <div style="font-size:11px;color:var(--muted);font-weight:500">${without.length} without · ${withGuard.length} with guard</div>
+        </div>
+      </div>
+      <div class="pair-card">
+        <div class="pair-label">Choose experiment json</div>
+        <button class="analysis-select-btn" type="button" data-model="${esc(model)}" data-side="without">
+          ${selectedRunCard(selectedWithout, without.length)}
+        </button>
+      </div>
+      <div class="pair-card">
+        <div class="pair-label">Choose experiment json</div>
+        <button class="analysis-select-btn" type="button" data-model="${esc(model)}" data-side="with">
+          ${selectedRunCard(selectedWith, withGuard.length)}
+        </button>
+      </div>
+    `);
+  });
+  $('analysis-pairs').innerHTML = rows.join('');
+  $('analysis-pairs').querySelectorAll('.analysis-select-btn').forEach(btn => {
+    btn.addEventListener('click', () => openAnalysisPicker(btn.dataset.model, btn.dataset.side));
+  });
+}
+
+function selectedAnalysisRuns(domain, model, side) {
+  const run = selectedAnalysisRun(domain, model, side);
+  return run ? [run] : [];
+}
+
+function openAnalysisPicker(model, side) {
+  const domain = $('analysis-domain').value;
+  _analysisPickerTarget = { domain, model, side };
+  const candidates = analysisCandidates(domain, model, side);
+  const selected = selectedAnalysisRun(domain, model, side);
+  $('analysis-picker-title').textContent = side === 'with' ? 'Choose With-Guard Experiment' : 'Choose Without-Guard Experiment';
+  $('analysis-picker-sub').textContent = `${domain} · ${model} · ${candidates.length} matching run${candidates.length === 1 ? '' : 's'}`;
+  $('analysis-picker-clear').onclick = () => clearAnalysisSelection();
+
+  if (!candidates.length) {
+    $('analysis-picker-body').innerHTML = emptyState('📭', 'No matching runs', 'Run this model/architecture first, then select it here.');
+  } else {
+    const rows = candidates.map(run => `
+      <tr class="analysis-picker-row ${selected && selected.id === run.id ? 'selected' : ''}" data-run-id="${esc(run.id)}">
+        <td>
+          <div style="font-weight:800">${esc(run.label || run.id)}</div>
+          <div class="result-id">${esc(run.id)}</div>
+          <div style="font-size:11px;color:var(--muted)">${esc(run.date || '')}</div>
+        </td>
+        <td>${guardCell(run.guard_model, run.guardrail_config)}</td>
+        <td><div style="font-weight:700">${esc(run.model || '—')}</div></td>
+        <td>${rewardBadge(run.avg_reward)}</td>
+        <td>${pct(run.policy_violation_rate)}</td>
+        <td>${run.has_guard ? `${pct(run.guard_false_positive_rate || 0)} (${run.guard_false_positive_count || 0}/${run.guard_block_count || 0})` : '—'}</td>
+        <td>${badge(esc(run.domain || '—'), 'agent')}</td>
+        <td><code>${esc(run.user_model || '—')}</code></td>
+        <td style="text-align:center">${run.num_tasks ?? '—'}</td>
+        <td>${seconds(run.avg_latency)}</td>
+        <td style="text-align:center">${run.num_simulations ?? '—'}</td>
+      </tr>
+    `).join('');
+    $('analysis-picker-body').innerHTML = `
+      <div class="table-wrap" style="border:0;border-radius:0;box-shadow:none">
+        <table>
+          <thead>
+            <tr>
+              <th>Name / Result</th>
+              <th>Guard</th>
+              <th>Agent Model</th>
+              <th>Avg Reward</th>
+              <th>Policy Violation Rate</th>
+              <th>False Positive Rate</th>
+              <th>Dataset</th>
+              <th>User Model</th>
+              <th style="text-align:center">Samples</th>
+              <th>Latency</th>
+              <th style="text-align:center">Runs</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+    $('analysis-picker-body').querySelectorAll('.analysis-picker-row').forEach(row => {
+      row.addEventListener('click', () => chooseAnalysisRun(row.dataset.runId));
+    });
+  }
+  $('analysis-picker').classList.add('open');
+  $('analysis-picker').setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+}
+
+function closeAnalysisPicker() {
+  $('analysis-picker').classList.remove('open');
+  $('analysis-picker').setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+  _analysisPickerTarget = null;
+}
+
+function chooseAnalysisRun(runId) {
+  if (!_analysisPickerTarget) return;
+  const { domain, model, side } = _analysisPickerTarget;
+  _analysisSelections[analysisKey(domain, model, side)] = runId;
+  closeAnalysisPicker();
+  renderAnalysisPairs();
+  renderAnalyzer();
+}
+
+function clearAnalysisSelection() {
+  if (!_analysisPickerTarget) return;
+  const { domain, model, side } = _analysisPickerTarget;
+  _analysisSelections[analysisKey(domain, model, side)] = '';
+  closeAnalysisPicker();
+  renderAnalysisPairs();
+  renderAnalyzer();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $('analysis-picker')?.classList.contains('open')) {
+    closeAnalysisPicker();
+  }
+});
+
+function aggregateLatencyChange(withoutRuns, withRuns) {
+  const withoutByTask = {};
+  const withByTask = {};
+  for (const r of withoutRuns) {
+    Object.entries(r.task_latencies || {}).forEach(([task, value]) => {
+      (withoutByTask[task] ||= []).push(Number(value));
+    });
+  }
+  for (const r of withRuns) {
+    Object.entries(r.task_latencies || {}).forEach(([task, value]) => {
+      (withByTask[task] ||= []).push(Number(value));
+    });
+  }
+  const changes = Object.keys(withoutByTask)
+    .filter(task => withByTask[task])
+    .map(task => {
+      const base = avg(withoutByTask[task]);
+      const guarded = avg(withByTask[task]);
+      return base ? ((guarded - base) / base) * 100 : null;
+    })
+    .filter(v => v != null && Number.isFinite(v));
+  if (changes.length) return avg(changes);
+  const base = avg(withoutRuns.map(r => r.avg_latency));
+  const guarded = avg(withRuns.map(r => r.avg_latency));
+  return base && guarded != null ? ((guarded - base) / base) * 100 : null;
+}
+
+function collectAnalysisSeries() {
+  const domain = $('analysis-domain').value;
+  const models = [...new Set(_analysisRuns.filter(r => r.domain === domain).map(r => r.model).filter(Boolean))]
+    .sort((a, b) => modelRank(a) - modelRank(b) || a.localeCompare(b));
+  return models.map((model) => {
+    const withoutRuns = selectedAnalysisRuns(domain, model, 'without');
+    const withRuns = selectedAnalysisRuns(domain, model, 'with');
+    return {
+      model,
+      withoutRuns,
+      withRuns,
+      noGuardViolation: avg(withoutRuns.map(r => r.policy_violation_rate)),
+      guardViolation: avg(withRuns.map(r => r.policy_violation_rate)),
+      noGuardReward: avg(withoutRuns.map(r => r.avg_reward)),
+      guardReward: avg(withRuns.map(r => r.avg_reward)),
+      latencyChange: aggregateLatencyChange(withoutRuns, withRuns),
+      falsePositiveRate: avg(withRuns.map(r => r.guard_false_positive_rate)),
+      falsePositiveCount: withRuns.reduce((sum, r) => sum + (Number(r.guard_false_positive_count) || 0), 0),
+      guardBlockCount: withRuns.reduce((sum, r) => sum + (Number(r.guard_block_count) || 0), 0),
+      falsePositiveEvents: withRuns.flatMap(r => (r.guard_false_positive_events || []).map(ev => ({
+        ...ev,
+        model,
+        run_label: r.label || r.id,
+      }))),
+    };
+  }).filter(row => row.withoutRuns.length || row.withRuns.length);
+}
+
+function lineChart(id, labels, noGuard, withGuard, title, yPct = true) {
+  const ctx = $(id);
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Without guard', data: noGuard, borderColor: '#dc2626', backgroundColor: '#fee2e2', tension: .25, spanGaps: true },
+        { label: 'With guard', data: withGuard, borderColor: '#1d4ed8', backgroundColor: '#eff6ff', tension: .25, spanGaps: true },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom' }, title: { display: true, text: title } },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { callback: v => yPct ? `${v}%` : v },
+        },
+      },
+    },
+  });
+}
+
+function barChart(id, labels, values, title) {
+  const ctx = $(id);
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ label: 'Latency change with guard', data: values, backgroundColor: '#0f5f78' }],
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, title: { display: true, text: title } },
+      scales: {
+        y: {
+          ticks: { callback: v => `${v}%` },
+        },
+      },
+    },
+  });
+}
+
+function analyzerInsights(rows) {
+  const paired = rows.filter(r => r.noGuardViolation != null && r.guardViolation != null);
+  const rewardPairs = rows.filter(r => r.noGuardReward != null && r.guardReward != null);
+  const latencyRows = rows.filter(r => r.latencyChange != null);
+  const fpRows = rows.filter(r => r.falsePositiveRate != null);
+  const violationDrop = avg(paired.map(r => (r.noGuardViolation - r.guardViolation) * 100));
+  const rewardDelta = avg(rewardPairs.map(r => (r.guardReward - r.noGuardReward) * 100));
+  const latencyDelta = avg(latencyRows.map(r => r.latencyChange));
+  const falsePositiveAvg = avg(fpRows.map(r => r.falsePositiveRate * 100));
+  const sortedBySize = paired.slice().sort((a, b) => modelRank(a.model) - modelRank(b.model));
+  const small = sortedBySize[0];
+  const large = sortedBySize[sortedBySize.length - 1];
+  const sizeInsight = small && large && small.model !== large.model
+    ? `Without guard, ${esc(small.model)} has ${pct(small.noGuardViolation)} policy violations and ${esc(large.model)} has ${pct(large.noGuardViolation)}.`
+    : 'Add at least two model pairs to compare smaller and larger models.';
+
+  return `
+    <div class="insight-list">
+      <div class="insight"><strong>Safety:</strong> Guarded runs reduce policy violations by ${violationDrop == null ? '—' : violationDrop.toFixed(1) + ' percentage points'} on average across selected model pairs.</div>
+      <div class="insight"><strong>Reward:</strong> Reward changes by ${rewardDelta == null ? '—' : rewardDelta.toFixed(1) + ' percentage points'} on average, so safety gains do not automatically translate into higher reward.</div>
+      <div class="insight"><strong>Latency:</strong> Guarded architecture changes average per-task latency by ${latencyDelta == null ? '—' : pctSigned(latencyDelta)} across selected model pairs.</div>
+      <div class="insight"><strong>False positives:</strong> Guarded runs block allowed tool calls at ${falsePositiveAvg == null ? '—' : falsePositiveAvg.toFixed(1) + '%'} of guard blocks on average.</div>
+      <div class="insight"><strong>Model size:</strong> ${sizeInsight}</div>
+    </div>
+  `;
+}
+
+async function openFalsePositiveChat(runId, taskId, trial) {
+  await loadTasks(runId);
+  loadConvo(taskId);
+  const taskSims = (_simData?.simulations || []).filter(s => String(s.task_id) === String(taskId));
+  const idx = taskSims.findIndex(s => String(s.trial ?? 0) === String(trial ?? 0));
+  if (idx >= 0) {
+    _trialIdx = idx;
+    renderConvo();
+  }
+}
+
+function falsePositiveLinks(rows) {
+  const events = rows.flatMap(r => r.falsePositiveEvents || []);
+  if (!events.length) {
+    return emptyState('✓', 'No false-positive guard blocks in the selected runs', 'A false positive is a guard block without a matching unauthorized_action compliance predicate.');
+  }
+  return `
+    <div class="fp-list">
+      ${events.slice(0, 40).map(ev => `
+        <div class="fp-row">
+          <div>
+            <div style="font-weight:800">${esc(ev.model || 'model')}</div>
+            <div class="result-id">${esc(ev.run_label || ev.run_id)}</div>
+          </div>
+          <div>
+            <div><strong>${esc(ev.tool_name || 'tool')}</strong> blocked on task <code>${esc(ev.task_id)}</code>, trial ${esc(ev.trial ?? 0)}</div>
+            <div class="fp-reason">${esc(ev.reason || 'No guard reason recorded.')}</div>
+          </div>
+          <button class="btn-small" type="button" onclick="openFalsePositiveChat('${esc(ev.run_id)}', '${esc(ev.task_id)}', '${esc(ev.trial ?? 0)}')">Open chat</button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderAnalyzer() {
+  if (!$('analysis-domain') || !$('analysis-domain').value) return;
+  const rows = collectAnalysisSeries();
+  _analysisCharts.forEach(c => c.destroy());
+  _analysisCharts = [];
+  if (!rows.length) {
+    $('analysis-content').innerHTML = emptyState('📊', 'No comparable runs selected', 'Choose experiments on either side of the analyzer');
+    return;
+  }
+
+  const policyRows = rows.slice().sort((a, b) =>
+    ((b.noGuardViolation ?? b.guardViolation ?? -1) - (a.noGuardViolation ?? a.guardViolation ?? -1))
+  );
+  const rewardRows = rows.slice().sort((a, b) =>
+    ((b.noGuardReward ?? b.guardReward ?? -1) - (a.noGuardReward ?? a.guardReward ?? -1))
+  );
+  const latencyRows = rows.slice().sort((a, b) => modelRank(a.model) - modelRank(b.model) || a.model.localeCompare(b.model));
+  const fpRows = rows.slice().sort((a, b) =>
+    ((b.falsePositiveRate ?? -1) - (a.falsePositiveRate ?? -1))
+  );
+
+  $('analysis-content').innerHTML = `
+    <div class="analysis-grid">
+      <section class="chart-card analysis-chart">
+        <canvas id="chart-policy"></canvas>
+      </section>
+      <section class="chart-card analysis-chart">
+        <canvas id="chart-reward"></canvas>
+      </section>
+      <section class="chart-card analysis-chart">
+        <canvas id="chart-latency"></canvas>
+      </section>
+      <section class="chart-card analysis-chart">
+        <canvas id="chart-false-positive"></canvas>
+      </section>
+    </div>
+    <section class="analyzer-panel">
+      <h3 style="margin-bottom:8px">Insights</h3>
+      ${analyzerInsights(rows)}
+    </section>
+    <section class="analyzer-panel">
+      <h3 style="margin-bottom:8px">False Positive Chats</h3>
+      ${falsePositiveLinks(rows)}
+    </section>
+  `;
+
+  _analysisCharts.push(lineChart(
+    'chart-policy',
+    policyRows.map(r => r.model),
+    policyRows.map(r => r.noGuardViolation == null ? null : +(r.noGuardViolation * 100).toFixed(1)),
+    policyRows.map(r => r.guardViolation == null ? null : +(r.guardViolation * 100).toFixed(1)),
+    `Policy violation rate · ${$('analysis-domain').value}`
+  ));
+  _analysisCharts.push(lineChart(
+    'chart-reward',
+    rewardRows.map(r => r.model),
+    rewardRows.map(r => r.noGuardReward == null ? null : +(r.noGuardReward * 100).toFixed(1)),
+    rewardRows.map(r => r.guardReward == null ? null : +(r.guardReward * 100).toFixed(1)),
+    `Reward · ${$('analysis-domain').value}`
+  ));
+  _analysisCharts.push(barChart(
+    'chart-latency',
+    latencyRows.map(r => r.model),
+    latencyRows.map(r => r.latencyChange == null ? null : +r.latencyChange.toFixed(1)),
+    `Per-task latency change with guard · ${$('analysis-domain').value}`
+  ));
+  _analysisCharts.push(barChart(
+    'chart-false-positive',
+    fpRows.map(r => r.model),
+    fpRows.map(r => r.falsePositiveRate == null ? null : +(r.falsePositiveRate * 100).toFixed(1)),
+    `Guard false positive rate · ${$('analysis-domain').value}`
+  ));
+}
+
+// ════════════════════════════════════════════════════════════
+// POLICY MAPPER ANALYZER
+// ════════════════════════════════════════════════════════════
+const MAPPER_METRICS = [
+  { value: 'macro.precision', label: 'Macro P' },
+  { value: 'macro.recall', label: 'Macro R' },
+  { value: 'macro.f1', label: 'Macro F1' },
+  { value: 'micro.precision', label: 'Micro P' },
+  { value: 'micro.recall', label: 'Micro R' },
+  { value: 'micro.f1', label: 'Micro F1' },
+];
+const MAPPER_MODES = [
+  { value: 'llm', label: 'LLM' },
+  { value: 'retrieval', label: 'Retrieval' },
+];
+const MAPPER_CONFS = [
+  { value: 'high', label: 'High' },
+  { value: 'all', label: 'All' },
+];
+
+async function loadMapperOptions() {
+  if (_mapperOptions) return;
+  _mapperOptions = await api('/api/mapper-options');
+  const domains = _mapperOptions.domains || ['airline', 'retail', 'telecom'];
+  $('mapper-run-domain').innerHTML = domains.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
+  $('mapper-run-mode').innerHTML = (_mapperOptions.modes || ['retrieval', 'llm'])
+    .map(m => `<option value="${esc(m)}">${esc(m === 'retrieval' ? 'Retrieval' : 'LLM')}</option>`).join('');
+  if (domains.includes('airline')) $('mapper-run-domain').value = 'airline';
+  $('mapper-run-mode').value = 'retrieval';
+  $('mapper-run-embed').value = _mapperOptions.default_embed_model || 'text-embedding-3-large';
+  $('mapper-run-ce-model').value = _mapperOptions.default_ce_model || 'cross-encoder/ms-marco-MiniLM-L-6-v2';
+  $('mapper-run-ce-top-k').value = _mapperOptions.default_ce_top_k || 20;
+  updateMapperCommandPreview();
+}
+
+function splitModels(value) {
+  return String(value || '').replace(/,/g, ' ').split(/\s+/).map(v => v.trim()).filter(Boolean);
+}
+
+function getMapperRunPayload() {
+  return {
+    name: $('mapper-run-name').value,
+    domain: $('mapper-run-domain').value,
+    mode: $('mapper-run-mode').value,
+    models: splitModels($('mapper-run-models').value),
+    embed_model: $('mapper-run-embed').value,
+    ce_model: $('mapper-run-ce-model').value,
+    ce_top_k: Number($('mapper-run-ce-top-k').value || 20),
+    skip_mapping: $('mapper-run-skip').checked,
+  };
+}
+
+function buildMapperCommand(payload = getMapperRunPayload()) {
+  const parts = [
+    'uv run python policy_tool_mapper/run_pipeline.py',
+    `--domain ${payload.domain}`,
+    `--models ${payload.models.join(' ')}`,
+    `--mode ${payload.mode}`,
+  ];
+  if (payload.mode === 'retrieval') {
+    parts.push(`--embed-model ${payload.embed_model}`);
+    parts.push(`--ce-model ${payload.ce_model}`);
+    parts.push(`--ce-top-k ${payload.ce_top_k}`);
+  }
+  if (payload.skip_mapping) parts.push('--skip-mapping');
+  return parts.join(' \\\n  ');
+}
+
+function updateMapperCommandPreview() {
+  if (!$('mapper-command-preview')) return;
+  $('mapper-command-preview').textContent = buildMapperCommand();
+}
+
+function copyMapperCommand() {
+  navigator.clipboard?.writeText($('mapper-command-preview').textContent);
+}
+
+function syncMapperRunDefaults() {
+  const domain = $('mapper-run-domain').value || 'airline';
+  $('mapper-run-name').value = `${domain[0].toUpperCase()}${domain.slice(1)} mapper run`;
+  updateMapperCommandPreview();
+}
+
+async function scheduleMapperRun(event) {
+  event.preventDefault();
+  $('btn-schedule-mapper').disabled = true;
+  try {
+    const response = await fetch('/api/mapper-experiments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(getMapperRunPayload()),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Could not schedule mapper run');
+    await loadMapperExperiments();
+  } catch (e) {
+    $('mapper-runs-content').innerHTML = errState(e.message);
+  } finally {
+    $('btn-schedule-mapper').disabled = false;
+  }
+}
+
+async function loadMapperExperiments() {
+  try {
+    _mapperExperiments = await api('/api/mapper-experiments');
+    renderMapperExperiments();
+  } catch (e) {
+    $('mapper-runs-content').innerHTML = errState(e.message);
+  }
+}
+
+async function cancelMapperRun(event, experimentId) {
+  event.preventDefault();
+  event.stopPropagation();
+  if (!confirm('Cancel this mapper run?')) return;
+  try {
+    const response = await fetch(`/api/mapper-experiments/${encodeURIComponent(experimentId)}/cancel`, { method: 'POST' });
+    let payload = {};
+    try {
+      payload = await response.json();
+    } catch (_) {
+      payload = {};
+    }
+    if (!response.ok) throw new Error(payload.error || `Cancel failed (${response.status})`);
+    await loadMapperExperiments();
+  } catch (e) {
+    $('mapper-runs-content').innerHTML = errState(e.message);
+  }
+}
+
+function mapperRunMetrics(exp) {
+  const results = exp.metrics?.results || [];
+  if (!results.length) return exp.error ? esc(exp.error) : '—';
+  const chips = results.slice(0, 4).map(r => {
+    const high = r.scores_high?.micro?.f1 ?? r.scores_high?.overall?.micro?.f1;
+    const all = r.scores_all?.micro?.f1 ?? r.scores_all?.overall?.micro?.f1;
+    return `<div><code>${esc(r.model || exp.models?.[0] || '')}</code> high ${pct(high)} · all ${pct(all)}</div>`;
+  }).join('');
+  const more = results.length > 4 ? `<div style="color:var(--muted)">+${results.length - 4} more</div>` : '';
+  return chips + more;
+}
+
+function renderMapperExperiments() {
+  if (!_mapperExperiments.length) {
+    $('mapper-runs-content').innerHTML = emptyState('🧭', 'No mapper runs scheduled', 'Use the form above to queue policy-tool mapper runs');
+    return;
+  }
+  const rows = _mapperExperiments.slice().reverse().map(e => {
+    const canCancel = ['queued', 'running', 'cancelling'].includes(e.status);
+    const cancelButton = canCancel
+      ? `<button class="btn-small btn-danger" type="button" onclick="cancelMapperRun(event, '${esc(e.id)}')" ${e.status === 'cancelling' ? 'disabled' : ''}>Cancel</button>`
+      : '';
+    return `
+      <tr>
+        <td><strong>${esc(e.name)}</strong><div style="font-size:10px;color:var(--muted)">${esc(e.created_at || '')}</div></td>
+        <td>${badge(esc(e.domain), 'agent')}</td>
+        <td>${badge(esc(e.mode), e.mode === 'retrieval' ? 'warn' : 'agent')}</td>
+        <td>${(e.models || []).map(m => `<code>${esc(m)}</code>`).join('<br>')}</td>
+        <td>${statusPill(e.status)}</td>
+        <td class="result-id">${esc(e.summary_path || '—')}</td>
+        <td>${mapperRunMetrics(e)}</td>
+        <td>${cancelButton}</td>
+      </tr>
+    `;
+  }).join('');
+  $('mapper-runs-content').innerHTML = `
+    <section class="analyzer-panel mapper-table">
+      <h3 style="margin-bottom:8px">Mapper Run Queue</h3>
+      <div class="table-wrap scroll-x">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Domain</th>
+              <th>Mode</th>
+              <th>Models</th>
+              <th>Status</th>
+              <th>Summary</th>
+              <th>Metrics</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+function mapperMetricLabel(metric) {
+  return MAPPER_METRICS.find(m => m.value === metric)?.label || metric;
+}
+
+function mapperMetricValue(row, metric) {
+  const [group, key] = metric.split('.');
+  const value = row?.[group]?.[key];
+  return value == null ? null : Number(value);
+}
+
+function mapperComboLabel(mode, conf) {
+  return `${mode === 'retrieval' ? 'Retrieval' : 'LLM'} · ${conf}`;
+}
+
+function mapperColor(mode, conf) {
+  const key = `${mode}:${conf}`;
+  return {
+    'llm:high': '#1d4ed8',
+    'llm:all': '#60a5fa',
+    'retrieval:high': '#dc2626',
+    'retrieval:all': '#f97316',
+  }[key] || '#64748b';
+}
+
+function renderCheckGroup(id, options, selected) {
+  $(id).innerHTML = options.map(opt => `
+    <label class="check-pill">
+      <input type="checkbox" value="${esc(opt.value)}" ${selected.includes(opt.value) ? 'checked' : ''}>
+      ${esc(opt.label)}
+    </label>
+  `).join('');
+  $(id).querySelectorAll('input').forEach(input => input.addEventListener('change', renderMapper));
+}
+
+function checkedValues(id) {
+  return [...$(id).querySelectorAll('input:checked')].map(input => input.value);
+}
+
+async function goMapper() {
+  _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
+  updateBreadcrumb();
+  showView('mapper');
+  setHeaderActive('btn-mapper');
+  document.body.classList.add('wide-view');
+  await loadMapperOptions();
+  await loadMapperExperiments();
+  await loadMapper();
+}
+
+async function loadMapper() {
+  try {
+    const data = await api('/api/policy-mapper-results');
+    _mapperResults = data.results || [];
+    const domains = data.domains || [];
+    $('mapper-domain').innerHTML = domains.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
+    if (domains.includes('airline')) $('mapper-domain').value = 'airline';
+    renderCheckGroup('mapper-metrics', MAPPER_METRICS, ['macro.f1', 'micro.f1']);
+    renderCheckGroup('mapper-modes', MAPPER_MODES, ['llm', 'retrieval']);
+    renderCheckGroup('mapper-confs', MAPPER_CONFS, ['high', 'all']);
+    $('mapper-domain').onchange = renderMapper;
+    renderMapper();
+  } catch (e) {
+    $('mapper-content').innerHTML = errState(e.message);
+  }
+}
+
+function collectMapperRows() {
+  const domain = $('mapper-domain').value;
+  const modes = checkedValues('mapper-modes');
+  const confs = checkedValues('mapper-confs');
+  return _mapperResults
+    .filter(r => r.domain === domain && modes.includes(r.mode) && confs.includes(r.conf))
+    .sort((a, b) =>
+      modelRank(a.model) - modelRank(b.model)
+      || a.model.localeCompare(b.model)
+      || a.mode.localeCompare(b.mode)
+      || a.conf.localeCompare(b.conf)
+    );
+}
+
+function mapperLineChart(id, metric, rows) {
+  const domain = $('mapper-domain').value;
+  const modes = checkedValues('mapper-modes');
+  const confs = checkedValues('mapper-confs');
+  const models = [...new Set(rows.map(r => r.model))].sort((a, b) => modelRank(a) - modelRank(b) || a.localeCompare(b));
+  const datasets = [];
+  for (const mode of modes) {
+    for (const conf of confs) {
+      datasets.push({
+        label: mapperComboLabel(mode, conf),
+        data: models.map(model => {
+          const row = rows.find(r => r.model === model && r.mode === mode && r.conf === conf);
+          const value = mapperMetricValue(row, metric);
+          return value == null ? null : +(value * 100).toFixed(1);
+        }),
+        borderColor: mapperColor(mode, conf),
+        backgroundColor: mapperColor(mode, conf),
+        tension: .22,
+        spanGaps: true,
+      });
+    }
+  }
+  return new Chart($(id), {
+    type: 'line',
+    data: { labels: models, datasets },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        title: { display: true, text: `${mapperMetricLabel(metric)} · ${domain}` },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          suggestedMax: 100,
+          ticks: { callback: v => `${v}%` },
+        },
+      },
+    },
+  });
+}
+
+function renderMapperTable(rows) {
+  if (!rows.length) return '';
+  const body = rows.map(r => `
+    <tr>
+      <td><code>${esc(r.model)}</code></td>
+      <td>${badge(esc(r.mode), r.mode === 'retrieval' ? 'warn' : 'agent')}</td>
+      <td>${badge(esc(r.conf), r.conf === 'high' ? 'pass' : 'gray')}</td>
+      <td>${pct(r.macro?.precision)}</td>
+      <td>${pct(r.macro?.recall)}</td>
+      <td>${pct(r.macro?.f1)}</td>
+      <td>${pct(r.micro?.precision)}</td>
+      <td>${pct(r.micro?.recall)}</td>
+      <td>${pct(r.micro?.f1)}</td>
+      <td><code>${esc(r.file)}</code></td>
+    </tr>
+  `).join('');
+  return `
+    <section class="analyzer-panel mapper-table">
+      <h3 style="margin-bottom:8px">Selected Results</h3>
+      <div class="table-wrap scroll-x">
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Mode</th>
+              <th>Conf</th>
+              <th>Macro P</th>
+              <th>Macro R</th>
+              <th>Macro F1</th>
+              <th>Micro P</th>
+              <th>Micro R</th>
+              <th>Micro F1</th>
+              <th>Eval File</th>
+            </tr>
+          </thead>
+          <tbody>${body}</tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+function renderMapperInsights(rows, metrics) {
+  const hasRetrieval = rows.some(r => r.mode === 'retrieval');
+  const hasLlm = rows.some(r => r.mode === 'llm');
+  const firstMetric = metrics[0] || 'macro.f1';
+  const pairs = [];
+  const models = [...new Set(rows.map(r => r.model))];
+  for (const model of models) {
+    for (const conf of checkedValues('mapper-confs')) {
+      const llm = rows.find(r => r.model === model && r.mode === 'llm' && r.conf === conf);
+      const retrieval = rows.find(r => r.model === model && r.mode === 'retrieval' && r.conf === conf);
+      const base = mapperMetricValue(llm, firstMetric);
+      const ret = mapperMetricValue(retrieval, firstMetric);
+      if (base != null && ret != null) pairs.push((ret - base) * 100);
+    }
+  }
+  const delta = avg(pairs);
+  return `
+    <section class="analyzer-panel">
+      <h3 style="margin-bottom:8px">Quick Read</h3>
+      <div class="insight-list">
+        <div class="insight"><strong>Selected slice:</strong> ${rows.length} eval result${rows.length === 1 ? '' : 's'} across ${models.length} model${models.length === 1 ? '' : 's'}.</div>
+        <div class="insight"><strong>Mode comparison:</strong> ${hasLlm && hasRetrieval ? `Retrieval changes ${mapperMetricLabel(firstMetric)} by ${delta == null ? '—' : pctSigned(delta)} points vs LLM mode on matched model/confidence pairs.` : 'Select both LLM and retrieval to compare modes.'}</div>
+        <div class="insight"><strong>Confidence:</strong> Use high-only to inspect conservative mappings; use all to include medium-confidence mapper outputs.</div>
+      </div>
+    </section>
+  `;
+}
+
+function renderMapper() {
+  if (!$('mapper-domain') || !$('mapper-domain').value) return;
+  _mapperCharts.forEach(chart => chart.destroy());
+  _mapperCharts = [];
+  const metrics = checkedValues('mapper-metrics');
+  const rows = collectMapperRows();
+  if (!rows.length || !metrics.length) {
+    $('mapper-content').innerHTML = emptyState('📭', 'No mapper results for this slice', 'Run policy mapper evals, or select at least one metric/mode/confidence.');
+    return;
+  }
+  $('mapper-content').innerHTML = `
+    <div class="mapper-grid">
+      ${metrics.map((metric, idx) => `
+        <section class="chart-card mapper-chart">
+          <canvas id="mapper-chart-${idx}"></canvas>
+        </section>
+      `).join('')}
+    </div>
+    ${renderMapperInsights(rows, metrics)}
+    ${renderMapperTable(rows)}
+  `;
+  metrics.forEach((metric, idx) => {
+    _mapperCharts.push(mapperLineChart(`mapper-chart-${idx}`, metric, rows));
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// VIEW 1 — SIMULATIONS
+// ════════════════════════════════════════════════════════════
+async function goSims() {
+  _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
+  updateBreadcrumb();
+  showView('sims');
+  setHeaderActive(null);
+  document.body.classList.add('wide-view');
+}
+
+async function loadSims() {
+  try {
+    _sims = await api('/api/simulations');
+    renderSims();
+  } catch(e) {
+    $('sims-content').innerHTML = errState(e.message);
+  }
+}
+
+function renderSims() {
+  document.body.classList.add('wide-view');
+  const n = _sims.length;
+  $('sims-sub').textContent = `${n} run${n !== 1 ? 's' : ''} found in tau2-bench/data/simulations/`;
+  if (n === 0) {
+    $('sims-content').innerHTML = emptyState('📭', 'No simulations found', 'Run tau2 to generate simulation data');
+    return;
+  }
+  const rows = _sims.map(s => {
+    const rCls = rewardClass(s.avg_reward);
+    const fillCls = rCls === 'pass' ? 'rf-pass' : rCls === 'fail' ? 'rf-fail' : 'rf-warn';
+    const rewardPct = s.avg_reward != null ? (s.avg_reward * 100).toFixed(0) : 0;
+    const rewardHtml = s.avg_reward != null
+      ? `<div class="reward-wrap">
+           <div class="reward-bar"><div class="reward-fill ${fillCls}" style="width:${rewardPct}%"></div></div>
+           ${rewardBadge(s.avg_reward)}
+         </div>`
+      : badge('No runs', 'gray');
+    return `
+      <tr onclick="loadTasks('${esc(s.id)}')">
+        <td>
+          <div style="font-weight:700">${esc(s.display_name || s.id)}</div>
+          ${s.display_name && s.display_name !== s.id ? `<div class="result-id">${esc(s.id)}</div>` : ''}
+          <div style="font-size:11px;color:var(--muted)">${esc(s.date)}</div>
+        </td>
+        <td>${guardCell(s.guard_model, s.guardrail_config)}</td>
+        <td>${agentCell(s.agent)}</td>
+        <td>
+          <div style="font-weight:600">${esc(s.model)}</div>
+        </td>
+        <td>${rewardHtml}</td>
+        <td>${pct(s.policy_violation_rate)}</td>
+        <td>${badge(esc(s.dataset_label || s.domain), 'agent')}</td>
+        <td><code>${esc(s.user_model || '—')}</code></td>
+        <td style="text-align:center">${s.num_tasks}</td>
+        <td>${seconds(s.avg_latency)}</td>
+        <td style="text-align:center">${s.num_simulations}</td>
+        <td style="color:var(--muted);font-size:16px;text-align:center">›</td>
+      </tr>`;
+  }).join('');
+  $('sims-content').innerHTML = `
+    <div class="table-wrap scroll-x">
+      <table class="sim-runs-table">
+        <thead>
+          <tr>
+            <th>Name / Result</th>
+            <th>Guard</th>
+            <th>Agent</th>
+            <th>Agent Model</th>
+            <th>Avg Reward</th>
+            <th>Policy Violation Rate</th>
+            <th>Dataset</th>
+            <th>User Model</th>
+            <th style="text-align:center">Samples</th>
+            <th>Latency</th>
+            <th style="text-align:center">Runs</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════════
+// VIEW 2 — TASKS
+// ════════════════════════════════════════════════════════════
+async function loadTasks(simId) {
+  _simId = simId; _taskId = null; _trialIdx = 0;
+  showView('tasks');
+  updateBreadcrumb();
+  document.body.classList.remove('wide-view');
+  $('tasks-content').innerHTML = loading();
+  $('sim-info').innerHTML = '';
+
+  try {
+    _simData = await api(`/api/simulations/${encodeURIComponent(simId)}`);
+    renderTasks();
+  } catch(e) {
+    $('tasks-content').innerHTML = errState(e.message);
+  }
+}
+
+function goTasks() {
+  _taskId = null; _trialIdx = 0;
+  updateBreadcrumb();
+  showView('tasks');
+  document.body.classList.remove('wide-view');
+}
+
+function renderTasks() {
+  const info    = _simData.info   || {};
+  const agent   = info.agent_info || {};
+  const uinfo   = info.user_info  || {};
+  const env     = info.environment_info || {};
+  const tasks   = _simData.tasks  || [];
+  const sims    = _simData.simulations || [];
+
+  // Group sims by task_id
+  const byTask = {};
+  for (const s of sims) {
+    const k = String(s.task_id);
+    (byTask[k] = byTask[k] || []).push(s);
+  }
+
+  const domain = env.domain_name || env.domain || (_simId.split('_')[2] || '—');
+
+  // Info bar
+  $('sim-info').innerHTML = [
+    ['Agent Model',   `<code>${esc(agent.llm || '—')}</code>`],
+    ['User Model',    `<code>${esc(uinfo.llm || '—')}</code>`],
+    ['Domain',        badge(esc(domain), 'agent')],
+    ['Max Steps',     info.max_steps ?? '—'],
+    ['Trials',        info.num_trials ?? '—'],
+    ['Total Runs',    sims.length],
+  ].map(([lbl, val]) => `
+    <div class="info-card">
+      <div class="info-label">${lbl}</div>
+      <div class="info-value">${val}</div>
+    </div>`).join('');
+
+  $('tasks-sub').textContent =
+    `${tasks.length} task${tasks.length !== 1 ? 's' : ''} · ${sims.length} simulation${sims.length !== 1 ? 's' : ''}`;
+
+  if (tasks.length === 0) {
+    $('tasks-content').innerHTML = emptyState('📋', 'No tasks', 'The results file contains no task definitions');
+    return;
+  }
+
+  const rows = tasks.map(t => {
+    const key      = String(t.id);
+    const taskSims = byTask[key] || [];
+    const best     = taskSims.slice().sort((a,b) => (b.reward_info?.reward??0) - (a.reward_info?.reward??0))[0];
+    const reward   = best?.reward_info?.reward ?? null;
+    const msgs     = best?.messages?.length ?? 0;
+    const term     = best?.termination_reason ?? null;
+    const desc     = t.description?.notes || t.description?.purpose || '—';
+    const short    = desc.length > 110 ? desc.slice(0,110)+'…' : desc;
+
+    // Compliance summary across all trials
+    const allChecks = taskSims.flatMap(s => (s.reward_info?.compliance_checks || []).filter(c => !c.skipped));
+    const nViolated = allChecks.filter(c => !c.passed).length;
+    const nGuarded  = allChecks.filter(c => c.passed && c.violation_detail).length;
+    const complianceBadge = !taskSims.length ? ''
+      : nViolated ? badge(`✗ ${nViolated} violated`, 'fail')
+      : nGuarded  ? badge(`🛡️ ${nGuarded} guarded`, 'pass')
+      : allChecks.length ? badge('✓ compliant', 'pass')
+      : '';
+
+    return `
+      <tr onclick="loadConvo('${esc(key)}')">
+        <td class="task-id-cell">#${esc(key)}</td>
+        <td class="task-desc-cell">
+          <div style="font-weight:500;margin-bottom:2px">${esc(short)}</div>
+          ${taskSims.length > 1 ? `<div style="font-size:11px;color:var(--muted)">${taskSims.length} trials</div>` : ''}
+        </td>
+        <td>${taskSims.length ? rewardBadge(reward) : badge('No run','gray')}</td>
+        <td>${complianceBadge}</td>
+        <td style="color:var(--muted)">${msgs ? msgs+' msgs' : '—'}</td>
+        <td>${taskSims.length ? termBadge(term) : '—'}</td>
+        <td style="color:var(--muted);font-size:16px;text-align:center">›</td>
+      </tr>`;
+  }).join('');
+
+  $('tasks-content').innerHTML = `
+    <div class="table-wrap">
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Reward</th>
+            <th>Policy</th>
+            <th>Turns</th>
+            <th>Termination</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════════
+// VIEW 3 — CONVERSATION
+// ════════════════════════════════════════════════════════════
+function loadConvo(taskId) {
+  _taskId = String(taskId);
+  _trialIdx = 0;
+  updateBreadcrumb();
+  showView('convo');
+  renderConvo();
+}
+
+function renderConvo() {
+  const tasks    = _simData.tasks || [];
+  const allSims  = _simData.simulations || [];
+  const task     = tasks.find(t => String(t.id) === _taskId);
+  const taskSims = allSims.filter(s => String(s.task_id) === _taskId);
+
+  renderTaskHeader(task, taskSims);
+  renderTrialBar(taskSims);
+  renderMessages(taskSims[_trialIdx]);
+}
+
+function renderTaskHeader(task, taskSims) {
+  if (!task) { $('task-hdr').innerHTML = ''; return; }
+
+  const sim     = taskSims[_trialIdx] || taskSims[0];
+  const reward  = sim?.reward_info?.reward ?? null;
+  const term    = sim?.termination_reason;
+  const agCost  = sim?.agent_cost;
+  const dur     = sim?.duration;
+
+  const desc     = task.description?.notes || task.description?.purpose || '';
+  const scenario = typeof task.user_scenario?.instructions === 'string'
+    ? task.user_scenario.instructions
+    : task.user_scenario?.instructions?.reason_for_call
+      || task.user_scenario?.instructions?.task_instructions || '';
+
+  const actions = (task.evaluation_criteria?.actions || []).map(a => {
+    const who = a.requestor === 'user' ? 'user' : 'agent';
+    return `<span class="action-chip"><span class="who ${who}">${esc(a.requestor)}:</span> ${esc(a.name)}</span>`;
+  }).join('');
+
+  const assertions = (task.evaluation_criteria?.nl_assertions || []);
+  const assertHtml = assertions.length ? `
+    <div style="margin-top:10px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:5px">Assertions</div>
+      ${assertions.map(a => `<div style="font-size:12px;color:var(--muted);margin-bottom:3px;line-height:1.4">• ${esc(a)}</div>`).join('')}
+    </div>` : '';
+
+  const guardrailEvents = sim?.guardrail_events || [];
+  const guardrailHtml = guardrailEvents.length ? `
+    <div class="guardrail-summary">
+      <div class="guardrail-summary-label">🛡️ Guardrail Blocks (${guardrailEvents.length})</div>
+      ${guardrailEvents.map(ev => `
+        <div class="guardrail-event-row">
+          <code>${esc(ev.tool_name)}</code> — blocked by <strong>${esc(ev.guard_name)}</strong>
+        </div>`).join('')}
+    </div>` : '';
+
+  // ── Policy compliance checks ──────────────────────────────────────────────
+  const compChecks = (sim?.reward_info?.compliance_checks || []).filter(c => !c.skipped);
+  const activeChecks = compChecks.filter(c => !c.passed || c.violation_detail);
+  const numViolated = compChecks.filter(c => !c.passed).length;
+  const numGuarded  = compChecks.filter(c => c.passed && c.violation_detail).length;
+
+  const complianceHtml = activeChecks.length ? `
+    <div class="compliance-panel">
+      <div class="compliance-panel-label">
+        📋 Policy Compliance — ${compChecks.length} checks
+        ${numViolated ? `· <span style="color:var(--fail)">✗ ${numViolated} violation${numViolated>1?'s':''}</span>` : ''}
+        ${numGuarded  ? `· <span style="color:var(--pass)">🛡️ ${numGuarded} guarded</span>` : ''}
+      </div>
+      ${activeChecks.map(c => {
+        const isViolation = !c.passed;
+        const cls  = isViolation ? 'violated' : 'guarded';
+        const icon = isViolation ? '✗' : '🛡️';
+        const status = isViolation ? 'VIOLATION' : 'GUARDED';
+        // Extract tool name from violation_detail if present
+        const toolMatch = (c.violation_detail || '').match(/(?:executed|attempted) '([^']+)'/);
+        const toolName  = toolMatch ? toolMatch[1] : null;
+        return `
+          <div class="compliance-entry ${cls}">
+            <div class="compliance-entry-hdr">
+              <span>${icon} ${status}</span>
+              ${toolName ? `<span class="ce-tool">${esc(toolName)}</span>` : ''}
+              <span class="ce-check-id">${esc(c.check_id)}</span>
+            </div>
+            <div class="ce-desc">${esc(c.description)}</div>
+            ${c.violation_detail ? `<div class="ce-detail">${esc(c.violation_detail)}</div>` : ''}
+          </div>`;
+      }).join('')}
+    </div>` : '';
+
+  $('task-hdr').innerHTML = `
+    <div class="task-header-card">
+      <div class="task-title-row">
+        <span class="task-title">Task #${esc(_taskId)}</span>
+        ${rewardBadge(reward)}
+        ${termBadge(term)}
+        ${agCost != null ? badge(cost$(agCost), 'gray') : ''}
+        ${dur != null ? badge(Math.round(dur)+'s', 'gray') : ''}
+        ${guardrailEvents.length ? `<span class="guardrail-badge">🛡️ ${guardrailEvents.length} blocked</span>` : ''}
+        ${numViolated ? `<span class="badge b-fail">✗ ${numViolated} policy violation${numViolated>1?'s':''}</span>` : ''}
+        ${numGuarded && !numViolated ? `<span class="badge b-pass">🛡️ ${numGuarded} guarded</span>` : ''}
+      </div>
+      ${desc ? `<div class="task-desc">${esc(desc)}</div>` : ''}
+      ${scenario ? `<div class="task-scenario"><strong>👤 User goal</strong>${esc(scenario)}</div>` : ''}
+      ${actions ? `<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:5px;margin-top:10px">Expected Actions</div><div class="actions-list">${actions}</div>` : ''}
+      ${assertHtml}
+      ${guardrailHtml}
+      ${complianceHtml}
+    </div>`;
+}
+
+function renderTrialBar(taskSims) {
+  if (taskSims.length <= 1) { $('trial-bar').innerHTML = ''; return; }
+  const btns = taskSims.map((s, i) => {
+    const r = s.reward_info?.reward ?? null;
+    const cls = _trialIdx === i ? 'active' : (r != null ? (r >= 0.95 ? 'pass' : 'fail') : '');
+    return `<button class="trial-btn ${cls}" onclick="selectTrial(${i})">Trial ${i+1}</button>`;
+  }).join('');
+  $('trial-bar').innerHTML = `<div class="trial-bar"><span class="trial-label">Trial:</span>${btns}</div>`;
+}
+
+function selectTrial(idx) {
+  _trialIdx = idx;
+  renderConvo();
+}
+
+function renderMessages(sim) {
+  if (!sim) {
+    $('convo').innerHTML = emptyState('📭', 'No simulation data', 'This task has no recorded run');
+    return;
+  }
+  const messages = sim.messages || [];
+  if (messages.length === 0) {
+    $('convo').innerHTML = emptyState('💬', 'No messages', 'The simulation produced no messages');
+    return;
+  }
+
+  // Build lookup: tool_call_id → GuardrailEvent (for blocked calls)
+  const blockedByCallId = {};
+  for (const ev of (sim.guardrail_events || [])) {
+    blockedByCallId[ev.tool_call_id] = ev;
+  }
+
+  // Process messages: attach tool results to the preceding tool call message
+  const cards = [];
+  let i = 0;
+  while (i < messages.length) {
+    const msg = messages[i];
+
+    if (msg.role === 'tool') {
+      // Orphaned tool message (shouldn't happen, but be safe)
+      i++; continue;
+    }
+
+    if (msg.role === 'assistant' && msg.tool_calls?.length) {
+      // Collect the N tool result messages that follow (positional, since tool_call_id is null)
+      const results = [];
+      let j = i + 1;
+      while (j < messages.length && messages[j].role === 'tool') {
+        results.push(messages[j]);
+        j++;
+      }
+      cards.push(renderToolCallCard(msg, results, blockedByCallId));
+      // Emit a standalone guardrail interception card for each blocked call
+      (msg.tool_calls || []).forEach((tc, idx) => {
+        const guardEv = blockedByCallId[tc.id];
+        if (guardEv) {
+          cards.push(renderGuardrailCard(guardEv, results[idx], tc));
+        }
+      });
+      i = j; // skip past all consumed tool messages
+    } else {
+      cards.push(renderTextCard(msg));
+      i++;
+    }
+  }
+
+  $('convo').innerHTML = cards.join('');
+}
+
+// ── Text message card ───────────────────────────────────────
+function renderTextCard(msg) {
+  const role    = msg.role;
+  const content = msg.content ?? '';
+  const isStop  = content.includes('###STOP###');
+  const isEmpty = !content.trim();
+
+  const icons = { assistant: '🤖', user: '👤', tool: '⚙️' };
+  const labels = { assistant: 'Agent', user: 'User', tool: 'Environment' };
+
+  const meta = buildMeta(msg);
+  const bodyHtml = isStop
+    ? `<div class="msg-body">${badge('Conversation ended', 'gray')}</div>`
+    : isEmpty
+    ? `<div class="msg-body empty">(empty message)</div>`
+    : `<div class="msg-body">${esc(content)}</div>`;
+
+  return `
+    <div class="msg m-${role}">
+      <div class="msg-head m-${role}">
+        <span class="msg-role-icon">${icons[role] || '?'}</span>
+        <span>${labels[role] || role}</span>
+        ${meta ? `<div class="msg-meta">${meta}</div>` : ''}
+      </div>
+      ${bodyHtml}
+    </div>`;
+}
+
+// ── Tool call card ──────────────────────────────────────────
+function renderToolCallCard(msg, results, blockedByCallId = {}) {
+  const meta = buildMeta(msg);
+
+  // Optional text content before tool calls (unusual but handle it)
+  const textContent = msg.content?.trim()
+    ? `<div class="msg-body">${esc(msg.content)}</div>` : '';
+
+  const toolBlocks = (msg.tool_calls || []).map((tc, idx) => {
+    const uid      = `tc-${Date.now()}-${Math.random().toString(36).slice(2)}-${idx}`;
+    const result   = results[idx] || null;
+    const guardEv  = blockedByCallId[tc.id] || null;
+    const isBlocked = !!guardEv;
+
+    // Arguments
+    const args = typeof tc.arguments === 'string' ? tryJson(tc.arguments) : tc.arguments;
+    const argsHtml = (args !== null && args !== undefined)
+      ? hlJson(args)
+      : `<div class="result-block" style="color:var(--muted);font-style:italic">No arguments</div>`;
+
+    // Result — special rendering for guardrail blocks
+    let resultHtml = '';
+    if (isBlocked) {
+      resultHtml = `
+        <div class="tc-section">
+          <div class="tc-section-label" style="color:var(--fail)">🛡️ <span>Intercepted by ${esc(guardEv.guard_name)} — see interception card below</span></div>
+        </div>`;
+    } else if (result) {
+      const parsed = tryJson(result.content);
+      resultHtml = `
+        <div class="tc-section">
+          <div class="tc-section-label">↩ <span>Returned</span></div>
+          ${parsed !== null ? hlJson(parsed) : `<div class="result-block">${esc(String(result.content ?? ''))}</div>`}
+        </div>`;
+    } else {
+      resultHtml = `
+        <div class="tc-section">
+          <div class="tc-section-label">↩ <span>Returned</span></div>
+          <div style="color:var(--muted);font-size:12px;font-style:italic">No result recorded</div>
+        </div>`;
+    }
+
+    // Count args for the summary hint
+    const argCount = args && typeof args === 'object' ? Object.keys(args).length : 0;
+    const hint = argCount ? `${argCount} arg${argCount !== 1 ? 's' : ''}` : '';
+
+    return `
+      <div class="tc${isBlocked ? ' blocked' : ''}">
+        <div class="tc-head${isBlocked ? ' blocked' : ''}" onclick="toggleTc('${uid}')">
+          <span class="tc-icon">${isBlocked ? '🛡️' : '🔧'}</span>
+          <span class="tc-name">${esc(tc.name)}</span>
+          ${isBlocked ? `<span class="guardrail-badge">blocked</span>` : hint ? `<span class="tc-hint">${hint}</span>` : ''}
+          <span class="tc-chevron" id="chev-${uid}">▶</span>
+        </div>
+        <div class="tc-body" id="body-${uid}">
+          <div class="tc-section">
+            <div class="tc-section-label">→ <span>Arguments</span></div>
+            ${argsHtml}
+          </div>
+          ${resultHtml}
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="msg m-assistant">
+      <div class="msg-head m-assistant">
+        <span class="msg-role-icon">🤖</span>
+        <span>Agent</span>
+        <span style="font-weight:400;color:var(--muted);font-size:11px;margin-left:2px">
+          · ${msg.tool_calls.length} tool call${msg.tool_calls.length !== 1 ? 's' : ''}
+        </span>
+        ${meta ? `<div class="msg-meta">${meta}</div>` : ''}
+      </div>
+      ${textContent}
+      <div class="tool-calls">${toolBlocks}</div>
+    </div>`;
+}
+
+// ── Guardrail interception card ─────────────────────────────
+function renderGuardrailCard(guardEv, toolMsg, tc) {
+  // Prefer the full rejection text the agent actually received (stored in the
+  // ToolMessage), fall back to the structured reason from the GuardrailEvent.
+  const agentSaw = toolMsg?.content || '';
+  const body = agentSaw.startsWith('POLICY GUARDRAIL')
+    ? agentSaw
+    : (guardEv.reason || agentSaw || '(no details recorded)');
+
+  return `
+    <div class="msg m-guardrail">
+      <div class="msg-head m-guardrail">
+        <span class="msg-role-icon">🛡️</span>
+        <span>Guardrail — ${esc(guardEv.guard_name)}</span>
+        <span class="guardrail-badge">intercepted</span>
+        <span style="margin-left:6px" class="guardrail-tool-ref">${esc(tc?.name || guardEv.tool_name)}</span>
+        <div class="msg-meta" style="color:#b91c1c">Tool was NOT executed</div>
+      </div>
+      <div class="guardrail-feedback-body">${esc(body)}</div>
+    </div>`;
+}
+
+function toggleTc(uid) {
+  const body = $('body-' + uid);
+  const chev = $('chev-' + uid);
+  const open = body.classList.toggle('open');
+  chev.classList.toggle('open', open);
+  chev.textContent = open ? '▼' : '▶';
+}
+
+function buildMeta(msg) {
+  const parts = [];
+  if (msg.turn_idx != null)   parts.push(`Turn ${msg.turn_idx}`);
+  if (msg.cost)               parts.push(cost$(msg.cost));
+  if (msg.usage?.completion_tokens != null)
+    parts.push(`${msg.usage.prompt_tokens ?? 0}↑ ${msg.usage.completion_tokens}↓ tok`);
+  return parts.join(' · ');
+}
+
+// ════════════════════════════════════════════════════════════
+// REUSABLE TEMPLATES
+// ════════════════════════════════════════════════════════════
+function loading() {
+  return `<div class="loading"><div class="spinner"></div> Loading…</div>`;
+}
+function errState(msg) {
+  return emptyState('⚠️', 'Failed to load', esc(msg));
+}
+function emptyState(icon, title, sub) {
+  return `<div class="empty-state">
+    <div class="empty-icon">${icon}</div>
+    <div class="empty-title">${title}</div>
+    <div class="empty-sub">${sub}</div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════════════
+// VIEW 4 — BUDGET
+// ════════════════════════════════════════════════════════════
+let _budgetChart = null;
+
+async function gobudget() {
+  _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
+  updateBreadcrumb();
+  showView('budget');
+  setHeaderActive('btn-budget');
+  document.body.classList.remove('wide-view');
+  $('budget-content').innerHTML = loading();
+  try {
+    const data = await api('/api/budget');
+    renderBudget(data);
+  } catch(e) {
+    $('budget-content').innerHTML = errState(e.message);
+  }
+}
+
+function renderBudget(data) {
+  const { days, series, totals, runs } = data;
+  const fmt = v => `$${Number(v).toFixed(4)}`;
+
+  // KPI cards
+  const kpiHtml = `
+    <div class="budget-grid">
+      <div class="budget-kpi">
+        <div class="budget-kpi-label">Total Spent</div>
+        <div class="budget-kpi-value grand">${fmt(totals.grand)}</div>
+      </div>
+      <div class="budget-kpi">
+        <div class="budget-kpi-label">Agent Cost</div>
+        <div class="budget-kpi-value agent">${fmt(totals.agent)}</div>
+      </div>
+      <div class="budget-kpi">
+        <div class="budget-kpi-label">User Cost</div>
+        <div class="budget-kpi-value user">${fmt(totals.user)}</div>
+      </div>
+      <div class="budget-kpi">
+        <div class="budget-kpi-label">Guard Cost</div>
+        <div class="budget-kpi-value guard">not tracked</div>
+      </div>
+    </div>`;
+
+  // Per-run table
+  const runRows = runs.map(r => `
+    <tr>
+      <td style="color:var(--muted);font-size:11px">${esc(r.date)}</td>
+      <td><code style="font-size:11px">${esc(r.model)}</code>
+        ${r.user_model ? `<div style="font-size:10px;color:var(--muted)">user: ${esc(r.user_model)}</div>` : ''}
+      </td>
+      <td style="text-align:right;color:var(--agent);font-weight:600">${fmt(r.agent_cost)}</td>
+      <td style="text-align:right;color:var(--user);font-weight:600">${fmt(r.user_cost)}</td>
+      <td style="text-align:right;color:var(--muted)">—</td>
+      <td style="text-align:right;font-weight:700">${fmt(r.total)}</td>
+    </tr>`).join('');
+
+  $('budget-content').innerHTML = `
+    ${kpiHtml}
+    <div class="chart-card">
+      <div style="font-size:13px;font-weight:700;margin-bottom:14px">Daily Cost Breakdown</div>
+      ${days.length === 0 ? '<div style="color:var(--muted);font-style:italic">No cost data found — run simulations first.</div>'
+        : '<canvas id="budget-chart"></canvas>'}
+      <div class="budget-note">Guard LLM cost (via LiteLLM tool calling in LLMGuard) is not yet captured in results.json.</div>
+    </div>
+    ${runs.length ? `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th><th>Model</th>
+            <th style="text-align:right">Agent</th>
+            <th style="text-align:right">User</th>
+            <th style="text-align:right">Guard</th>
+            <th style="text-align:right">Total</th>
+          </tr>
+        </thead>
+        <tbody>${runRows}</tbody>
+      </table>
+    </div>` : ''}`;
+
+  if (days.length === 0) return;
+
+  if (_budgetChart) { _budgetChart.destroy(); _budgetChart = null; }
+
+  const ctx = document.getElementById('budget-chart').getContext('2d');
+  _budgetChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: days,
+      datasets: [
+        {
+          label: 'Agent',
+          data: series.agent,
+          backgroundColor: '#1d4ed8cc',
+          borderColor: '#1d4ed8',
+          borderWidth: 1,
+        },
+        {
+          label: 'User Simulator',
+          data: series.user,
+          backgroundColor: '#047857cc',
+          borderColor: '#047857',
+          borderWidth: 1,
+        },
+        {
+          label: 'Guard (not tracked)',
+          data: series.guard,
+          backgroundColor: '#94a3b8cc',
+          borderColor: '#94a3b8',
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.dataset.label}: $${ctx.parsed.y.toFixed(4)}`,
+            footer: items => {
+              const total = items.reduce((s, i) => s + i.parsed.y, 0);
+              return `Total: $${total.toFixed(4)}`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: { stacked: true, grid: { color: '#e2e8f0' } },
+        y: {
+          stacked: true,
+          grid: { color: '#e2e8f0' },
+          ticks: {
+            callback: v => `$${v.toFixed(3)}`,
+          },
+        },
+      },
+    },
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// WIRE UP NAVIGATION
+// ════════════════════════════════════════════════════════════
+$('btn-to-sims').onclick = goSims;
+$('btn-to-tasks').onclick = () => { _taskId = null; _trialIdx = 0; updateBreadcrumb(); showView('tasks'); };
+$('experiment-form').onsubmit = scheduleExperiment;
+[
+  'ex-name', 'ex-domain', 'ex-guard', 'ex-agent', 'ex-agent-llm', 'ex-user-llm',
+  'ex-guard-llm', 'ex-trials', 'ex-concurrency', 'ex-split', 'ex-num-tasks',
+  'ex-task-ids', 'ex-prompt', 'ex-dataset',
+].forEach(id => {
+  $(id).addEventListener('input', updateCommandPreview);
+  $(id).addEventListener('change', updateCommandPreview);
+});
+$('ex-domain').addEventListener('change', () => {
+  if (_experimentOptions) applyDomainDefaults();
+  updateCommandPreview();
+});
+$('ex-guard').addEventListener('change', () => {
+  $('ex-prompt').value = inferPromptLabel($('ex-guard').value);
+  updateCommandPreview();
+});
+$('analysis-domain').addEventListener('change', () => {
+  renderAnalysisPairs();
+  renderAnalyzer();
+});
+$('mapper-run-form').onsubmit = scheduleMapperRun;
+[
+  'mapper-run-name', 'mapper-run-domain', 'mapper-run-mode', 'mapper-run-models',
+  'mapper-run-embed', 'mapper-run-ce-model', 'mapper-run-ce-top-k', 'mapper-run-skip',
+].forEach(id => {
+  $(id).addEventListener('input', updateMapperCommandPreview);
+  $(id).addEventListener('change', updateMapperCommandPreview);
+});
+$('mapper-run-domain').addEventListener('change', syncMapperRunDefaults);
+$('mapper-run-mode').addEventListener('change', () => {
+  const isRetrieval = $('mapper-run-mode').value === 'retrieval';
+  ['mapper-run-embed', 'mapper-run-ce-model', 'mapper-run-ce-top-k'].forEach(id => {
+    $(id).disabled = !isRetrieval;
+  });
+  updateMapperCommandPreview();
+});
+
+// ════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════
+updateBreadcrumb();
+loadSims();
+setInterval(() => {
+  if ($('v-experiments').classList.contains('active')) loadExperiments();
+  if ($('v-mapper').classList.contains('active')) loadMapperExperiments();
+}, 2500);
+</script>
+</body>
+</html>
