@@ -10,7 +10,7 @@ from policy_tool_mapper.state import MappedStatement, PipelineState, PolicyState
 
 _PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "sweeper.md"
 _UNDER_MAPPED_THRESHOLD = 2
-_CONCURRENCY = 10
+_CONCURRENCY = 1
 
 
 def _load_prompt() -> str:

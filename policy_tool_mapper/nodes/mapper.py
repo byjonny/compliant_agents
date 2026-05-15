@@ -9,7 +9,7 @@ from policy_tool_mapper.schemas import MapperOutput
 from policy_tool_mapper.state import MappedStatement, PipelineState, PolicyStatement, ToolMapping, ToolProfile
 
 _PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "mapper.md"
-_CONCURRENCY = 10
+_CONCURRENCY = 1
 
 
 def _load_prompt() -> str:

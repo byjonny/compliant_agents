@@ -30,7 +30,7 @@ from policy_tool_mapper.state import (
 )
 
 _PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "judge.md"
-_CONCURRENCY = 20   # each call is small (one sentence), so high concurrency is fine
+_CONCURRENCY = 1   # each call is small (one sentence), so high concurrency is fine
 
 
 class JudgeOutput(BaseModel):

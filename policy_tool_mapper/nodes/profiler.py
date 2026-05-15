@@ -11,7 +11,7 @@ from policy_tool_mapper.state import PipelineState, ToolProfile
 from policy_tool_mapper.utils.openapi_parser import parse_openapi
 
 _PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "profiler.md"
-_CONCURRENCY = 10
+_CONCURRENCY = 1
 
 
 def _load_prompt() -> str:

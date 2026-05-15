@@ -103,7 +103,7 @@ def run_mapping(paths: dict[str, Path], model: str, mode: str, args) -> bool:
         cmd += [
             "--embed-model",  args.embed_model,
             "--ce-model",     args.ce_model,
-            "--ce-threshold", str(args.ce_threshold),
+            "--ce-top-k",     str(args.ce_top_k),
         ]
     return _run(cmd, f"policy-map  [{model}]  mode={mode}") == 0
 
@@ -245,8 +245,8 @@ def main() -> None:
         ),
     )
     parser.add_argument(
-        "--ce-threshold", type=float, default=0.0,
-        help="Cross-encoder score threshold (retrieval mode only, default: 0.0).",
+        "--ce-top-k", type=int, default=20,
+        help="Number of cross-encoder reranked candidates to keep per tool (retrieval mode only, default: 20).",
     )
     parser.add_argument(
         "--skip-mapping", action="store_true",

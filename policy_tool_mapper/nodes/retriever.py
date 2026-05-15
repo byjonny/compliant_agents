@@ -4,12 +4,11 @@ Retriever node — mode: retrieval.
 Three-stage recall-optimised retrieval for each tool profile:
   1. BM25 (lexical)         — catches exact terminology matches
   2. Bi-encoder (OpenAI)    — semantic top-k by cosine similarity
-  3. Cross-encoder reranker — joint (tool, sentence) scoring; generous threshold
+  3. Cross-encoder reranker — joint (tool, sentence) scoring
 
 BM25 + bi-encoder candidates are unioned (~top-50-60 per tool), then
-re-ranked by the cross-encoder. Only pairs above `ce_threshold` pass to the
-judge node. Set the threshold low to maximise recall — false positives are
-killed by the LLM judge, not here.
+re-ranked by the cross-encoder. The top `ce_top_k` pairs pass to the judge node.
+False positives are killed by the LLM judge, not here.
 """
 
 import asyncio
@@ -29,7 +28,7 @@ from policy_tool_mapper.state import (
 _TOP_K_BM25    = 30
 _TOP_K_BIENC   = 30
 _CE_MODEL      = "BAAI/bge-reranker-v2-m3"
-_CE_THRESHOLD  = 0.0   # generous — sigmoid(0) = 0.5; false positives killed by judge
+_CE_TOP_K      = 20
 _EMBED_MODEL   = "text-embedding-3-small"   # best OpenAI embedding for cost/quality
 
 _cross_encoder: Any = None   # cached after first load
@@ -108,7 +107,7 @@ def _cross_encode_sync(
     candidates: list[str],
     stmt_by_id: dict[str, PolicyStatement],
     ce_model:   str,
-    threshold:  float,
+    top_k:      int,
 ) -> list[str]:
     if not candidates:
         return []
@@ -116,7 +115,7 @@ def _cross_encode_sync(
     pairs  = [(tool_text, stmt_by_id[sid].text) for sid in candidates]
     scores = ce.predict(pairs, show_progress_bar=False)
     ranked = sorted(zip(candidates, scores), key=lambda x: x[1], reverse=True)
-    return [sid for sid, score in ranked if score >= threshold]
+    return [sid for sid, _score in ranked[:top_k]]
 
 
 # ── Node ──────────────────────────────────────────────────────────────────────
@@ -125,7 +124,7 @@ async def retriever_node(state: PipelineState, config: RunnableConfig) -> dict:
     cfg          = config.get("configurable", {})
     embed_model  = cfg.get("embed_model",  _EMBED_MODEL)
     ce_model     = cfg.get("ce_model",     _CE_MODEL)
-    ce_threshold = cfg.get("ce_threshold", _CE_THRESHOLD)
+    ce_top_k     = cfg.get("ce_top_k",     _CE_TOP_K)
 
     statements: list[PolicyStatement] = state["policy_statements"]
     profiles:   list[ToolProfile]     = state["tool_profiles"]
@@ -173,14 +172,14 @@ async def retriever_node(state: PipelineState, config: RunnableConfig) -> dict:
 
         # Cross-encoder reranking — skipped when ce_model is "none"
         if ce_model and ce_model.lower() != "none":
-            kept = _cross_encode_sync(tool_text, union_ids, stmt_by_id, ce_model, ce_threshold)
+            kept = _cross_encode_sync(tool_text, union_ids, stmt_by_id, ce_model, ce_top_k)
         else:
             kept = union_ids   # pass full union to judge; judge handles precision
 
         print(
             f"[retriever] {profile.tool_id}: "
             f"BM25={len(bm25_ids)} bienc={len(bienc_ids)} "
-            f"union={len(union_ids)} → CE kept={len(kept)}"
+            f"union={len(union_ids)} → CE top-k kept={len(kept)}"
         )
         candidates.append(RetrievalCandidate(tool_id=profile.tool_id, statement_ids=kept))
 
