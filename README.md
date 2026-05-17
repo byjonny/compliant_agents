@@ -25,7 +25,7 @@ It also contains a policy-tool mapper pipeline that maps policy passages to the 
 The main way to work with the project is the custom viewer in:
 
 ```text
-compliant_agents_fresh/viewer/
+./viewer/
 ```
 
 It is not the old `web/leaderboard` app. The viewer is the project-specific UI for:
@@ -42,7 +42,6 @@ It is not the old `web/leaderboard` app. The viewer is the project-specific UI f
 Run it from the repository root:
 
 ```bash
-cd compliant_agents_fresh
 python3 viewer/server.py
 ```
 
@@ -55,7 +54,6 @@ http://localhost:8765
 Use a different port if needed:
 
 ```bash
-cd compliant_agents_fresh
 VIEWER_PORT=8766 python3 viewer/server.py
 ```
 
@@ -78,14 +76,13 @@ policy_tool_mapper/output/
 Install dependencies:
 
 ```bash
-cd compliant_agents_fresh
 uv sync
 ```
 
 Create or update the environment file:
 
 ```text
-compliant_agents_fresh/.env
+./.env
 ```
 
 Typical keys used by experiments:
@@ -190,7 +187,6 @@ uv run tau2 run \
 The recommended path is the web viewer:
 
 ```bash
-cd compliant_agents_fresh
 python3 viewer/server.py
 ```
 
@@ -319,7 +315,7 @@ policy_tool_mapper/output/
 
 ## Run the Full Policy-Mapper Pipeline
 
-Run from `compliant_agents_fresh/`.
+Run from the repository root.
 
 ### LLM Mapping
 
@@ -576,7 +572,7 @@ It counts a guard block as “correctly blocked” only if the blocked tool call
 ## Repository Map
 
 ```text
-compliant_agents_fresh/
+./
 ├── data/tau2/domains/              # Domain policies, tasks, DBs, splits
 ├── data/simulations/               # Completed tau2 experiment results
 ├── guardrail_configs/              # Guardrail JSON configs
