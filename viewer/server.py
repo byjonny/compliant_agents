@@ -366,6 +366,7 @@ def _compute_guard_false_positives(run_id: str, sims: list, tasks: list) -> dict
 
     return {
         "guard_block_count": total_blocks,
+        "guard_expected_block_count": total_blocks - false_positive_blocks,
         "guard_false_positive_count": false_positive_blocks,
         "guard_false_positive_rate": round(false_positive_blocks / total_blocks, 3)
         if total_blocks
@@ -445,6 +446,7 @@ def _load_summary(path: Path) -> dict | None:
             "avg_reward":      avg_reward,
             "policy_violation_rate": policy_violation_rate,
             "guard_block_count": fp_summary["guard_block_count"],
+            "guard_expected_block_count": fp_summary["guard_expected_block_count"],
             "guard_false_positive_count": fp_summary["guard_false_positive_count"],
             "guard_false_positive_rate": fp_summary["guard_false_positive_rate"],
             "guard_false_positive_events": fp_summary["guard_false_positive_events"],
@@ -495,6 +497,7 @@ def get_analysis_runs() -> dict:
                 "avg_reward": r.get("avg_reward"),
                 "policy_violation_rate": r.get("policy_violation_rate"),
                 "guard_block_count": r.get("guard_block_count"),
+                "guard_expected_block_count": r.get("guard_expected_block_count"),
                 "guard_false_positive_count": r.get("guard_false_positive_count"),
                 "guard_false_positive_rate": r.get("guard_false_positive_rate"),
                 "guard_false_positive_events": r.get("guard_false_positive_events") or [],

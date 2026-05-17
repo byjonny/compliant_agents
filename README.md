@@ -1,221 +1,610 @@
-# Guardrail Architecture Evaluation for Compliance Agents
+# Compliance Guardrail Experiments on tau2-bench
 
-<div align="center">
-<img src="figs/architecture.png" width="90%" alt="New Guardrail Architecture Intercepts Tool Calls">
-</div>
+This repository contains a tau2-bench based evaluation setup for studying whether a dedicated guardrail layer can reduce policy-violating tool calls in customer-service agents.
 
-> **TU Munich · Entwicklungspraktikum**
+The important idea is simple:
+
+```text
+User simulator → Agent → Guardrail middleware → Tool execution
+```
+
+The agent still decides what tool to call. The guardrail middleware sees that tool call before it reaches the real tool. If the call violates a mapped policy rule, the guard blocks it and returns feedback to the agent instead of executing the side effect.
+
+The project currently supports experiments across:
+
+- `airline`
+- `telecom`
+- `retail`
+
+It also contains a policy-tool mapper pipeline that maps policy passages to the tools they govern.
 
 ---
 
-## Overview
+## Start Here: Web Viewer and Experiment Runner
 
-This project evaluates a **guardrail middleware architecture** that intercepts AI agent tool calls at runtime to enforce business policy compliance. Rather than relying on the agent itself to self-regulate, a dedicated guardrail layer sits between the agent and its tools — blocking or allowing each tool call based on domain-specific rules before any side effect occurs.
+The main way to work with the project is the custom viewer in:
 
-The central research question is:
-
-> **How effectively does the guardrail architecture reduce the policy violation rate of an AI agent across different customer service scenarios?**
-
----
-
-## Architecture
-
-```
-User  →  AI Agent  →  Guardrail Middleware  →  Tool
-                       ┌──────────────────┐
-                       │   Orchestrator   │
-                       │  ┌────────────┐  │
-                       │  │   Guard 1  │──┼──→  Tool A
-                       │  ├────────────┤  │
-                       │  │   Guard 2  │──┼──→  Tool B
-                       │  ├────────────┤  │
-                       │  │   Guard N  │──┼──→  Tool C
-                       │  └────────────┘  │
-                       └──────────────────┘
+```text
+tau2-bench/viewer/
 ```
 
-The **Orchestrator** receives every tool call the agent makes and routes it through a pipeline of **Guards**. Each guard is a focused, single-responsibility policy check. Only tool calls that pass all applicable guards are forwarded to the real tool; blocked calls return a structured rejection message back to the agent.
+It is not the old `web/leaderboard` app. The viewer is the project-specific UI for:
 
-### Guard Types
+- browsing all completed simulation runs
+- opening individual task conversations
+- comparing guarded vs unguarded experiments
+- analyzing reward, policy violation rate, latency, and guard blocks
+- scheduling full tau2 experiments from the browser
+- scheduling policy-tool-mapper runs from the browser
+- cancelling queued or running experiments
+- exporting plots to `;`-separated CSV
 
-| Guard | Type | Description |
-|-------|------|-------------|
-| `flight_status` | Rule-based | Checks flight status before allowing rebooking actions |
-| `cancellation_eligibility` | Rule-based | Validates whether a reservation is eligible for cancellation |
-| `llm_policy` | LLM-based | Uses an LLM to reason over the full policy and conversation history for complex cases |
+Run it from the repository root:
 
-Guards implement a two-phase interface:
-
-1. **`applies_to(tool_call)`** — cheap pre-filter; skips guards not relevant to the current tool
-2. **`check(tool_call, env, history)`** — full evaluation; returns a `GuardVerdict(allowed, reason)`
-
-The middleware is **fail-open**: if a guard raises an unexpected exception, the tool call is allowed through and the error is logged. This prevents guard bugs from silently blocking all agent actions.
-
----
-
-## Evaluation
-
-### Metric: Policy Violation Rate
-
-The primary metric is the **policy violation rate** — the fraction of agent actions that violate the domain policy, measured with and without the guardrail layer active. A lower violation rate with guardrails active indicates the architecture is working.
-
-Secondary metrics tracked per run:
-
-- Task completion rate (did the agent resolve the user's request?)
-- Guardrail intervention rate (how often did guards fire?)
-- False positive rate (how often did guards block a valid action?)
-
-### Evaluation Pipeline
-
-Evaluations are run via the `tau2-bench` simulation framework. A simulated user interacts with the agent over multiple turns; the evaluator scores each trajectory against the ground-truth expected actions and the domain policy.
-
+```bash
+cd tau2-bench
+python3 viewer/server.py
 ```
-tau2-bench run \
-  --domain airline \
-  --guardrail-config guardrail_configs/airline_with_llm.json \
-  --tasks 50
+
+Then open:
+
+```text
+http://localhost:8765
+```
+
+Use a different port if needed:
+
+```bash
+cd tau2-bench
+VIEWER_PORT=8766 python3 viewer/server.py
+```
+
+The viewer reads simulation results from:
+
+```text
+data/simulations/
+```
+
+and policy-mapper results from:
+
+```text
+policy_tool_mapper/output/
 ```
 
 ---
 
-## Use Cases
+## Install and Configure
 
-### tau-bench Domains
-
-Evaluation uses established customer service domains from [τ-bench](tau2-bench/README.md):
-
-| Domain | Description |
-|--------|-------------|
-| `airline` | Flight rebooking, cancellations, seat upgrades |
-| `retail` | Order management, returns, refunds |
-| `telecom` | Plan changes, tech support, account management |
-| `banking_knowledge` | Knowledge-retrieval-based customer service |
-
-### Self-Constructed Scenarios
-
-In addition to the τ-bench task suite, custom scenarios are constructed to specifically stress-test guardrail coverage:
-
-- **Edge cases** — inputs that exploit ambiguity in the policy wording
-- **Adversarial requests** — users that try to pressure the agent into bypassing policy
-- **Chained violations** — multi-step sequences where each step appears individually valid but the combination violates policy
-
-Custom tasks are stored in [new_data/](new_data/).
-
----
-
-## Repository Structure
-
-```
-COMPLIANCE AGENTS/
-├── tau2-bench/               # Forked tau2-bench evaluation framework
-│   ├── src/tau2/
-│   │   ├── guardrails/       # Guardrail middleware implementation
-│   │   │   ├── guard.py           # Abstract Guard base class
-│   │   │   ├── middleware.py      # GuardrailMiddleware & SequentialGuardrailMiddleware
-│   │   │   └── guards/
-│   │   │       ├── flight_status_guard.py
-│   │   │       ├── cancellation_guard.py
-│   │   │       └── llm_policy_guard.py
-│   │   ├── orchestrator/     # Run orchestration logic
-│   │   └── domains/          # Domain definitions (policy, tools, tasks)
-│   └── guardrail_configs/    # Guardrail pipeline configurations (JSON)
-│       ├── airline_defaults.json
-│       ├── airline_with_llm.json
-│       └── null.json         # Baseline: no guardrails
-├── new_data/                 # Self-constructed evaluation tasks
-│   └── Airline/
-└── viewer/                   # Trajectory viewer UI
-```
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Python `>=3.12, <3.14`
-- [`uv`](https://github.com/astral-sh/uv) for dependency management
-
-### Install
+Install dependencies:
 
 ```bash
 cd tau2-bench
 uv sync
 ```
 
-### Configure
+Create or update the environment file:
 
-Set your API keys in `tau2-bench/.env` (copy from `.env.example`).
+```text
+tau2-bench/.env
+```
 
-Choose or create a guardrail config in `guardrail_configs/`. Use `null.json` for a no-guardrail baseline run.
+Typical keys used by experiments:
 
-### Run a Baseline (no guardrails)
+```bash
+OPENAI_API_KEY=...
+ANTHROPIC_API_KEY=...
+```
+
+The exact keys needed depend on the models you run.
+
+---
+
+## Running Full Agent Experiments
+
+The core command is:
+
+```bash
+uv run tau2 run \
+  --domain <domain> \
+  --agent llm_agent \
+  --guardrail-config <guardrail_config> \
+  --agent-llm <agent_model> \
+  --user-llm <user_model> \
+  --num-trials <n> \
+  --max-concurrency <n>
+```
+
+Results are written to:
+
+```text
+data/simulations/<run_id>/results.json
+```
+
+### Baseline Without Guard
+
+Use `guardrail_configs/null.json`.
+
+```bash
+uv run tau2 run \
+  --domain airline \
+  --agent llm_agent \
+  --guardrail-config guardrail_configs/null.json \
+  --agent-llm gpt-4.1-mini \
+  --user-llm gpt-5.1 \
+  --num-trials 3 \
+  --max-concurrency 3
+```
+
+### With Guard
+
+Use the domain guard config.
+
+```bash
+uv run tau2 run \
+  --domain airline \
+  --agent llm_agent \
+  --guardrail-config guardrail_configs/airline_llm_guard.json \
+  --agent-llm gpt-4.1-mini \
+  --user-llm gpt-5.1 \
+  --guard-llm gpt-4.1-mini \
+  --num-trials 3 \
+  --max-concurrency 3
+```
+
+`--guard-llm` overrides the LLM used by all LLM-based guards in the guardrail config. Everything else in the config stays unchanged.
+
+### Domain-Specific Guard Configs
+
+Current main configs:
+
+```text
+guardrail_configs/airline_llm_guard.json
+guardrail_configs/telecom_llm_guard.json
+guardrail_configs/retail_llm_guard.json
+guardrail_configs/null.json
+```
+
+`null.json` is the no-guard baseline.
+
+
+### Run Specific Task IDs
+
+```bash
+uv run tau2 run \
+  --domain airline \
+  --agent llm_agent \
+  --guardrail-config guardrail_configs/airline_llm_guard.json \
+  --agent-llm gpt-4.1-mini \
+  --user-llm gpt-5.1 \
+  --guard-llm gpt-4.1-mini \
+  --num-trials 1 \
+  --max-concurrency 1 \
+  --task-ids 0 1 4 5 9 11 12
+```
+
+
+---
+
+## Reading Simulation Results
+
+The recommended path is the web viewer:
 
 ```bash
 cd tau2-bench
-tau2 run --domain airline --guardrail-config guardrail_configs/null.json
+python3 viewer/server.py
 ```
 
-### Run with Guardrails
+Open:
 
-```bash
-tau2 run --domain airline --guardrail-config guardrail_configs/airline_with_llm.json
+```text
+http://localhost:8765
 ```
 
-### Policy Tool Mapper
+Useful pages in the viewer:
 
-First you have to normaliue the tool.py file to a json & then run the policy mappe 
-```bash
-cd "./policy_tool_mapper" && pip install -e .
+- **Simulation Runs**: all result folders with reward, policy violation rate, latency, guard model, agent model, user model, and sample count.
+- **Experiment Analyzer**: select guarded and unguarded runs per model and compare policy violation rate, reward, latency, and guard block counts.
+- **Task Conversation View**: inspect the actual dialogue and tool calls for one task/trial.
+- **Experiment Scheduler**: create queued tau2 runs from the browser instead of hand-writing CLI commands.
+- **Mapper Scheduler / Analyzer**: run and compare policy-tool-mapper experiments.
 
-cd tau2-bench
-uv run python policy_tool_mapper/build_tools_json.py \
-  --tools-file src/tau2/domains/airline/tools.py
+The analyzer’s guard-block graph is count-based:
 
-policy-map \
-  --policy  ./input/airlinePolicy.md \
-  --openapi ./input/airlineTools.json \
-  --output  ./output/airline-mappings.json \
-  --model gpt-4.1-mini
+- **Total guard blocks**: all tool calls blocked by guards.
+- **Correctly blocked**: blocked calls that matched an explicit `unauthorized_action` compliance assertion in the task JSON.
+- **Unmatched block chats**: links to conversations where the guard blocked a call that did not match an explicit task compliance assertion.
 
+---
+
+## Policy-Tool Mapper
+
+The policy-tool mapper creates mappings from tools to the policy passages that constrain them.
+
+There are two modes:
+
+### LLM Mode
+
+```text
+chunker → profiler → mapper → sweeper
 ```
 
+The LLM directly maps policy statements to tools.
 
-### View Trajectories
+### Retrieval Mode
+
+```text
+chunker → profiler → BM25 + embedding search → cross-encoder top-k reranker → LLM judge → sweeper
+```
+
+This mode first retrieves candidate policy passages, reranks them, and then asks an LLM judge to verify the candidates.
+
+---
+
+## Show Already Completed Policy-Mapper Results
+
+This is the most important command when you want the full overview of existing mapper results.
+
+It does not rerun mapping or evaluation. It only reads existing files from:
+
+```text
+policy_tool_mapper/output/
+```
+
+Airline:
 
 ```bash
-cd viewer
-python server.py
+uv run python policy_tool_mapper/run_pipeline.py \
+  --domain airline \
+  --compare
+```
+
+Telecom:
+
+```bash
+uv run python policy_tool_mapper/run_pipeline.py \
+  --domain telecom \
+  --compare
+```
+
+Retail:
+
+```bash
+uv run python policy_tool_mapper/run_pipeline.py \
+  --domain retail \
+  --compare
 ```
 
 ---
 
-## Guardrail Configuration Format
+## Policy-Mapper Inputs
 
-Guardrail pipelines are defined as JSON:
+Policy and tool input files live in:
 
-```json
-{
-  "type": "sequential",
-  "guards": [
-    { "type": "flight_status" },
-    { "type": "cancellation_eligibility" },
-    {
-      "type": "llm_policy",
-      "llm": "gpt-4.1-mini",
-      "tool_names_filter": ["cancel_reservation"],
-      "history_window": 10
-    }
-  ]
-}
+```text
+policy_tool_mapper/input/
 ```
 
-The `sequential` orchestrator evaluates guards in order; the first block wins.
+Expected files:
+
+```text
+policy_tool_mapper/input/airlinePolicy.md
+policy_tool_mapper/input/airlineTools.json
+policy_tool_mapper/input/telecomPolicy.md
+policy_tool_mapper/input/telecomTools.json
+policy_tool_mapper/input/retailPolicy.md
+policy_tool_mapper/input/retailTools.json
+```
+
+Ground truth lives in:
+
+```text
+policy_tool_mapper/ground_truth/
+```
+
+Important files:
+
+```text
+policy_tool_mapper/ground_truth/airline-ground-truth.json
+policy_tool_mapper/ground_truth/telecom-ground-truth.json
+policy_tool_mapper/ground_truth/retail-ground-truth.json
+```
+
+Outputs are written to:
+
+```text
+policy_tool_mapper/output/
+```
 
 ---
 
-## Related Work
+## Run the Full Policy-Mapper Pipeline
 
-- [τ-bench](https://arxiv.org/abs/2506.07982) — Benchmark for Tool-Agent-User Interaction
-- [τ³-bench](https://arxiv.org/abs/2603.13686) — Extension with voice and knowledge domains
-- [SABER](https://arxiv.org/abs/2512.07850) — Task quality analysis for τ-bench
+Run from `tau2-bench/`.
+
+### LLM Mapping
+
+```bash
+uv run python policy_tool_mapper/run_pipeline.py \
+  --domain airline \
+  --models gpt-4.1-mini gpt-4.1 gpt-5.1 gpt-5.4 \
+  --mode llm
+```
+
+For telecom:
+
+```bash
+uv run python policy_tool_mapper/run_pipeline.py \
+  --domain telecom \
+  --models gpt-4.1-mini gpt-4.1 gpt-5.1 gpt-5.4 \
+  --mode llm
+```
+
+For retail:
+
+```bash
+uv run python policy_tool_mapper/run_pipeline.py \
+  --domain retail \
+  --models gpt-4.1-mini gpt-4.1 gpt-5.1 gpt-5.4 \
+  --mode llm
+```
+
+### Retrieval Mapping
+
+```bash
+uv run python policy_tool_mapper/run_pipeline.py \
+  --domain airline \
+  --models gpt-4.1-mini gpt-4.1 gpt-5.1 gpt-5.4 \
+  --mode retrieval \
+  --ce-top-k 20
+```
+
+The default retrieval setup uses:
+
+```text
+Embedding model: text-embedding-3-large
+Cross-encoder:   cross-encoder/ms-marco-MiniLM-L-6-v2
+CE top-k:        20
+```
+
+
+The comparison table includes:
+
+- model
+- mode: `llm` or `retrieval`
+- confidence slice: `high` or `all`
+- macro precision
+- macro recall
+- macro F1
+- micro precision
+- micro recall
+- micro F1
+
+The files that feed the comparison look like:
+
+```text
+policy_tool_mapper/output/airline-eval-gpt-4.1-mini-high.json
+policy_tool_mapper/output/airline-eval-gpt-4.1-mini-all.json
+policy_tool_mapper/output/airline-eval-gpt-4.1-mini-retrieval-high.json
+policy_tool_mapper/output/airline-eval-gpt-4.1-mini-retrieval-all.json
+```
+
+You can also inspect and compare these results in the web viewer under the mapper analyzer.
+
+---
+
+## Run One Mapper Call Manually
+
+Use `policy-map` directly when debugging one mapping run.
+
+```bash
+uv run policy-map \
+  --policy policy_tool_mapper/input/airlinePolicy.md \
+  --openapi policy_tool_mapper/input/airlineTools.json \
+  --output policy_tool_mapper/output/airline-mappings-debug.json \
+  --model gpt-4.1-mini \
+  --mode llm
+```
+
+Retrieval mode:
+
+```bash
+uv run policy-map \
+  --policy policy_tool_mapper/input/airlinePolicy.md \
+  --openapi policy_tool_mapper/input/airlineTools.json \
+  --output policy_tool_mapper/output/airline-mappings-debug-retrieval.json \
+  --model gpt-4.1-mini \
+  --mode retrieval \
+  --ce-top-k 20
+```
+
+Evaluate one mapping file:
+
+```bash
+uv run policy-map-eval \
+  --predicted policy_tool_mapper/output/airline-mappings-debug.json \
+  --ground-truth policy_tool_mapper/ground_truth/airline-ground-truth.json \
+  --output policy_tool_mapper/output/airline-eval-debug.json
+```
+
+Evaluate high-confidence mappings only:
+
+```bash
+uv run policy-map-eval \
+  --predicted policy_tool_mapper/output/airline-mappings-debug.json \
+  --ground-truth policy_tool_mapper/ground_truth/airline-ground-truth.json \
+  --output policy_tool_mapper/output/airline-eval-debug-high.json \
+  --confidence-high-only
+```
+
+---
+
+## Key Data Files
+
+Tasks:
+
+```text
+data/tau2/domains/airline/tasks.json
+data/tau2/domains/telecom/tasks.json
+data/tau2/domains/retail/tasks.json
+```
+
+Task splits:
+
+```text
+data/tau2/domains/airline/split_tasks.json
+data/tau2/domains/telecom/split_tasks.json
+data/tau2/domains/retail/split_tasks.json
+```
+
+Policies:
+
+```text
+data/tau2/domains/airline/policy.md
+data/tau2/domains/telecom/main_policy.md
+data/tau2/domains/retail/policy.md
+```
+
+Tools:
+
+```text
+src/tau2/domains/airline/tools.py
+src/tau2/domains/telecom/tools.py
+src/tau2/domains/retail/tools.py
+```
+
+Databases:
+
+```text
+data/tau2/domains/airline/db.json
+data/tau2/domains/retail/db.json
+data/tau2/domains/telecom/db.toml
+data/tau2/domains/telecom/user_db.toml
+```
+
+Guard configs:
+
+```text
+guardrail_configs/
+```
+
+Simulation output:
+
+```text
+data/simulations/
+```
+
+Policy-mapper output:
+
+```text
+policy_tool_mapper/output/
+```
+
+---
+
+## Suggested Experiment Pattern
+
+For each domain and model, run one baseline and one guarded experiment:
+
+```bash
+# Without guard
+uv run tau2 run \
+  --domain telecom \
+  --agent llm_agent \
+  --guardrail-config guardrail_configs/null.json \
+  --agent-llm gpt-4.1-mini \
+  --user-llm gpt-5.1 \
+  --num-trials 3 \
+  --max-concurrency 3
+
+# With guard
+uv run tau2 run \
+  --domain telecom \
+  --agent llm_agent \
+  --guardrail-config guardrail_configs/telecom_llm_guard.json \
+  --agent-llm gpt-4.1-mini \
+  --user-llm gpt-5.1 \
+  --guard-llm gpt-4.1-mini \
+  --num-trials 3 \
+  --max-concurrency 3
+```
+
+Then open the viewer and compare the pair in the **Experiment Analyzer**.
+
+The main plots to report are:
+
+- policy violation rate
+- reward
+- latency change
+- guard block counts
+
+For the policy mapper, run both:
+
+- `--mode llm`
+- `--mode retrieval`
+
+Then use:
+
+```bash
+uv run python policy_tool_mapper/run_pipeline.py --domain <domain> --compare
+```
+
+or the mapper analyzer in the viewer.
+
+---
+
+## Common Notes
+
+### Rate limits
+
+If you hit provider rate limits:
+
+- lower `--max-concurrency`
+- use fewer models in one mapper batch
+- run fewer trials
+- resume later with `--auto-resume`
+
+For Anthropic especially, input-token-per-minute limits can be hit even when request count looks low.
+
+### Guard false positives
+
+The viewer’s unmatched block list is a conservative diagnostic, not a perfect semantic false-positive oracle.
+
+It counts a guard block as “correctly blocked” only if the blocked tool call matches an explicit `unauthorized_action` compliance assertion in the task JSON. A block that does not match such an assertion is shown as unmatched so the chat can be inspected manually.
+
+---
+
+## Repository Map
+
+```text
+tau2-bench/
+├── data/tau2/domains/              # Domain policies, tasks, DBs, splits
+├── data/simulations/               # Completed tau2 experiment results
+├── guardrail_configs/              # Guardrail JSON configs
+├── policy_tool_mapper/             # Policy-to-tool mapping pipeline
+│   ├── input/                      # Mapper policies and tool JSON
+│   ├── ground_truth/               # Human ground-truth mappings
+│   └── output/                     # Mapper outputs and eval files
+├── src/tau2/guardrails/            # Guard middleware and guard implementations
+├── src/tau2/domains/               # Domain tool implementations
+└── viewer/                         # Custom web viewer, scheduler, analyzers
+```
+
+---
+
+## Paper-Facing Metrics
+
+For guardrail architecture experiments:
+
+- primary safety metric: policy violation rate
+- utility metric: reward
+- cost metric: average task latency
+- diagnostic metric: guard block counts and unmatched block chats
+
+For policy-tool mapping:
+
+- primary balanced metric: F1
+- safety-oriented metric: recall
+- precision-oriented metric: precision
+- report both macro and micro scores
+- compare `llm` vs `retrieval`
+- compare `high` vs `all` confidence slices

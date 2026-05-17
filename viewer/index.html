@@ -272,6 +272,12 @@
     .analysis-chart canvas {
       max-height: 260px;
     }
+    .analysis-chart-wide {
+      grid-column: 1 / -1;
+    }
+    .analysis-chart-wide canvas {
+      max-height: 380px;
+    }
     .insight-list {
       margin-top: 12px;
       display: grid;
@@ -1922,6 +1928,7 @@ async function loadAnalyzer() {
           avg_reward: s.avg_reward,
           policy_violation_rate: s.policy_violation_rate,
           guard_block_count: s.guard_block_count || 0,
+          guard_expected_block_count: s.guard_expected_block_count || Math.max(0, (s.guard_block_count || 0) - (s.guard_false_positive_count || 0)),
           guard_false_positive_count: s.guard_false_positive_count || 0,
           guard_false_positive_rate: s.guard_false_positive_rate || 0,
           guard_false_positive_events: s.guard_false_positive_events || [],
@@ -2188,6 +2195,13 @@ function collectAnalysisSeries() {
       falsePositiveRate: avg(withRuns.map(r => r.guard_false_positive_rate)),
       falsePositiveCount: withRuns.reduce((sum, r) => sum + (Number(r.guard_false_positive_count) || 0), 0),
       guardBlockCount: withRuns.reduce((sum, r) => sum + (Number(r.guard_block_count) || 0), 0),
+      guardExpectedBlockCount: withRuns.reduce((sum, r) => {
+        const total = Number(r.guard_block_count) || 0;
+        const expected = r.guard_expected_block_count != null
+          ? Number(r.guard_expected_block_count) || 0
+          : Math.max(0, total - (Number(r.guard_false_positive_count) || 0));
+        return sum + expected;
+      }, 0),
       falsePositiveEvents: withRuns.flatMap(r => (r.guard_false_positive_events || []).map(ev => ({
         ...ev,
         model,
@@ -2241,15 +2255,49 @@ function barChart(id, labels, values, title) {
   });
 }
 
+function groupedBlockChart(id, labels, totalBlocks, correctBlocks, title) {
+  const ctx = $(id);
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Total guard blocks', data: totalBlocks, backgroundColor: '#f97316' },
+        { label: 'Correctly blocked', data: correctBlocks, backgroundColor: '#16a34a' },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        title: { display: true, text: title },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y ?? 0}`,
+          },
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 },
+          title: { display: true, text: 'Blocked tool calls' },
+        },
+      },
+    },
+  });
+}
+
 function analyzerInsights(rows) {
   const paired = rows.filter(r => r.noGuardViolation != null && r.guardViolation != null);
   const rewardPairs = rows.filter(r => r.noGuardReward != null && r.guardReward != null);
   const latencyRows = rows.filter(r => r.latencyChange != null);
-  const fpRows = rows.filter(r => r.falsePositiveRate != null);
+  const blockRows = rows.filter(r => r.guardBlockCount > 0);
   const violationDrop = avg(paired.map(r => (r.noGuardViolation - r.guardViolation) * 100));
   const rewardDelta = avg(rewardPairs.map(r => (r.guardReward - r.noGuardReward) * 100));
   const latencyDelta = avg(latencyRows.map(r => r.latencyChange));
-  const falsePositiveAvg = avg(fpRows.map(r => r.falsePositiveRate * 100));
+  const totalBlocks = blockRows.reduce((sum, r) => sum + (Number(r.guardBlockCount) || 0), 0);
+  const correctBlocks = blockRows.reduce((sum, r) => sum + (Number(r.guardExpectedBlockCount) || 0), 0);
   const sortedBySize = paired.slice().sort((a, b) => modelRank(a.model) - modelRank(b.model));
   const small = sortedBySize[0];
   const large = sortedBySize[sortedBySize.length - 1];
@@ -2262,7 +2310,7 @@ function analyzerInsights(rows) {
       <div class="insight"><strong>Safety:</strong> Guarded runs reduce policy violations by ${violationDrop == null ? '—' : violationDrop.toFixed(1) + ' percentage points'} on average across selected model pairs.</div>
       <div class="insight"><strong>Reward:</strong> Reward changes by ${rewardDelta == null ? '—' : rewardDelta.toFixed(1) + ' percentage points'} on average, so safety gains do not automatically translate into higher reward.</div>
       <div class="insight"><strong>Latency:</strong> Guarded architecture changes average per-task latency by ${latencyDelta == null ? '—' : pctSigned(latencyDelta)} across selected model pairs.</div>
-      <div class="insight"><strong>False positives:</strong> Guarded runs block allowed tool calls at ${falsePositiveAvg == null ? '—' : falsePositiveAvg.toFixed(1) + '%'} of guard blocks on average.</div>
+      <div class="insight"><strong>Guard blocks:</strong> ${totalBlocks ? `${correctBlocks} of ${totalBlocks} blocked tool calls matched explicit unauthorized-action checks.` : 'No guard blocks in the selected runs.'}</div>
       <div class="insight"><strong>Model size:</strong> ${sizeInsight}</div>
     </div>
   `;
@@ -2320,8 +2368,8 @@ function renderAnalyzer() {
     ((b.noGuardReward ?? b.guardReward ?? -1) - (a.noGuardReward ?? a.guardReward ?? -1))
   );
   const latencyRows = rows.slice().sort((a, b) => modelRank(a.model) - modelRank(b.model) || a.model.localeCompare(b.model));
-  const fpRows = rows.slice().sort((a, b) =>
-    ((b.falsePositiveRate ?? -1) - (a.falsePositiveRate ?? -1))
+  const blockRows = rows.slice().sort((a, b) =>
+    ((b.guardBlockCount ?? 0) - (a.guardBlockCount ?? 0)) || modelRank(a.model) - modelRank(b.model) || a.model.localeCompare(b.model)
   );
 
   $('analysis-content').innerHTML = `
@@ -2344,11 +2392,11 @@ function renderAnalyzer() {
         </div>
         <canvas id="chart-latency"></canvas>
       </section>
-      <section class="chart-card analysis-chart">
+      <section class="chart-card analysis-chart analysis-chart-wide">
         <div class="chart-card-head">
-          <button class="chart-export-btn" type="button" onclick="exportChartCsv('chart-false-positive', 'analysis-${esc($('analysis-domain').value)}-false-positive-rate.csv')">CSV</button>
+          <button class="chart-export-btn" type="button" onclick="exportChartCsv('chart-guard-blocks', 'analysis-${esc($('analysis-domain').value)}-guard-block-counts.csv')">CSV</button>
         </div>
-        <canvas id="chart-false-positive"></canvas>
+        <canvas id="chart-guard-blocks"></canvas>
       </section>
     </div>
     <section class="analyzer-panel">
@@ -2356,7 +2404,7 @@ function renderAnalyzer() {
       ${analyzerInsights(rows)}
     </section>
     <section class="analyzer-panel">
-      <h3 style="margin-bottom:8px">False Positive Chats</h3>
+      <h3 style="margin-bottom:8px">Unmatched Block Chats</h3>
       ${falsePositiveLinks(rows)}
     </section>
   `;
@@ -2381,11 +2429,12 @@ function renderAnalyzer() {
     latencyRows.map(r => r.latencyChange == null ? null : +r.latencyChange.toFixed(1)),
     `Per-task latency change with guard · ${$('analysis-domain').value}`
   ));
-  _analysisCharts.push(barChart(
-    'chart-false-positive',
-    fpRows.map(r => r.model),
-    fpRows.map(r => r.falsePositiveRate == null ? null : +(r.falsePositiveRate * 100).toFixed(1)),
-    `Guard false positive rate · ${$('analysis-domain').value}`
+  _analysisCharts.push(groupedBlockChart(
+    'chart-guard-blocks',
+    blockRows.map(r => r.model),
+    blockRows.map(r => Number(r.guardBlockCount) || 0),
+    blockRows.map(r => Number(r.guardExpectedBlockCount) || 0),
+    `Guard block counts · ${$('analysis-domain').value}`
   ));
 }
 
