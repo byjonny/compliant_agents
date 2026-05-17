@@ -1,0 +1,15 @@
+{
+  "total_cases": 6,
+  "violated_cases": 1,
+  "violation_rate": 0.16666666666666666,
+  "per_tool": {
+    "update_reservation_flights": {
+      "tool_name": "update_reservation_flights",
+      "attempted_violations": 1,
+      "executed_violations": 1,
+      "cases_affected": 1
+    }
+  },
+  "total_attempted_violations": 1,
+  "total_executed_violations": 1
+}

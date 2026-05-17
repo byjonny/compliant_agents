@@ -9,7 +9,6 @@ dumps/
 dump.rdb
 *.rdg
 logs/
-data/simulations/*
 data/exp/
 data/datasets/
 data/models/
@@ -220,7 +219,6 @@ data/simulations/.credentials/
 #   voice-mode, soham/appendix, soham/hyp
 #   These branches contain ~198MB of *_simulation.json blobs in git history.
 #   After deleting the branches, GitHub will eventually GC the orphaned objects.
-*_simulation.json
 
 # Cursor IDE
 .cursor/

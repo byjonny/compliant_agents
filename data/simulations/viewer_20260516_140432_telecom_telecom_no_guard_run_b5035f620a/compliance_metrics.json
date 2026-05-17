@@ -1,0 +1,15 @@
+{
+  "total_cases": 90,
+  "violated_cases": 5,
+  "violation_rate": 0.05555555555555555,
+  "per_tool": {
+    "extend_payment_due_date": {
+      "tool_name": "extend_payment_due_date",
+      "attempted_violations": 5,
+      "executed_violations": 5,
+      "cases_affected": 5
+    }
+  },
+  "total_attempted_violations": 5,
+  "total_executed_violations": 5
+}

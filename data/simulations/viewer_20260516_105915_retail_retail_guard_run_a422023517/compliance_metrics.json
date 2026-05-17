@@ -1,0 +1,27 @@
+{
+  "total_cases": 75,
+  "violated_cases": 5,
+  "violation_rate": 0.06666666666666667,
+  "per_tool": {
+    "apply_delivery_credit": {
+      "tool_name": "apply_delivery_credit",
+      "attempted_violations": 3,
+      "executed_violations": 3,
+      "cases_affected": 3
+    },
+    "modify_pending_order_items": {
+      "tool_name": "modify_pending_order_items",
+      "attempted_violations": 1,
+      "executed_violations": 1,
+      "cases_affected": 1
+    },
+    "return_delivered_order_items": {
+      "tool_name": "return_delivered_order_items",
+      "attempted_violations": 1,
+      "executed_violations": 1,
+      "cases_affected": 1
+    }
+  },
+  "total_attempted_violations": 5,
+  "total_executed_violations": 5
+}

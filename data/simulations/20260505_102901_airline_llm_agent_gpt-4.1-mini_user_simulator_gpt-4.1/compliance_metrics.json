@@ -1,0 +1,15 @@
+{
+  "total_cases": 3,
+  "violated_cases": 1,
+  "violation_rate": 0.3333333333333333,
+  "per_tool": {
+    "cancel_reservation": {
+      "tool_name": "cancel_reservation",
+      "attempted_violations": 2,
+      "executed_violations": 1,
+      "cases_affected": 2
+    }
+  },
+  "total_attempted_violations": 2,
+  "total_executed_violations": 1
+}

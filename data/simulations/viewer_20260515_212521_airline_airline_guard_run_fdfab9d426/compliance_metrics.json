@@ -1,0 +1,33 @@
+{
+  "total_cases": 156,
+  "violated_cases": 23,
+  "violation_rate": 0.14743589743589744,
+  "per_tool": {
+    "cancel_reservation": {
+      "tool_name": "cancel_reservation",
+      "attempted_violations": 38,
+      "executed_violations": 13,
+      "cases_affected": 25
+    },
+    "update_reservation_flights": {
+      "tool_name": "update_reservation_flights",
+      "attempted_violations": 8,
+      "executed_violations": 5,
+      "cases_affected": 6
+    },
+    "book_reservation": {
+      "tool_name": "book_reservation",
+      "attempted_violations": 5,
+      "executed_violations": 5,
+      "cases_affected": 3
+    },
+    "send_certificate": {
+      "tool_name": "send_certificate",
+      "attempted_violations": 4,
+      "executed_violations": 3,
+      "cases_affected": 4
+    }
+  },
+  "total_attempted_violations": 55,
+  "total_executed_violations": 26
+}

@@ -1,0 +1,15 @@
+{
+  "total_cases": 18,
+  "violated_cases": 5,
+  "violation_rate": 0.2777777777777778,
+  "per_tool": {
+    "apply_delivery_credit": {
+      "tool_name": "apply_delivery_credit",
+      "attempted_violations": 5,
+      "executed_violations": 5,
+      "cases_affected": 5
+    }
+  },
+  "total_attempted_violations": 5,
+  "total_executed_violations": 5
+}

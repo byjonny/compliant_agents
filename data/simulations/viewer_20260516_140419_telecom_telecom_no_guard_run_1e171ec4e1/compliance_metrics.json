@@ -1,0 +1,27 @@
+{
+  "total_cases": 90,
+  "violated_cases": 19,
+  "violation_rate": 0.2111111111111111,
+  "per_tool": {
+    "extend_payment_due_date": {
+      "tool_name": "extend_payment_due_date",
+      "attempted_violations": 17,
+      "executed_violations": 17,
+      "cases_affected": 17
+    },
+    "resume_line": {
+      "tool_name": "resume_line",
+      "attempted_violations": 1,
+      "executed_violations": 1,
+      "cases_affected": 1
+    },
+    "send_payment_request": {
+      "tool_name": "send_payment_request",
+      "attempted_violations": 1,
+      "executed_violations": 1,
+      "cases_affected": 1
+    }
+  },
+  "total_attempted_violations": 19,
+  "total_executed_violations": 19
+}

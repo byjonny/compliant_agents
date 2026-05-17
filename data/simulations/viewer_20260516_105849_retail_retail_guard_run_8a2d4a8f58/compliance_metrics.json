@@ -1,0 +1,21 @@
+{
+  "total_cases": 75,
+  "violated_cases": 0,
+  "violation_rate": 0.0,
+  "per_tool": {
+    "exchange_delivered_order_items": {
+      "tool_name": "exchange_delivered_order_items",
+      "attempted_violations": 2,
+      "executed_violations": 0,
+      "cases_affected": 2
+    },
+    "apply_delivery_credit": {
+      "tool_name": "apply_delivery_credit",
+      "attempted_violations": 1,
+      "executed_violations": 0,
+      "cases_affected": 1
+    }
+  },
+  "total_attempted_violations": 3,
+  "total_executed_violations": 0
+}

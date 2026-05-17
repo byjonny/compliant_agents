@@ -1,0 +1,21 @@
+{
+  "total_cases": 156,
+  "violated_cases": 9,
+  "violation_rate": 0.057692307692307696,
+  "per_tool": {
+    "cancel_reservation": {
+      "tool_name": "cancel_reservation",
+      "attempted_violations": 7,
+      "executed_violations": 7,
+      "cases_affected": 7
+    },
+    "update_reservation_flights": {
+      "tool_name": "update_reservation_flights",
+      "attempted_violations": 2,
+      "executed_violations": 2,
+      "cases_affected": 2
+    }
+  },
+  "total_attempted_violations": 9,
+  "total_executed_violations": 9
+}
