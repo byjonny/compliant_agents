@@ -56,7 +56,7 @@
       position: sticky; top: 0; z-index: 20;
       background: var(--card);
       border-bottom: 1px solid var(--border);
-      height: 54px;
+      min-height: 54px;
       padding: 0 24px;
       display: flex;
       align-items: center;
@@ -78,7 +78,26 @@
       margin-left: auto;
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 8px;
+      justify-content: flex-end;
+    }
+    .nav-section {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding-left: 8px;
+      border-left: 1px solid var(--border);
+    }
+    .nav-section:first-child { border-left: 0; padding-left: 0; }
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--agent);
+      white-space: nowrap;
+      margin-right: 1px;
     }
     .header-nav-btn {
       display: inline-flex; align-items: center; gap: 5px;
@@ -245,6 +264,34 @@
       font-weight: 800;
       text-align: center;
     }
+    .pair-head-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    .guard-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1;
+      flex: 0 0 auto;
+    }
+    .guard-icon.off {
+      color: #991b1b;
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+    }
+    .guard-icon.on {
+      color: #1d4ed8;
+      background: #eff6ff;
+      border: 1px solid #93c5fd;
+    }
     .pair-card {
       border: 1px solid var(--border);
       background: #f8fafc;
@@ -263,20 +310,17 @@
     }
     .analysis-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      align-items: stretch;
     }
     .analysis-chart {
       min-width: 0;
+      min-height: 360px;
     }
     .analysis-chart canvas {
-      max-height: 260px;
-    }
-    .analysis-chart-wide {
-      grid-column: 1 / -1;
-    }
-    .analysis-chart-wide canvas {
-      max-height: 380px;
+      height: 300px !important;
+      max-height: 300px;
     }
     .insight-list {
       margin-top: 12px;
@@ -1195,6 +1239,7 @@
       .command-card { position: static; }
       .experiment-form { grid-template-columns: 1fr 1fr; }
       .analysis-grid { grid-template-columns: 1fr; }
+      .analysis-chart { min-height: 340px; }
       .pair-grid { grid-template-columns: 1fr; }
       .pair-head { text-align: left; }
       .mapper-controls { grid-template-columns: 1fr; }
@@ -1203,6 +1248,8 @@
     @media (max-width: 640px) {
       .header { padding: 0 12px; }
       .header-actions { gap: 5px; }
+      .nav-section-label { display: none; }
+      .nav-section { padding-left: 5px; gap: 4px; }
       .header-nav-btn { padding: 5px 8px; }
       .main { padding: 20px 12px; }
       .experiment-form { grid-template-columns: 1fr; }
@@ -1214,13 +1261,22 @@
 
 <!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
 <header class="header">
-  <div class="logo">τ<em>bench</em> Viewer</div>
+  <div class="logo">Compliant <em>Agents</em></div>
   <nav class="breadcrumb" id="bc"></nav>
   <div class="header-actions">
-    <button class="header-nav-btn" id="btn-analyzer" onclick="goAnalyzer()">📈 Analyzer</button>
-    <button class="header-nav-btn" id="btn-mapper" onclick="goMapper()">🧭 Mapper</button>
-    <button class="header-nav-btn" id="btn-experiments" onclick="goExperiments()">⚙ Experiments</button>
-    <button class="header-nav-btn" id="btn-budget" onclick="gobudget()">💰 Budget</button>
+    <div class="nav-section">
+      <span class="nav-section-label">Full Pipeline</span>
+      <button class="header-nav-btn" id="btn-experiments" onclick="goExperiments()">Experiments</button>
+      <button class="header-nav-btn" id="btn-analyzer" onclick="goAnalyzer()">Analyze</button>
+    </div>
+    <div class="nav-section">
+      <span class="nav-section-label">Policy Mapper</span>
+      <button class="header-nav-btn" id="btn-mapper-run" onclick="goMapperRun()">Experiments</button>
+      <button class="header-nav-btn" id="btn-mapper" onclick="goMapper()">Analyze</button>
+    </div>
+    <div class="nav-section">
+      <button class="header-nav-btn" id="btn-budget" onclick="gobudget()">💰 Budget</button>
+    </div>
   </div>
 </header>
 
@@ -1228,7 +1284,7 @@
 <main class="main">
 
   <!-- VIEW 1: Simulation list -->
-  <div class="view active" id="v-sims">
+  <div class="view" id="v-sims">
     <div class="ph">
       <div class="ph-title">Simulation Runs</div>
       <div class="ph-sub" id="sims-sub">Loading…</div>
@@ -1321,7 +1377,7 @@
   </div>
 
   <!-- VIEW 1C: Guard architecture analyzer -->
-  <div class="view" id="v-analyzer">
+  <div class="view active" id="v-analyzer">
     <div class="ph">
       <div class="ph-title">Experiment Analyzer</div>
       <div class="ph-sub">Compare guarded and unguarded architectures by model and domain</div>
@@ -1348,11 +1404,11 @@
     </div>
   </div>
 
-  <!-- VIEW 1D: Policy mapper analyzer -->
-  <div class="view" id="v-mapper">
+  <!-- VIEW 1D: Policy mapper runner -->
+  <div class="view" id="v-mapper-run">
     <div class="ph">
-      <div class="ph-title">Policy Mapper Analyzer</div>
-      <div class="ph-sub">Compare mapper precision, recall, and F1 by model, mode, and confidence scope</div>
+      <div class="ph-title">Policy Mapper Experiments</div>
+      <div class="ph-sub">Define policy mapper runs and queue them sequentially</div>
     </div>
 
     <div class="experiment-layout">
@@ -1403,6 +1459,14 @@
 
     <div id="mapper-runs-content">
       <div class="loading"><div class="spinner"></div> Loading mapper runs…</div>
+    </div>
+  </div>
+
+  <!-- VIEW 1D.2: Policy mapper analyzer -->
+  <div class="view" id="v-mapper">
+    <div class="ph">
+      <div class="ph-title">Policy Mapper Analyzer</div>
+      <div class="ph-sub">Compare mapper precision, recall, and F1 by model, mode, and confidence scope</div>
     </div>
 
     <section class="analyzer-panel">
@@ -1636,6 +1700,10 @@ function modelRank(model) {
   return 100;
 }
 
+function modelCompare(a, b) {
+  return modelRank(a) - modelRank(b) || String(a || '').localeCompare(String(b || ''));
+}
+
 // ════════════════════════════════════════════════════════════
 // BREADCRUMB
 // ════════════════════════════════════════════════════════════
@@ -1654,7 +1722,16 @@ function updateBreadcrumb() {
       parts.push(`<span class="bc-current">${esc(simLabel)}</span>`);
     }
   } else {
-    parts.push(`<span class="bc-current">All Simulations</span>`);
+    const activeView = document.querySelector('.view.active')?.id;
+    const current = {
+      'v-analyzer': 'Analyzer',
+      'v-sims': 'All Simulations',
+      'v-experiments': 'Full Pipeline Experiments',
+      'v-mapper-run': 'Policy Mapper Experiments',
+      'v-mapper': 'Policy Mapper Analyzer',
+      'v-budget': 'Budget',
+    }[activeView] || 'Analyzer';
+    parts.push(`<span class="bc-current">${current}</span>`);
   }
   $('bc').innerHTML = parts.join('');
 }
@@ -1698,9 +1775,9 @@ function setHeaderActive(activeId) {
 
 async function goExperiments() {
   _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
-  updateBreadcrumb();
   showView('experiments');
   setHeaderActive('btn-experiments');
+  updateBreadcrumb();
   document.body.classList.add('wide-view');
   await loadExperimentOptions();
   await loadExperiments();
@@ -1897,9 +1974,9 @@ function renderExperiments() {
 // ════════════════════════════════════════════════════════════
 async function goAnalyzer() {
   _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
-  updateBreadcrumb();
   showView('analyzer');
   setHeaderActive('btn-analyzer');
+  updateBreadcrumb();
   document.body.classList.remove('wide-view');
   await loadAnalyzer();
 }
@@ -1942,7 +2019,7 @@ async function loadAnalyzer() {
     _analysisRuns = data.runs || [];
     const domains = data.domains || [];
     $('analysis-domain').innerHTML = domains.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
-    if (domains.includes('telecom')) $('analysis-domain').value = 'telecom';
+    if (domains.includes('airline')) $('analysis-domain').value = 'airline';
     renderAnalysisPairs();
     renderAnalyzer();
   } catch (e) {
@@ -1999,7 +2076,7 @@ function renderAnalysisPairs() {
   const domain = $('analysis-domain').value;
   const runs = _analysisRuns.filter(r => r.domain === domain);
   const models = [...new Set(runs.map(r => r.model).filter(Boolean))]
-    .sort((a, b) => modelRank(a) - modelRank(b) || a.localeCompare(b));
+    .sort(modelCompare);
 
   if (!models.length) {
     $('analysis-pairs').innerHTML = emptyState('📭', 'No completed runs for this domain', 'Run or select experiments first');
@@ -2008,8 +2085,8 @@ function renderAnalysisPairs() {
 
   const rows = [
     '<div class="pair-head">Agent + Guard Model</div>',
-    '<div class="pair-head">Without Guard</div>',
-    '<div class="pair-head">With Guard</div>',
+    '<div class="pair-head"><span class="pair-head-label"><span class="guard-icon off">×</span>Without Guard</span></div>',
+    '<div class="pair-head"><span class="pair-head-label"><span class="guard-icon on">✓</span>With Guard</span></div>',
   ];
   models.forEach((model) => {
     const without = analysisCandidates(domain, model, 'without');
@@ -2179,7 +2256,7 @@ function aggregateLatencyChange(withoutRuns, withRuns) {
 function collectAnalysisSeries() {
   const domain = $('analysis-domain').value;
   const models = [...new Set(_analysisRuns.filter(r => r.domain === domain).map(r => r.model).filter(Boolean))]
-    .sort((a, b) => modelRank(a) - modelRank(b) || a.localeCompare(b));
+    .sort(modelCompare);
   return models.map((model) => {
     const withoutRuns = selectedAnalysisRuns(domain, model, 'without');
     const withRuns = selectedAnalysisRuns(domain, model, 'with');
@@ -2361,16 +2438,7 @@ function renderAnalyzer() {
     return;
   }
 
-  const policyRows = rows.slice().sort((a, b) =>
-    ((b.noGuardViolation ?? b.guardViolation ?? -1) - (a.noGuardViolation ?? a.guardViolation ?? -1))
-  );
-  const rewardRows = rows.slice().sort((a, b) =>
-    ((b.noGuardReward ?? b.guardReward ?? -1) - (a.noGuardReward ?? a.guardReward ?? -1))
-  );
-  const latencyRows = rows.slice().sort((a, b) => modelRank(a.model) - modelRank(b.model) || a.model.localeCompare(b.model));
-  const blockRows = rows.slice().sort((a, b) =>
-    ((b.guardBlockCount ?? 0) - (a.guardBlockCount ?? 0)) || modelRank(a.model) - modelRank(b.model) || a.model.localeCompare(b.model)
-  );
+  const chartRows = rows.slice().sort((a, b) => modelCompare(a.model, b.model));
 
   $('analysis-content').innerHTML = `
     <div class="analysis-grid">
@@ -2392,7 +2460,7 @@ function renderAnalyzer() {
         </div>
         <canvas id="chart-latency"></canvas>
       </section>
-      <section class="chart-card analysis-chart analysis-chart-wide">
+      <section class="chart-card analysis-chart">
         <div class="chart-card-head">
           <button class="chart-export-btn" type="button" onclick="exportChartCsv('chart-guard-blocks', 'analysis-${esc($('analysis-domain').value)}-guard-block-counts.csv')">CSV</button>
         </div>
@@ -2411,29 +2479,29 @@ function renderAnalyzer() {
 
   _analysisCharts.push(lineChart(
     'chart-policy',
-    policyRows.map(r => r.model),
-    policyRows.map(r => r.noGuardViolation == null ? null : +(r.noGuardViolation * 100).toFixed(1)),
-    policyRows.map(r => r.guardViolation == null ? null : +(r.guardViolation * 100).toFixed(1)),
+    chartRows.map(r => r.model),
+    chartRows.map(r => r.noGuardViolation == null ? null : +(r.noGuardViolation * 100).toFixed(1)),
+    chartRows.map(r => r.guardViolation == null ? null : +(r.guardViolation * 100).toFixed(1)),
     `Policy violation rate · ${$('analysis-domain').value}`
   ));
   _analysisCharts.push(lineChart(
     'chart-reward',
-    rewardRows.map(r => r.model),
-    rewardRows.map(r => r.noGuardReward == null ? null : +(r.noGuardReward * 100).toFixed(1)),
-    rewardRows.map(r => r.guardReward == null ? null : +(r.guardReward * 100).toFixed(1)),
+    chartRows.map(r => r.model),
+    chartRows.map(r => r.noGuardReward == null ? null : +(r.noGuardReward * 100).toFixed(1)),
+    chartRows.map(r => r.guardReward == null ? null : +(r.guardReward * 100).toFixed(1)),
     `Reward · ${$('analysis-domain').value}`
   ));
   _analysisCharts.push(barChart(
     'chart-latency',
-    latencyRows.map(r => r.model),
-    latencyRows.map(r => r.latencyChange == null ? null : +r.latencyChange.toFixed(1)),
+    chartRows.map(r => r.model),
+    chartRows.map(r => r.latencyChange == null ? null : +r.latencyChange.toFixed(1)),
     `Per-task latency change with guard · ${$('analysis-domain').value}`
   ));
   _analysisCharts.push(groupedBlockChart(
     'chart-guard-blocks',
-    blockRows.map(r => r.model),
-    blockRows.map(r => Number(r.guardBlockCount) || 0),
-    blockRows.map(r => Number(r.guardExpectedBlockCount) || 0),
+    chartRows.map(r => r.model),
+    chartRows.map(r => Number(r.guardBlockCount) || 0),
+    chartRows.map(r => Number(r.guardExpectedBlockCount) || 0),
     `Guard block counts · ${$('analysis-domain').value}`
   ));
 }
@@ -2667,13 +2735,22 @@ function checkedValues(id) {
 
 async function goMapper() {
   _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
-  updateBreadcrumb();
   showView('mapper');
   setHeaderActive('btn-mapper');
+  updateBreadcrumb();
+  document.body.classList.add('wide-view');
+  await loadMapperOptions();
+  await loadMapper();
+}
+
+async function goMapperRun() {
+  _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
+  showView('mapper-run');
+  setHeaderActive('btn-mapper-run');
+  updateBreadcrumb();
   document.body.classList.add('wide-view');
   await loadMapperOptions();
   await loadMapperExperiments();
-  await loadMapper();
 }
 
 async function loadMapper() {
@@ -2700,8 +2777,7 @@ function collectMapperRows() {
   return _mapperResults
     .filter(r => r.domain === domain && modes.includes(r.mode) && confs.includes(r.conf))
     .sort((a, b) =>
-      modelRank(a.model) - modelRank(b.model)
-      || a.model.localeCompare(b.model)
+      modelCompare(a.model, b.model)
       || a.mode.localeCompare(b.mode)
       || a.conf.localeCompare(b.conf)
     );
@@ -2711,7 +2787,7 @@ function mapperLineChart(id, metric, rows) {
   const domain = $('mapper-domain').value;
   const modes = checkedValues('mapper-modes');
   const confs = checkedValues('mapper-confs');
-  const models = [...new Set(rows.map(r => r.model))].sort((a, b) => modelRank(a) - modelRank(b) || a.localeCompare(b));
+  const models = [...new Set(rows.map(r => r.model))].sort(modelCompare);
   const datasets = [];
   for (const mode of modes) {
     for (const conf of confs) {
@@ -2853,10 +2929,11 @@ function renderMapper() {
 // ════════════════════════════════════════════════════════════
 async function goSims() {
   _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
-  updateBreadcrumb();
   showView('sims');
   setHeaderActive(null);
+  updateBreadcrumb();
   document.body.classList.add('wide-view');
+  await loadSims();
 }
 
 async function loadSims() {
@@ -3404,9 +3481,9 @@ let _budgetChart = null;
 
 async function gobudget() {
   _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
-  updateBreadcrumb();
   showView('budget');
   setHeaderActive('btn-budget');
+  updateBreadcrumb();
   document.body.classList.remove('wide-view');
   $('budget-content').innerHTML = loading();
   try {
@@ -3586,11 +3663,10 @@ $('mapper-run-mode').addEventListener('change', () => {
 // ════════════════════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════════════════════
-updateBreadcrumb();
-loadSims();
+goAnalyzer();
 setInterval(() => {
   if ($('v-experiments').classList.contains('active')) loadExperiments();
-  if ($('v-mapper').classList.contains('active')) loadMapperExperiments();
+  if ($('v-mapper-run').classList.contains('active')) loadMapperExperiments();
 }, 2500);
 </script>
 </body>
