@@ -1,0 +1,502 @@
+{
+  "metadata": {
+    "threshold": 0.8,
+    "high_conf_only": true,
+    "total_tools": 14,
+    "timestamp": "2026-05-17T07:27:33.860145+00:00",
+    "predicted_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/telecom-mappings-claude-haiku-4-5-20251001-retrieval.json",
+    "ground_truth_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/ground_truth/telecom-ground-truth.json"
+  },
+  "overall": {
+    "macro": {
+      "precision": 0.3691,
+      "recall": 0.4762,
+      "f1": 0.4034
+    },
+    "micro": {
+      "precision": 0.1556,
+      "recall": 0.4118,
+      "f1": 0.2258
+    }
+  },
+  "per_tool": {
+    "disable_roaming": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "n_predicted": 1,
+      "n_gt": 1,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-001",
+          "text": "If a line is roaming enabled, the user can use their phone's data connection in areas outside their home network.",
+          "section": null
+        }
+      ],
+      "compositional_matches": []
+    },
+    "enable_roaming": {
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6667,
+      "n_predicted": 2,
+      "n_gt": 1,
+      "n_matched_pred": 1,
+      "n_matched_gt": 1,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "extend_payment_due_date": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "n_predicted": 0,
+      "n_gt": 4,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [],
+      "recall_paragraphs": [
+        {
+          "id": "GT-023",
+          "text": "A bill due date can be extended only if all of the following are true: The bill status is Issued or Overdue. The requested new due date is after the current due date and no more than 14 days after the current due date. The customer has not received a payment extension in the last 90 days.",
+          "section": null
+        },
+        {
+          "id": "GT-024",
+          "text": "You must not extend the due date for a bill whose status is Paid, Disputed, Draft, or Awaiting Payment.",
+          "section": null
+        },
+        {
+          "id": "GT-025",
+          "text": "You must not extend the due date if the requested new due date is more than 14 days after the current due date.",
+          "section": null
+        },
+        {
+          "id": "GT-026",
+          "text": "You must not extend the due date if the customer received a payment extension in the last 90 days.",
+          "section": null
+        }
+      ],
+      "compositional_matches": []
+    },
+    "get_bills_for_customer": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 7,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-014",
+          "text": "Each bill contains:\n- bill ID\n- customer ID\n- billing period (start and end dates)\n- issue date\n- total amount due\n- due date\n- line items (charges, fees, credits)\n- status",
+          "section": "Bill",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-015",
+          "text": "There are five bill status types: **Draft**, **Issued**, **Paid**, **Overdue**, **Awaiting Payment**, and **Disputed**.",
+          "section": "Bill",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-016",
+          "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
+          "section": "Customer Lookup",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "Check the bill status to make sure it is overdue.",
+          "section": "Overdue Bill Payment",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "Check the bill amount due",
+          "section": "Overdue Bill Payment",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-024",
+          "text": "A user can only have one bill in the AWAITING PAYMENT status at a time.",
+          "section": "Overdue Bill Payment",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_customer_by_id": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 2,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-016",
+          "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
+          "section": "Customer Lookup",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_customer_by_name": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 3,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-016",
+          "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
+          "section": "Customer Lookup",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-017",
+          "text": "For name lookup, date of birth is required for verification purposes.",
+          "section": "Customer Lookup",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_customer_by_phone": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 2,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-016",
+          "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
+          "section": "Customer Lookup",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_data_usage": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 7,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-011",
+          "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
+          "section": "Line",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-037",
+          "text": "Each plan specify the maxium data usage per month.",
+          "section": "Data Refueling",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-038",
+          "text": "If the user's data usage for a line exceeds the plan's data limit, data connectivity will be lost.",
+          "section": "Data Refueling",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-039",
+          "text": "You can add more data to the line by \"refueling\" data at a price per GB specified by the plan.",
+          "section": "Data Refueling",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-040",
+          "text": "The maximum amount of data that can be refueled is 2GB.",
+          "section": "Data Refueling",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-041",
+          "text": "To refuel data you should:\n- Ask them how much data they want to refuel\n- Confirm the price\n- Apply the refueled data to the line associated with the phone number the user provided.",
+          "section": "Data Refueling",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_details_by_id": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 6,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-010",
+          "text": "Each payment method includes:\n- method type (Credit Card, Debit Card, PayPal)\n- account number last 4 digits\n- expiration date (MM/YYYY format)",
+          "section": "Payment Method",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
+          "section": "Line",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-013",
+          "text": "Each plan specifies:\n- plan ID\n- name\n- data limit (in GB)\n- monthly price\n- data refueling price per GB",
+          "section": "Plan",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-014",
+          "text": "Each bill contains:\n- bill ID\n- customer ID\n- billing period (start and end dates)\n- issue date\n- total amount due\n- due date\n- line items (charges, fees, credits)\n- status",
+          "section": "Bill",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-016",
+          "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
+          "section": "Customer Lookup",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-017",
+          "text": "For name lookup, date of birth is required for verification purposes.",
+          "section": "Customer Lookup",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "refuel_data": {
+      "precision": 0.25,
+      "recall": 0.3333,
+      "f1": 0.2857,
+      "n_predicted": 4,
+      "n_gt": 3,
+      "n_matched_pred": 1,
+      "n_matched_gt": 1,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-013",
+          "text": "Each plan specifies:\n- plan ID\n- name\n- data limit (in GB)\n- monthly price\n- data refueling price per GB",
+          "section": "Plan",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-041",
+          "text": "To refuel data you should:\n- Ask them how much data they want to refuel\n- Confirm the price\n- Apply the refueled data to the line associated with the phone number the user provided.",
+          "section": "Data Refueling",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-004",
+          "text": "If the user's data usage for a line exceeds the plan's data limit, data connectivity will be lost.",
+          "section": null
+        },
+        {
+          "id": "GT-005",
+          "text": "You can add more data to the line by 'refueling' data at a price per GB specified by the plan.",
+          "section": null
+        }
+      ],
+      "compositional_matches": []
+    },
+    "resume_line": {
+      "precision": 0.6667,
+      "recall": 1.0,
+      "f1": 0.8,
+      "n_predicted": 3,
+      "n_gt": 2,
+      "n_matched_pred": 2,
+      "n_matched_gt": 2,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "send_payment_request": {
+      "precision": 0.6667,
+      "recall": 0.5,
+      "f1": 0.5714,
+      "n_predicted": 3,
+      "n_gt": 4,
+      "n_matched_pred": 2,
+      "n_matched_gt": 2,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-013",
+          "text": "Check the bill status to make sure it is overdue.",
+          "section": null
+        },
+        {
+          "id": "GT-016",
+          "text": "Inform the user that a payment request has been sent.",
+          "section": null
+        }
+      ],
+      "compositional_matches": []
+    },
+    "suspend_line": {
+      "precision": 0.5,
+      "recall": 0.5,
+      "f1": 0.5,
+      "n_predicted": 2,
+      "n_gt": 2,
+      "n_matched_pred": 1,
+      "n_matched_gt": 1,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-052",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-017",
+          "text": "When a line is suspended, the user will not have service.",
+          "section": null
+        }
+      ],
+      "compositional_matches": []
+    },
+    "transfer_to_human_agents": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 3,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-006",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Telecom Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Telecom Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
+          "section": "Telecom Agent Policy",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    }
+  }
+}

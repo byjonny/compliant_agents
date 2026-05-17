@@ -1,0 +1,42 @@
+{
+  "domain": "telecom",
+  "mode": "llm",
+  "models": [
+    "gpt-4.1-mini"
+  ],
+  "timestamp": "2026-05-15T17:28:45.878197+00:00",
+  "results": [
+    {
+      "model": "gpt-4.1-mini",
+      "mode": "llm",
+      "status": "ok",
+      "mappings": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/telecom-mappings-gpt-4.1-mini.json",
+      "eval_high": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/telecom-eval-gpt-4.1-mini-high.json",
+      "eval_all": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/telecom-eval-gpt-4.1-mini-all.json",
+      "scores_high": {
+        "macro": {
+          "precision": 0.2592,
+          "recall": 0.7857,
+          "f1": 0.3474
+        },
+        "micro": {
+          "precision": 0.1642,
+          "recall": 0.6471,
+          "f1": 0.2619
+        }
+      },
+      "scores_all": {
+        "macro": {
+          "precision": 0.1993,
+          "recall": 0.7857,
+          "f1": 0.2845
+        },
+        "micro": {
+          "precision": 0.1028,
+          "recall": 0.6471,
+          "f1": 0.1774
+        }
+      }
+    }
+  ]
+}

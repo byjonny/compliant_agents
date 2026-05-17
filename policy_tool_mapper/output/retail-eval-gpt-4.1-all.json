@@ -1,0 +1,1747 @@
+{
+  "metadata": {
+    "threshold": 0.8,
+    "high_conf_only": false,
+    "total_tools": 18,
+    "timestamp": "2026-05-17T08:34:38.937022+00:00",
+    "predicted_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/retail-mappings-gpt-4.1.json",
+    "ground_truth_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/ground_truth/retail-ground-truth.json"
+  },
+  "overall": {
+    "macro": {
+      "precision": 0.2348,
+      "recall": 0.8988,
+      "f1": 0.3598
+    },
+    "micro": {
+      "precision": 0.1529,
+      "recall": 0.8571,
+      "f1": 0.2596
+    }
+  },
+  "per_tool": {
+    "apply_delivery_credit": {
+      "precision": 0.2,
+      "recall": 0.5,
+      "f1": 0.2857,
+      "n_predicted": 15,
+      "n_gt": 6,
+      "n_matched_pred": 3,
+      "n_matched_gt": 3,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-023",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-056",
+          "text": "You can help a user apply a delivery credit for a delivery claim.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-057",
+          "text": "To do so, you need to follow these steps:\n- Authenticate the user.\n- Check the delivery claim details.\n- Check that the delivery claim belongs to the authenticated user.\n- Check the linked order if needed.\n- Confirm with the user before applying the delivery credit.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-058",
+          "text": "A delivery credit can be applied only if all of the following are true:\n- The delivery claim status is 'open'.\n- The claim was filed within 14 days after the actual delivery date.\n- At least one of the following is true:\n  - The actual delivery date was more than 3 days after the promised delivery date.\n  - The customer paid for expedited shipping.\n  - The claim was filed within 48 hours after the actual delivery date.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-047",
+          "text": "A delivery credit can be applied only if the delivery claim status is 'open'.",
+          "section": null
+        },
+        {
+          "id": "GT-048",
+          "text": "A delivery credit can be applied only if the claim was filed within 14 days after the actual delivery date.",
+          "section": null
+        },
+        {
+          "id": "GT-049",
+          "text": "A delivery credit can be applied only if at least one qualifying condition is true: the actual delivery date was more than 3 days after the promised delivery date, the customer paid for expedited shipping, or the claim was filed within 48 hours after the actual delivery date.",
+          "section": null
+        }
+      ],
+      "compositional_matches": []
+    },
+    "calculate": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 4,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "cancel_pending_order": {
+      "precision": 0.2,
+      "recall": 1.0,
+      "f1": 0.3333,
+      "n_predicted": 20,
+      "n_gt": 3,
+      "n_matched_pred": 4,
+      "n_matched_gt": 3,
+      "n_comp_matches": 1,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "Each order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-023",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": [
+        {
+          "type": "gt_contains_pred",
+          "container": {
+            "id": "GT-003",
+            "text": "The user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.",
+            "section": null
+          },
+          "contained": [
+            {
+              "id": "PS-028",
+              "text": "Other reasons are not acceptable.",
+              "section": "Cancel pending order",
+              "confidence": "high"
+            }
+          ]
+        }
+      ]
+    },
+    "exchange_delivered_order_items": {
+      "precision": 0.4286,
+      "recall": 0.8571,
+      "f1": 0.5714,
+      "n_predicted": 21,
+      "n_gt": 7,
+      "n_matched_pred": 9,
+      "n_matched_gt": 6,
+      "n_comp_matches": 3,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-012",
+          "text": "For a delivered order, return or exchange can be only done once by the agent.",
+          "section": null
+        }
+      ],
+      "compositional_matches": [
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-050",
+            "text": "For a delivered order, each item can be exchanged to an available new item of the same product but of different product option.",
+            "section": "Exchange delivered order",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-008",
+              "text": "For a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.",
+              "section": null
+            }
+          ]
+        },
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-052",
+            "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+            "section": "Exchange delivered order",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-009",
+              "text": "The user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.",
+              "section": null
+            }
+          ]
+        },
+        {
+          "type": "gt_contains_pred",
+          "container": {
+            "id": "GT-010",
+            "text": "After user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.",
+            "section": null
+          },
+          "contained": [
+            {
+              "id": "PS-055",
+              "text": "There is no need to place a new order.",
+              "section": "Exchange delivered order",
+              "confidence": "high"
+            }
+          ]
+        }
+      ]
+    },
+    "find_user_id_by_email": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 10,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-057",
+          "text": "To do so, you need to follow these steps:\n- Authenticate the user.\n- Check the delivery claim details.\n- Check that the delivery claim belongs to the authenticated user.\n- Check the linked order if needed.\n- Confirm with the user before applying the delivery credit.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "find_user_id_by_name_zip": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 7,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_delivery_claim": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 20,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "For example \"02:30:00\" means 2:30 AM EST.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "Each order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-021",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-022",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-056",
+          "text": "You can help a user apply a delivery credit for a delivery claim.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-057",
+          "text": "To do so, you need to follow these steps:\n- Authenticate the user.\n- Check the delivery claim details.\n- Check that the delivery claim belongs to the authenticated user.\n- Check the linked order if needed.\n- Confirm with the user before applying the delivery credit.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-058",
+          "text": "A delivery credit can be applied only if all of the following are true:\n- The delivery claim status is 'open'.\n- The claim was filed within 14 days after the actual delivery date.\n- At least one of the following is true:\n  - The actual delivery date was more than 3 days after the promised delivery date.\n  - The customer paid for expedited shipping.\n  - The claim was filed within 48 hours after the actual delivery date.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-059",
+          "text": "Do not apply the delivery credit if the claim status is 'closed' or 'credit applied'.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-060",
+          "text": "Do not apply the delivery credit if the claim was filed more than 14 days after the actual delivery date, even if another condition is true.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-061",
+          "text": "Do not apply the delivery credit if none of the qualifying conditions are true.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_item_details": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 4,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_order_details": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 16,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "For example \"02:30:00\" means 2:30 AM EST.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "Each order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-023",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_product_details": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 13,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Our retail store has 50 types of products.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-018",
+          "text": "Each variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+          "section": "Product",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "get_user_details": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 10,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "list_all_product_types": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 8,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-015",
+          "text": "Our retail store has 50 types of products.",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-016",
+          "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+          "section": "Product",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "modify_pending_order_address": {
+      "precision": 0.1111,
+      "recall": 1.0,
+      "f1": 0.2,
+      "n_predicted": 18,
+      "n_gt": 2,
+      "n_matched_pred": 2,
+      "n_matched_gt": 2,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "Each order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-024",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "modify_pending_order_items": {
+      "precision": 0.3333,
+      "recall": 1.0,
+      "f1": 0.5,
+      "n_predicted": 33,
+      "n_gt": 6,
+      "n_matched_pred": 11,
+      "n_matched_gt": 6,
+      "n_comp_matches": 5,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Our retail store has 50 types of products.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
+          "text": "Each variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-019",
+          "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "Each order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-031",
+          "text": "For a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.",
+          "section": "Modify pending order",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": [
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-035",
+            "text": "This action can only be called once, and will change the order status to 'pending (items modifed)'.",
+            "section": "Modify items",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-027",
+              "text": "This action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore.",
+              "section": null
+            }
+          ]
+        },
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-037",
+            "text": "So you must confirm all the details are correct and be cautious before taking this action.",
+            "section": "Modify items",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-028",
+              "text": "So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.",
+              "section": null
+            }
+          ]
+        },
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-039",
+            "text": "For a pending order, each item can be modified to an available new item of the same product but of different product option.",
+            "section": "Modify items",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-029",
+              "text": "For a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.",
+              "section": null
+            }
+          ]
+        },
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-041",
+            "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+            "section": "Modify items",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-030",
+              "text": "The user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.",
+              "section": null
+            }
+          ]
+        },
+        {
+          "type": "pred_contains_gt",
+          "container": {
+            "id": "PS-024",
+            "text": "Exchange or modify order tools can only be called once per order.",
+            "section": "Generic action rules",
+            "confidence": "high"
+          },
+          "contained": [
+            {
+              "id": "GT-031",
+              "text": "Exchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!",
+              "section": null
+            }
+          ]
+        }
+      ]
+    },
+    "modify_pending_order_payment": {
+      "precision": 0.2353,
+      "recall": 1.0,
+      "f1": 0.381,
+      "n_predicted": 17,
+      "n_gt": 4,
+      "n_matched_pred": 4,
+      "n_matched_gt": 4,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-023",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-024",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-025",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-031",
+          "text": "For a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.",
+          "section": "Modify pending order",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "modify_user_address": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "n_predicted": 10,
+      "n_gt": 0,
+      "n_matched_pred": 0,
+      "n_matched_gt": 0,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    },
+    "return_delivered_order_items": {
+      "precision": 0.2273,
+      "recall": 0.8333,
+      "f1": 0.3571,
+      "n_predicted": 22,
+      "n_gt": 6,
+      "n_matched_pred": 5,
+      "n_matched_gt": 5,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "Each order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [
+        {
+          "id": "GT-042",
+          "text": "For a delivered order, return or exchange can be only done once by the agent.",
+          "section": null
+        }
+      ],
+      "compositional_matches": []
+    },
+    "transfer_to_human_agents": {
+      "precision": 0.1429,
+      "recall": 1.0,
+      "f1": 0.25,
+      "n_predicted": 7,
+      "n_gt": 1,
+      "n_matched_pred": 1,
+      "n_matched_gt": 1,
+      "n_comp_matches": 0,
+      "precision_paragraphs": [
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        }
+      ],
+      "recall_paragraphs": [],
+      "compositional_matches": []
+    }
+  }
+}

@@ -1,0 +1,4759 @@
+{
+  "metadata": {
+    "policy_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/input/RetailPolicy.md",
+    "openapi_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/input/RetailTools.json",
+    "total_tools": 18,
+    "total_statements": 75,
+    "total_mappings": 598,
+    "sweep_iterations": 1,
+    "timestamp": "2026-05-17T08:32:50.202095+00:00"
+  },
+  "mappings": [
+    {
+      "tool_id": "apply_delivery_credit",
+      "tool_name": "apply_delivery_credit",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "For example \"02:30:00\" means 2:30 AM EST.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- unique user id",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
+          "text": "- default address",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-019",
+          "text": "- payment methods.",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "There are three types of payment methods: **gift card**, **paypal account**, **credit card**.",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-021",
+          "text": "Our retail store has 50 types of products.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-022",
+          "text": "For each **type of product**, there are **variant items** of different **options**.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-024",
+          "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-025",
+          "text": "Each variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-026",
+          "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-035",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-038",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-039",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-040",
+          "text": "An order can only be cancelled if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-041",
+          "text": "The user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-042",
+          "text": "Other reasons are not acceptable.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-043",
+          "text": "After user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-044",
+          "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Modify pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-045",
+          "text": "For a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.",
+          "section": "Modify pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-046",
+          "text": "The user can only choose a single payment method different from the original payment method.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-047",
+          "text": "If the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-048",
+          "text": "After user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-049",
+          "text": "This action can only be called once, and will change the order status to 'pending (items modifed)'.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-050",
+          "text": "The agent will not be able to modify or cancel the order anymore.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-051",
+          "text": "So you must confirm all the details are correct and be cautious before taking this action.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-052",
+          "text": "In particular, remember to remind the customer to confirm they have provided all the items they want to modify.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-053",
+          "text": "For a pending order, each item can be modified to an available new item of the same product but of different product option.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-054",
+          "text": "There cannot be any change of product types, e.g. modify shirt to shoe.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-055",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-056",
+          "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-057",
+          "text": "An order can only be returned if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-058",
+          "text": "The user needs to confirm the order id and the list of items to be returned.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-059",
+          "text": "The user needs to provide a payment method to receive the refund.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-060",
+          "text": "The refund must either go to the original payment method, or an existing gift card.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-061",
+          "text": "After user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-062",
+          "text": "An order can only be exchanged if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-063",
+          "text": "In particular, remember to remind the customer to confirm they have provided all items to be exchanged.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-064",
+          "text": "For a delivered order, each item can be exchanged to an available new item of the same product but of different product option.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-065",
+          "text": "There cannot be any change of product types, e.g. modify shirt to shoe.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-066",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-067",
+          "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-068",
+          "text": "After user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-069",
+          "text": "There is no need to place a new order.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-070",
+          "text": "You can help a user apply a delivery credit for a delivery claim.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-071",
+          "text": "To do so, you need to follow these steps:\n- Authenticate the user.\n- Check the delivery claim details.\n- Check that the delivery claim belongs to the authenticated user.\n- Check the linked order if needed.\n- Confirm with the user before applying the delivery credit.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-072",
+          "text": "A delivery credit can be applied only if all of the following are true:\n- The delivery claim status is 'open'.\n- The claim was filed within 14 days after the actual delivery date.\n- At least one of the following is true:\n  - The actual delivery date was more than 3 days after the promised delivery date.\n  - The customer paid for expedited shipping.\n  - The claim was filed within 48 hours after the actual delivery date.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-073",
+          "text": "Do not apply the delivery credit if the claim status is 'closed' or 'credit applied'.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-074",
+          "text": "Do not apply the delivery credit if the claim was filed more than 14 days after the actual delivery date, even if another condition is true.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-075",
+          "text": "Do not apply the delivery credit if none of the qualifying conditions are true.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "tool_id": "calculate",
+      "tool_name": "calculate",
+      "statements": [
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "tool_id": "cancel_pending_order",
+      "tool_name": "cancel_pending_order",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "For example \"02:30:00\" means 2:30 AM EST.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- unique user id",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
+          "text": "- default address",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-019",
+          "text": "- payment methods.",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "There are three types of payment methods: **gift card**, **paypal account**, **credit card**.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "Our retail store has 50 types of products.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-022",
+          "text": "For each **type of product**, there are **variant items** of different **options**.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-024",
+          "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-025",
+          "text": "Each variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-026",
+          "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-035",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-040",
+          "text": "An order can only be cancelled if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Cancel pending order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-041",
+          "text": "The user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation.",
+          "section": "Cancel pending order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-042",
+          "text": "Other reasons are not acceptable.",
+          "section": "Cancel pending order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-043",
+          "text": "After user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.",
+          "section": "Cancel pending order",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "tool_id": "exchange_delivered_order_items",
+      "tool_name": "exchange_delivered_order_items",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- unique user id",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
+          "text": "- default address",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-019",
+          "text": "- payment methods.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "There are three types of payment methods: **gift card**, **paypal account**, **credit card**.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "Our retail store has 50 types of products.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-022",
+          "text": "For each **type of product**, there are **variant items** of different **options**.",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-023",
+          "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-024",
+          "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-025",
+          "text": "Each variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-026",
+          "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-035",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-038",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-039",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-045",
+          "text": "For a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.",
+          "section": "Modify pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-046",
+          "text": "The user can only choose a single payment method different from the original payment method.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-047",
+          "text": "If the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-048",
+          "text": "After user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-053",
+          "text": "For a pending order, each item can be modified to an available new item of the same product but of different product option.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-054",
+          "text": "There cannot be any change of product types, e.g. modify shirt to shoe.",
+          "section": "Modify items",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-055",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+          "section": "Modify items",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-056",
+          "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": "Modify items",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-057",
+          "text": "An order can only be returned if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Return delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-058",
+          "text": "The user needs to confirm the order id and the list of items to be returned.",
+          "section": "Return delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-059",
+          "text": "The user needs to provide a payment method to receive the refund.",
+          "section": "Return delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-060",
+          "text": "The refund must either go to the original payment method, or an existing gift card.",
+          "section": "Return delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-061",
+          "text": "After user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-062",
+          "text": "An order can only be exchanged if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Exchange delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-063",
+          "text": "In particular, remember to remind the customer to confirm they have provided all items to be exchanged.",
+          "section": "Exchange delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-064",
+          "text": "For a delivered order, each item can be exchanged to an available new item of the same product but of different product option.",
+          "section": "Exchange delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-065",
+          "text": "There cannot be any change of product types, e.g. modify shirt to shoe.",
+          "section": "Exchange delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-066",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+          "section": "Exchange delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-067",
+          "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": "Exchange delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-068",
+          "text": "After user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items.",
+          "section": "Exchange delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-069",
+          "text": "There is no need to place a new order.",
+          "section": "Exchange delivered order",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "tool_id": "find_user_id_by_email",
+      "tool_name": "find_user_id_by_email",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-016",
+          "text": "- unique user id",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-017",
+          "text": "- email",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-018",
+          "text": "- default address",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-019",
+          "text": "- payment methods.",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "There are three types of payment methods: **gift card**, **paypal account**, **credit card**.",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-038",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-039",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-040",
+          "text": "An order can only be cancelled if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-041",
+          "text": "The user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-042",
+          "text": "Other reasons are not acceptable.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-043",
+          "text": "After user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-044",
+          "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Modify pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-045",
+          "text": "For a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.",
+          "section": "Modify pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-046",
+          "text": "The user can only choose a single payment method different from the original payment method.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-047",
+          "text": "If the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-048",
+          "text": "After user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-049",
+          "text": "This action can only be called once, and will change the order status to 'pending (items modifed)'.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-050",
+          "text": "The agent will not be able to modify or cancel the order anymore.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-051",
+          "text": "So you must confirm all the details are correct and be cautious before taking this action.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-052",
+          "text": "In particular, remember to remind the customer to confirm they have provided all the items they want to modify.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-053",
+          "text": "For a pending order, each item can be modified to an available new item of the same product but of different product option.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-054",
+          "text": "There cannot be any change of product types, e.g. modify shirt to shoe.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-055",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-056",
+          "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-057",
+          "text": "An order can only be returned if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-058",
+          "text": "The user needs to confirm the order id and the list of items to be returned.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-059",
+          "text": "The user needs to provide a payment method to receive the refund.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-060",
+          "text": "The refund must either go to the original payment method, or an existing gift card.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-061",
+          "text": "After user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-062",
+          "text": "An order can only be exchanged if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-063",
+          "text": "In particular, remember to remind the customer to confirm they have provided all items to be exchanged.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-064",
+          "text": "For a delivered order, each item can be exchanged to an available new item of the same product but of different product option.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-065",
+          "text": "There cannot be any change of product types, e.g. modify shirt to shoe.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-066",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-067",
+          "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-068",
+          "text": "After user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-069",
+          "text": "There is no need to place a new order.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-070",
+          "text": "You can help a user apply a delivery credit for a delivery claim.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-071",
+          "text": "To do so, you need to follow these steps:\n- Authenticate the user.\n- Check the delivery claim details.\n- Check that the delivery claim belongs to the authenticated user.\n- Check the linked order if needed.\n- Confirm with the user before applying the delivery credit.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-072",
+          "text": "A delivery credit can be applied only if all of the following are true:\n- The delivery claim status is 'open'.\n- The claim was filed within 14 days after the actual delivery date.\n- At least one of the following is true:\n  - The actual delivery date was more than 3 days after the promised delivery date.\n  - The customer paid for expedited shipping.\n  - The claim was filed within 48 hours after the actual delivery date.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-073",
+          "text": "Do not apply the delivery credit if the claim status is 'closed' or 'credit applied'.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-074",
+          "text": "Do not apply the delivery credit if the claim was filed more than 14 days after the actual delivery date, even if another condition is true.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-075",
+          "text": "Do not apply the delivery credit if none of the qualifying conditions are true.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "tool_id": "find_user_id_by_name_zip",
+      "tool_name": "find_user_id_by_name_zip",
+      "statements": [
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- unique user id",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-017",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "tool_id": "get_delivery_claim",
+      "tool_name": "get_delivery_claim",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-035",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-070",
+          "text": "You can help a user apply a delivery credit for a delivery claim.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-071",
+          "text": "To do so, you need to follow these steps:\n- Authenticate the user.\n- Check the delivery claim details.\n- Check that the delivery claim belongs to the authenticated user.\n- Check the linked order if needed.\n- Confirm with the user before applying the delivery credit.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-072",
+          "text": "A delivery credit can be applied only if all of the following are true:\n- The delivery claim status is 'open'.\n- The claim was filed within 14 days after the actual delivery date.\n- At least one of the following is true:\n  - The actual delivery date was more than 3 days after the promised delivery date.\n  - The customer paid for expedited shipping.\n  - The claim was filed within 48 hours after the actual delivery date.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-073",
+          "text": "Do not apply the delivery credit if the claim status is 'closed' or 'credit applied'.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-074",
+          "text": "Do not apply the delivery credit if the claim was filed more than 14 days after the actual delivery date, even if another condition is true.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-075",
+          "text": "Do not apply the delivery credit if none of the qualifying conditions are true.",
+          "section": "Delivery credit claims",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "tool_id": "get_item_details",
+      "tool_name": "get_item_details",
+      "statements": [
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "tool_id": "get_order_details",
+      "tool_name": "get_order_details",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "For example \"02:30:00\" means 2:30 AM EST.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-035",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-040",
+          "text": "An order can only be cancelled if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-044",
+          "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Modify pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-057",
+          "text": "An order can only be returned if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-062",
+          "text": "An order can only be exchanged if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-071",
+          "text": "To do so, you need to follow these steps:\n- Authenticate the user.\n- Check the delivery claim details.\n- Check that the delivery claim belongs to the authenticated user.\n- Check the linked order if needed.\n- Confirm with the user before applying the delivery credit.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "tool_id": "get_product_details",
+      "tool_name": "get_product_details",
+      "statements": [
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "For example \"02:30:00\" means 2:30 AM EST.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-021",
+          "text": "Our retail store has 50 types of products.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-022",
+          "text": "For each **type of product**, there are **variant items** of different **options**.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-024",
+          "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
+          "text": "Each variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-026",
+          "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+          "section": "Product",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "tool_id": "get_user_details",
+      "tool_name": "get_user_details",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "For example \"02:30:00\" means 2:30 AM EST.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- unique user id",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
+          "text": "- default address",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-019",
+          "text": "- payment methods.",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "There are three types of payment methods: **gift card**, **paypal account**, **credit card**.",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-021",
+          "text": "Our retail store has 50 types of products.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-022",
+          "text": "For each **type of product**, there are **variant items** of different **options**.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-024",
+          "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-025",
+          "text": "Each variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-026",
+          "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-035",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-040",
+          "text": "An order can only be cancelled if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-044",
+          "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Modify pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-057",
+          "text": "An order can only be returned if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-062",
+          "text": "An order can only be exchanged if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-071",
+          "text": "To do so, you need to follow these steps:\n- Authenticate the user.\n- Check the delivery claim details.\n- Check that the delivery claim belongs to the authenticated user.\n- Check the linked order if needed.\n- Confirm with the user before applying the delivery credit.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "tool_id": "list_all_product_types",
+      "tool_name": "list_all_product_types",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "All times in the database are EST and 24 hour based.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "For example \"02:30:00\" means 2:30 AM EST.",
+          "section": "Domain basic",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-021",
+          "text": "Our retail store has 50 types of products.",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "For each **type of product**, there are **variant items** of different **options**.",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-023",
+          "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-024",
+          "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
+          "text": "Each variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-026",
+          "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-038",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-039",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "tool_id": "modify_pending_order_address",
+      "tool_name": "modify_pending_order_address",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-035",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-038",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-039",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-040",
+          "text": "An order can only be cancelled if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-044",
+          "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Modify pending order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-045",
+          "text": "For a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.",
+          "section": "Modify pending order",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "tool_id": "modify_pending_order_items",
+      "tool_name": "modify_pending_order_items",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- unique user id",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
+          "text": "- default address",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-019",
+          "text": "- payment methods.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "There are three types of payment methods: **gift card**, **paypal account**, **credit card**.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-021",
+          "text": "Our retail store has 50 types of products.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-022",
+          "text": "For each **type of product**, there are **variant items** of different **options**.",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-023",
+          "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-024",
+          "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+          "section": "Product",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-025",
+          "text": "Each variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-026",
+          "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+          "section": "Product",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-035",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-038",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-039",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-044",
+          "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Modify pending order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-045",
+          "text": "For a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.",
+          "section": "Modify pending order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-046",
+          "text": "The user can only choose a single payment method different from the original payment method.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-047",
+          "text": "If the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-048",
+          "text": "After user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-049",
+          "text": "This action can only be called once, and will change the order status to 'pending (items modifed)'.",
+          "section": "Modify items",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-050",
+          "text": "The agent will not be able to modify or cancel the order anymore.",
+          "section": "Modify items",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-051",
+          "text": "So you must confirm all the details are correct and be cautious before taking this action.",
+          "section": "Modify items",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-052",
+          "text": "In particular, remember to remind the customer to confirm they have provided all the items they want to modify.",
+          "section": "Modify items",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-053",
+          "text": "For a pending order, each item can be modified to an available new item of the same product but of different product option.",
+          "section": "Modify items",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-054",
+          "text": "There cannot be any change of product types, e.g. modify shirt to shoe.",
+          "section": "Modify items",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-055",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+          "section": "Modify items",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-056",
+          "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": "Modify items",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "tool_id": "modify_pending_order_payment",
+      "tool_name": "modify_pending_order_payment",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- unique user id",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
+          "text": "- default address",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-019",
+          "text": "- payment methods.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "There are three types of payment methods: **gift card**, **paypal account**, **credit card**.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-035",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-038",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-039",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-040",
+          "text": "An order can only be cancelled if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Cancel pending order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-044",
+          "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+          "section": "Modify pending order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-045",
+          "text": "For a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.",
+          "section": "Modify pending order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-046",
+          "text": "The user can only choose a single payment method different from the original payment method.",
+          "section": "Modify payment",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-047",
+          "text": "If the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.",
+          "section": "Modify payment",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-048",
+          "text": "After user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.",
+          "section": "Modify payment",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-049",
+          "text": "This action can only be called once, and will change the order status to 'pending (items modifed)'.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-050",
+          "text": "The agent will not be able to modify or cancel the order anymore.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-051",
+          "text": "So you must confirm all the details are correct and be cautious before taking this action.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-052",
+          "text": "In particular, remember to remind the customer to confirm they have provided all the items they want to modify.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-053",
+          "text": "For a pending order, each item can be modified to an available new item of the same product but of different product option.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-054",
+          "text": "There cannot be any change of product types, e.g. modify shirt to shoe.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-055",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-056",
+          "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-059",
+          "text": "The user needs to provide a payment method to receive the refund.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-060",
+          "text": "The refund must either go to the original payment method, or an existing gift card.",
+          "section": "Return delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-066",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-067",
+          "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": "Exchange delivered order",
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "tool_id": "modify_user_address",
+      "tool_name": "modify_user_address",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- unique user id",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
+          "text": "- default address",
+          "section": "User",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "tool_id": "return_delivered_order_items",
+      "tool_name": "return_delivered_order_items",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- unique user id",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
+          "text": "- default address",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-019",
+          "text": "- payment methods.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-020",
+          "text": "There are three types of payment methods: **gift card**, **paypal account**, **credit card**.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-027",
+          "text": "Each order has the following attributes:",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- unique order id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- user id",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "- address",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-031",
+          "text": "- items ordered",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-032",
+          "text": "- status",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
+          "text": "- fullfilments info (tracking id and item ids)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- payment history",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-035",
+          "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+          "section": "Order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-036",
+          "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+          "section": "Order",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-038",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-039",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-046",
+          "text": "The user can only choose a single payment method different from the original payment method.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-047",
+          "text": "If the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-048",
+          "text": "After user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.",
+          "section": "Modify payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-055",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-056",
+          "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": "Modify items",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-057",
+          "text": "An order can only be returned if its status is 'delivered', and you should check its status before taking the action.",
+          "section": "Return delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-058",
+          "text": "The user needs to confirm the order id and the list of items to be returned.",
+          "section": "Return delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-059",
+          "text": "The user needs to provide a payment method to receive the refund.",
+          "section": "Return delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-060",
+          "text": "The refund must either go to the original payment method, or an existing gift card.",
+          "section": "Return delivered order",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-061",
+          "text": "After user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.",
+          "section": "Return delivered order",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "tool_id": "transfer_to_human_agents",
+      "tool_name": "transfer_to_human_agents",
+      "statements": [
+        {
+          "id": "PS-001",
+          "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-002",
+          "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-003",
+          "text": "This has to be done even when the user already provides the user id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-004",
+          "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-005",
+          "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-006",
+          "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
+          "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Retail agent policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-010",
+          "text": "You should deny user requests that are against this policy.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-011",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-012",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Retail agent policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-037",
+          "text": "Generally, you can only take action on pending or delivered orders.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-038",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-039",
+          "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": "Generic action rules",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-070",
+          "text": "You can help a user apply a delivery credit for a delivery claim.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-071",
+          "text": "To do so, you need to follow these steps:\n- Authenticate the user.\n- Check the delivery claim details.\n- Check that the delivery claim belongs to the authenticated user.\n- Check the linked order if needed.\n- Confirm with the user before applying the delivery credit.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-072",
+          "text": "A delivery credit can be applied only if all of the following are true:\n- The delivery claim status is 'open'.\n- The claim was filed within 14 days after the actual delivery date.\n- At least one of the following is true:\n  - The actual delivery date was more than 3 days after the promised delivery date.\n  - The customer paid for expedited shipping.\n  - The claim was filed within 48 hours after the actual delivery date.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-073",
+          "text": "Do not apply the delivery credit if the claim status is 'closed' or 'credit applied'.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-074",
+          "text": "Do not apply the delivery credit if the claim was filed more than 14 days after the actual delivery date, even if another condition is true.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-075",
+          "text": "Do not apply the delivery credit if none of the qualifying conditions are true.",
+          "section": "Delivery credit claims",
+          "confidence": "medium"
+        }
+      ]
+    }
+  ],
+  "statement_index": {
+    "PS-001": {
+      "text": "As a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-002": {
+      "text": "At the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-003": {
+      "text": "This has to be done even when the user already provides the user id.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-004": {
+      "text": "Once the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-005": {
+      "text": "You can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-006": {
+      "text": "Before taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-007": {
+      "text": "You should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "get_item_details",
+        "get_order_details",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-008": {
+      "text": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "calculate",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "get_item_details",
+        "get_order_details",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-009": {
+      "text": "If you respond to the user, you should not make a tool call at the same time.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "calculate",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "get_item_details",
+        "get_order_details",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-010": {
+      "text": "You should deny user requests that are against this policy.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "get_item_details",
+        "get_order_details",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-011": {
+      "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-012": {
+      "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+      "section": "Retail agent policy",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_delivery_claim",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-013": {
+      "text": "All times in the database are EST and 24 hour based.",
+      "section": "Domain basic",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "get_order_details",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types"
+      ]
+    },
+    "PS-014": {
+      "text": "For example \"02:30:00\" means 2:30 AM EST.",
+      "section": "Domain basic",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "get_order_details",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types"
+      ]
+    },
+    "PS-015": {
+      "text": "Each user has a profile containing:",
+      "section": "User",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_user_details",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-016": {
+      "text": "- unique user id",
+      "section": "User",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_user_details",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-017": {
+      "text": "- email",
+      "section": "User",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "find_user_id_by_name_zip",
+        "get_user_details",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-018": {
+      "text": "- default address",
+      "section": "User",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_user_details",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "modify_user_address",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-019": {
+      "text": "- payment methods.",
+      "section": "User",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_user_details",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-020": {
+      "text": "There are three types of payment methods: **gift card**, **paypal account**, **credit card**.",
+      "section": "User",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_user_details",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-021": {
+      "text": "Our retail store has 50 types of products.",
+      "section": "Product",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_items"
+      ]
+    },
+    "PS-022": {
+      "text": "For each **type of product**, there are **variant items** of different **options**.",
+      "section": "Product",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_items"
+      ]
+    },
+    "PS-023": {
+      "text": "For example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.",
+      "section": "Product",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_items"
+      ]
+    },
+    "PS-024": {
+      "text": "Each product has the following attributes:\n\n- unique product id\n- name\n- list of variants",
+      "section": "Product",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_items"
+      ]
+    },
+    "PS-025": {
+      "text": "Each variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price",
+      "section": "Product",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_items"
+      ]
+    },
+    "PS-026": {
+      "text": "Note: Product ID and Item ID have no relations and should not be confused!",
+      "section": "Product",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "get_product_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_items"
+      ]
+    },
+    "PS-027": {
+      "text": "Each order has the following attributes:",
+      "section": "Order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-028": {
+      "text": "- unique order id",
+      "section": "Order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-029": {
+      "text": "- user id",
+      "section": "Order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-030": {
+      "text": "- address",
+      "section": "Order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-031": {
+      "text": "- items ordered",
+      "section": "Order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-032": {
+      "text": "- status",
+      "section": "Order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-033": {
+      "text": "- fullfilments info (tracking id and item ids)",
+      "section": "Order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-034": {
+      "text": "- payment history",
+      "section": "Order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-035": {
+      "text": "The status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.",
+      "section": "Order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-036": {
+      "text": "Orders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)",
+      "section": "Order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-037": {
+      "text": "Generally, you can only take action on pending or delivered orders.",
+      "section": "Generic action rules",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-038": {
+      "text": "Exchange or modify order tools can only be called once per order.",
+      "section": "Generic action rules",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-039": {
+      "text": "Be sure that all items to be changed are collected into a list before making the tool call!!!",
+      "section": "Generic action rules",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "list_all_product_types",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-040": {
+      "text": "An order can only be cancelled if its status is 'pending', and you should check its status before taking the action.",
+      "section": "Cancel pending order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "find_user_id_by_email",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-041": {
+      "text": "The user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation.",
+      "section": "Cancel pending order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "find_user_id_by_email"
+      ]
+    },
+    "PS-042": {
+      "text": "Other reasons are not acceptable.",
+      "section": "Cancel pending order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "find_user_id_by_email"
+      ]
+    },
+    "PS-043": {
+      "text": "After user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.",
+      "section": "Cancel pending order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "cancel_pending_order",
+        "find_user_id_by_email"
+      ]
+    },
+    "PS-044": {
+      "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+      "section": "Modify pending order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "get_order_details",
+        "get_user_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-045": {
+      "text": "For a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.",
+      "section": "Modify pending order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_address",
+        "modify_pending_order_items",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-046": {
+      "text": "The user can only choose a single payment method different from the original payment method.",
+      "section": "Modify payment",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-047": {
+      "text": "If the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.",
+      "section": "Modify payment",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-048": {
+      "text": "After user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.",
+      "section": "Modify payment",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-049": {
+      "text": "This action can only be called once, and will change the order status to 'pending (items modifed)'.",
+      "section": "Modify items",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-050": {
+      "text": "The agent will not be able to modify or cancel the order anymore.",
+      "section": "Modify items",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-051": {
+      "text": "So you must confirm all the details are correct and be cautious before taking this action.",
+      "section": "Modify items",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-052": {
+      "text": "In particular, remember to remind the customer to confirm they have provided all the items they want to modify.",
+      "section": "Modify items",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-053": {
+      "text": "For a pending order, each item can be modified to an available new item of the same product but of different product option.",
+      "section": "Modify items",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-054": {
+      "text": "There cannot be any change of product types, e.g. modify shirt to shoe.",
+      "section": "Modify items",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-055": {
+      "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+      "section": "Modify items",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-056": {
+      "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+      "section": "Modify items",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_items",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-057": {
+      "text": "An order can only be returned if its status is 'delivered', and you should check its status before taking the action.",
+      "section": "Return delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_order_details",
+        "get_user_details",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-058": {
+      "text": "The user needs to confirm the order id and the list of items to be returned.",
+      "section": "Return delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-059": {
+      "text": "The user needs to provide a payment method to receive the refund.",
+      "section": "Return delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-060": {
+      "text": "The refund must either go to the original payment method, or an existing gift card.",
+      "section": "Return delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_payment",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-061": {
+      "text": "After user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.",
+      "section": "Return delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "return_delivered_order_items"
+      ]
+    },
+    "PS-062": {
+      "text": "An order can only be exchanged if its status is 'delivered', and you should check its status before taking the action.",
+      "section": "Exchange delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "get_order_details",
+        "get_user_details"
+      ]
+    },
+    "PS-063": {
+      "text": "In particular, remember to remind the customer to confirm they have provided all items to be exchanged.",
+      "section": "Exchange delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email"
+      ]
+    },
+    "PS-064": {
+      "text": "For a delivered order, each item can be exchanged to an available new item of the same product but of different product option.",
+      "section": "Exchange delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email"
+      ]
+    },
+    "PS-065": {
+      "text": "There cannot be any change of product types, e.g. modify shirt to shoe.",
+      "section": "Exchange delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email"
+      ]
+    },
+    "PS-066": {
+      "text": "The user must provide a payment method to pay or receive refund of the price difference.",
+      "section": "Exchange delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-067": {
+      "text": "If the user provides a gift card, it must have enough balance to cover the price difference.",
+      "section": "Exchange delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email",
+        "modify_pending_order_payment"
+      ]
+    },
+    "PS-068": {
+      "text": "After user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items.",
+      "section": "Exchange delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email"
+      ]
+    },
+    "PS-069": {
+      "text": "There is no need to place a new order.",
+      "section": "Exchange delivered order",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "exchange_delivered_order_items",
+        "find_user_id_by_email"
+      ]
+    },
+    "PS-070": {
+      "text": "You can help a user apply a delivery credit for a delivery claim.",
+      "section": "Delivery credit claims",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-071": {
+      "text": "To do so, you need to follow these steps:\n- Authenticate the user.\n- Check the delivery claim details.\n- Check that the delivery claim belongs to the authenticated user.\n- Check the linked order if needed.\n- Confirm with the user before applying the delivery credit.",
+      "section": "Delivery credit claims",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "get_order_details",
+        "get_user_details",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-072": {
+      "text": "A delivery credit can be applied only if all of the following are true:\n- The delivery claim status is 'open'.\n- The claim was filed within 14 days after the actual delivery date.\n- At least one of the following is true:\n  - The actual delivery date was more than 3 days after the promised delivery date.\n  - The customer paid for expedited shipping.\n  - The claim was filed within 48 hours after the actual delivery date.",
+      "section": "Delivery credit claims",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-073": {
+      "text": "Do not apply the delivery credit if the claim status is 'closed' or 'credit applied'.",
+      "section": "Delivery credit claims",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-074": {
+      "text": "Do not apply the delivery credit if the claim was filed more than 14 days after the actual delivery date, even if another condition is true.",
+      "section": "Delivery credit claims",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "transfer_to_human_agents"
+      ]
+    },
+    "PS-075": {
+      "text": "Do not apply the delivery credit if none of the qualifying conditions are true.",
+      "section": "Delivery credit claims",
+      "mapped_to_tools": [
+        "apply_delivery_credit",
+        "find_user_id_by_email",
+        "get_delivery_claim",
+        "transfer_to_human_agents"
+      ]
+    }
+  }
+}

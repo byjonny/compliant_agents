@@ -83815,6 +83815,72 @@
       "shipping_method": "standard",
       "status": "open",
       "credit_applied": false
+    },
+    "DC1007": {
+      "claim_id": "DC1007",
+      "user_id": "lucas_brown_6720",
+      "order_id": "#W8660475",
+      "promised_delivery_date": "2025-03-01",
+      "delivery_date": "2025-03-03",
+      "claim_date": "2025-03-20",
+      "shipping_method": "expedited",
+      "status": "open",
+      "credit_applied": false
+    },
+    "DC1008": {
+      "claim_id": "DC1008",
+      "user_id": "lucas_brown_6720",
+      "order_id": "#W9218746",
+      "promised_delivery_date": "2025-03-01",
+      "delivery_date": "2025-03-03",
+      "claim_date": "2025-03-08",
+      "shipping_method": "standard",
+      "status": "open",
+      "credit_applied": false
+    },
+    "DC1009": {
+      "claim_id": "DC1009",
+      "user_id": "lucas_brown_6720",
+      "order_id": "#W6239298",
+      "promised_delivery_date": "2025-03-01",
+      "delivery_date": "2025-03-06",
+      "claim_date": "2025-03-09",
+      "shipping_method": "standard",
+      "status": "credit applied",
+      "credit_applied": true
+    },
+    "DC1010": {
+      "claim_id": "DC1010",
+      "user_id": "lucas_brown_6720",
+      "order_id": "#W6239298",
+      "promised_delivery_date": "2025-03-01",
+      "delivery_date": "2025-03-08",
+      "claim_date": "2025-03-30",
+      "shipping_method": "standard",
+      "status": "open",
+      "credit_applied": false
+    },
+    "DC1011": {
+      "claim_id": "DC1011",
+      "user_id": "lucas_brown_6720",
+      "order_id": "#W9218746",
+      "promised_delivery_date": "2025-03-01",
+      "delivery_date": "2025-03-02",
+      "claim_date": "2025-03-05",
+      "shipping_method": "standard",
+      "status": "open",
+      "credit_applied": false
+    },
+    "DC1012": {
+      "claim_id": "DC1012",
+      "user_id": "lucas_brown_6720",
+      "order_id": "#W8660475",
+      "promised_delivery_date": "2025-03-01",
+      "delivery_date": "2025-03-03",
+      "claim_date": "2025-03-05",
+      "shipping_method": "expedited",
+      "status": "closed",
+      "credit_applied": false
     }
   }
 }

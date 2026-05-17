@@ -382,7 +382,7 @@ class BaseOrchestrator(ABC, Generic[BaseAgentT, BaseUserT, TrajectoryItemT]):
                     )
                 )
                 tool_results.append(rejection)
-                print("[orchestrator.py] Guardrail block detected")
+                # print("[orchestrator.py] Guardrail block detected")
 
 
         return tool_results

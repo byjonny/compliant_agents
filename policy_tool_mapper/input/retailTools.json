@@ -2,6 +2,27 @@
   {
     "type": "function",
     "function": {
+      "name": "apply_delivery_credit",
+      "description": "Apply a delivery credit for a delivery claim.\n\nThe agent must check the delivery credit policy before using this tool.\nThis tool applies the credit to the claim and changes the claim status to\n'credit applied'. The tool itself does not determine whether the claim is\npolicy-eligible.",
+      "parameters": {
+        "properties": {
+          "claim_id": {
+            "description": "The delivery claim id, such as 'DC1001'.",
+            "title": "Claim Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "claim_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
       "name": "calculate",
       "description": "Calculate the result of a mathematical expression.",
       "parameters": {
@@ -140,6 +161,27 @@
           "first_name",
           "last_name",
           "zip"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_delivery_claim",
+      "description": "Get the details of a delivery credit claim.",
+      "parameters": {
+        "properties": {
+          "claim_id": {
+            "description": "The delivery claim id, such as 'DC1001'.",
+            "title": "Claim Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "claim_id"
         ],
         "title": "parameters",
         "type": "object"

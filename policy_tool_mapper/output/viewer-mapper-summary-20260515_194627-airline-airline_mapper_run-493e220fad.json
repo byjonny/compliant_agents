@@ -1,0 +1,15 @@
+{
+  "domain": "airline",
+  "mode": "llm",
+  "models": [
+    "haiku-4.5"
+  ],
+  "timestamp": "2026-05-15T17:46:31.867997+00:00",
+  "results": [
+    {
+      "model": "haiku-4.5",
+      "mode": "llm",
+      "status": "mapping_failed"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "type": "sequential",
+  "guards": [
+    {
+      "type": "llm_guard",
+      "tool_name": "calculate",
+      "mappings_file": "policy_tool_mapper/ground_truth/retail-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "cancel_pending_order",
+      "mappings_file": "policy_tool_mapper/ground_truth/retail-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "exchange_delivered_order_items",
+      "mappings_file": "policy_tool_mapper/ground_truth/retail-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "modify_pending_order_address",
+      "mappings_file": "policy_tool_mapper/ground_truth/retail-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "modify_pending_order_items",
+      "mappings_file": "policy_tool_mapper/ground_truth/retail-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "modify_pending_order_payment",
+      "mappings_file": "policy_tool_mapper/ground_truth/retail-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "modify_user_address",
+      "mappings_file": "policy_tool_mapper/ground_truth/retail-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "return_delivered_order_items",
+      "mappings_file": "policy_tool_mapper/ground_truth/retail-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "transfer_to_human_agents",
+      "mappings_file": "policy_tool_mapper/ground_truth/retail-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "apply_delivery_credit",
+      "mappings_file": "policy_tool_mapper/ground_truth/retail-ground-truth.json",
+      "history_window": 1000
+    }
+  ]
+}

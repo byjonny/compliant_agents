@@ -116,6 +116,24 @@ Important:
 - A user can only have one bill in the AWAITING PAYMENT status at a time.
 - The send payement request tool will not check if the bill is overdue. You should always check that the bill is overdue before sending a payment request.
 
+## Payment Due Date Extension
+You can help the user extend the due date for a bill.
+To do so you need to follow these steps:
+- Check the bill status.
+- Check the bill's current due date.
+- Check whether the customer has received a payment extension in the last 90 days.
+- Confirm the requested new due date.
+- Extend the bill due date if the request is eligible.
+
+A bill due date can be extended only if all of the following are true:
+- The bill status is Issued or Overdue.
+- The requested new due date is after the current due date and no more than 14 days after the current due date.
+- The customer has not received a payment extension in the last 90 days.
+
+You must not extend the due date for a bill whose status is Paid, Disputed, Draft, or Awaiting Payment.
+You must not extend the due date if the requested new due date is more than 14 days after the current due date.
+You must not extend the due date if the customer received a payment extension in the last 90 days.
+
 ## Line Suspension
 When a line is suspended, the user will not have service.
 A line can be suspended for the following reasons:

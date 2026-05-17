@@ -804,3 +804,354 @@ description = "Suspension Fee - Line 555-223-3006"
 amount = 5.0
 date = "2025-02-10"
 item_type = "Fee"
+
+
+[[devices]]
+device_id = "D3001"
+device_type = "phone"
+model = "Due Date Test Phone A"
+imei = "300000000000001"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T11:00:00"
+
+[[devices]]
+device_id = "D3002"
+device_type = "phone"
+model = "Due Date Test Phone B"
+imei = "300000000000002"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T11:05:00"
+
+[[devices]]
+device_id = "D3003"
+device_type = "phone"
+model = "Due Date Test Phone C"
+imei = "300000000000003"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T11:10:00"
+
+[[devices]]
+device_id = "D3004"
+device_type = "phone"
+model = "Due Date Test Phone D"
+imei = "300000000000004"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T11:15:00"
+
+[[devices]]
+device_id = "D3005"
+device_type = "phone"
+model = "Due Date Test Phone E"
+imei = "300000000000005"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T11:20:00"
+
+[[devices]]
+device_id = "D3006"
+device_type = "phone"
+model = "Due Date Test Phone F"
+imei = "300000000000006"
+is_esim_capable = true
+activated = true
+activation_date = "2025-02-01T11:25:00"
+
+[[lines]]
+line_id = "L3001"
+phone_number = "555-323-4001"
+status = "Active"
+plan_id = "P1002"
+device_id = "D3001"
+data_used_gb = 4.0
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[lines]]
+line_id = "L3002"
+phone_number = "555-323-4002"
+status = "Active"
+plan_id = "P1002"
+device_id = "D3002"
+data_used_gb = 4.2
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[lines]]
+line_id = "L3003"
+phone_number = "555-323-4003"
+status = "Active"
+plan_id = "P1002"
+device_id = "D3003"
+data_used_gb = 3.6
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[lines]]
+line_id = "L3004"
+phone_number = "555-323-4004"
+status = "Active"
+plan_id = "P1002"
+device_id = "D3004"
+data_used_gb = 3.8
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[lines]]
+line_id = "L3005"
+phone_number = "555-323-4005"
+status = "Active"
+plan_id = "P1002"
+device_id = "D3005"
+data_used_gb = 3.9
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[lines]]
+line_id = "L3006"
+phone_number = "555-323-4006"
+status = "Active"
+plan_id = "P1002"
+device_id = "D3006"
+data_used_gb = 3.7
+data_refueling_gb = 0.0
+roaming_enabled = false
+contract_end_date = "2027-01-31"
+last_plan_change_date = "2025-01-20"
+
+[[customers]]
+customer_id = "C3001"
+full_name = "Nina Patel"
+date_of_birth = "1986-04-11"
+email = "nina.patel.extension@example.com"
+phone_number = "555-323-4001"
+account_status = "Active"
+created_at = "2025-02-01T11:00:00"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L3001"]
+bill_ids = ["B3001"]
+[[customers.payment_methods]]
+method_type = "Credit Card"
+account_number_last_4 = "3001"
+expiration_date = "12/2027"
+
+[customers.address]
+street = "300 Extension Ave"
+city = "Chicago"
+state = "IL"
+zip_code = "60601"
+
+[[customers]]
+customer_id = "C3002"
+full_name = "Leo Kim"
+date_of_birth = "1991-08-23"
+email = "leo.kim.extension@example.com"
+phone_number = "555-323-4002"
+account_status = "Active"
+created_at = "2025-02-01T11:05:00"
+last_extension_date = "2024-10-01"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L3002"]
+bill_ids = ["B3002"]
+[[customers.payment_methods]]
+method_type = "Debit Card"
+account_number_last_4 = "3002"
+expiration_date = "11/2027"
+
+[customers.address]
+street = "301 Extension Ave"
+city = "Phoenix"
+state = "AZ"
+zip_code = "85001"
+
+[[customers]]
+customer_id = "C3003"
+full_name = "Grace Taylor"
+date_of_birth = "1983-01-17"
+email = "grace.taylor.extension@example.com"
+phone_number = "555-323-4003"
+account_status = "Active"
+created_at = "2025-02-01T11:10:00"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L3003"]
+bill_ids = ["B3003"]
+[[customers.payment_methods]]
+method_type = "Credit Card"
+account_number_last_4 = "3003"
+expiration_date = "10/2027"
+
+[customers.address]
+street = "302 Extension Ave"
+city = "San Diego"
+state = "CA"
+zip_code = "92101"
+
+[[customers]]
+customer_id = "C3004"
+full_name = "Henry Brooks"
+date_of_birth = "1977-06-02"
+email = "henry.brooks.extension@example.com"
+phone_number = "555-323-4004"
+account_status = "Active"
+created_at = "2025-02-01T11:15:00"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L3004"]
+bill_ids = ["B3004"]
+[[customers.payment_methods]]
+method_type = "PayPal"
+account_number_last_4 = "3004"
+expiration_date = "09/2027"
+
+[customers.address]
+street = "303 Extension Ave"
+city = "Raleigh"
+state = "NC"
+zip_code = "27601"
+
+[[customers]]
+customer_id = "C3005"
+full_name = "Maya Chen"
+date_of_birth = "1993-10-14"
+email = "maya.chen.extension@example.com"
+phone_number = "555-323-4005"
+account_status = "Active"
+created_at = "2025-02-01T11:20:00"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L3005"]
+bill_ids = ["B3005"]
+[[customers.payment_methods]]
+method_type = "Credit Card"
+account_number_last_4 = "3005"
+expiration_date = "08/2027"
+
+[customers.address]
+street = "304 Extension Ave"
+city = "Columbus"
+state = "OH"
+zip_code = "43004"
+
+[[customers]]
+customer_id = "C3006"
+full_name = "Victor Stone"
+date_of_birth = "1980-11-05"
+email = "victor.stone.extension@example.com"
+phone_number = "555-323-4006"
+account_status = "Active"
+created_at = "2025-02-01T11:25:00"
+last_extension_date = "2025-01-15"
+goodwill_credit_used_this_year = 0.0
+line_ids = ["L3006"]
+bill_ids = ["B3006"]
+[[customers.payment_methods]]
+method_type = "Debit Card"
+account_number_last_4 = "3006"
+expiration_date = "07/2027"
+
+[customers.address]
+street = "305 Extension Ave"
+city = "Minneapolis"
+state = "MN"
+zip_code = "55401"
+
+[[bills]]
+bill_id = "B3001"
+customer_id = "C3001"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-02-20"
+status = "Issued"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-323-4001"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills]]
+bill_id = "B3002"
+customer_id = "C3002"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-02-15"
+status = "Overdue"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-323-4002"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills]]
+bill_id = "B3003"
+customer_id = "C3003"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-02-20"
+status = "Paid"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-323-4003"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills]]
+bill_id = "B3004"
+customer_id = "C3004"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-02-20"
+status = "Disputed"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-323-4004"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills]]
+bill_id = "B3005"
+customer_id = "C3005"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-02-20"
+status = "Issued"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-323-4005"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"
+
+[[bills]]
+bill_id = "B3006"
+customer_id = "C3006"
+period_start = "2025-02-01"
+period_end = "2025-02-28"
+issue_date = "2025-02-05"
+total_due = 65.0
+due_date = "2025-02-20"
+status = "Issued"
+[[bills.line_items]]
+description = "Premium Plan - Line 555-323-4006"
+amount = 65.0
+date = "2025-02-05"
+item_type = "Plan Charge"

@@ -17,11 +17,6 @@
       "tool_name": "book_reservation",
       "statements": [
         {
-          "id": "GT-008",
-          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
-          "section": null
-        },
-        {
           "id": "GT-009",
           "text": "Cabin class must be the same across all the flights in a reservation.",
           "section": null
@@ -118,16 +113,6 @@
       "tool_name": "cancel_reservation",
       "statements": [
         {
-          "id": "GT-027",
-          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
-          "section": null
-        },
-        {
-          "id": "GT-028",
-          "text": "The agent must also obtain the reason for cancellation (change of plan, airline cancelled flight, or other reasons).",
-          "section": null
-        },
-        {
           "id": "GT-029",
           "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
           "section": null
@@ -153,11 +138,6 @@
       "tool_id": "update_reservation_flights",
       "tool_name": "update_reservation_flights",
       "statements": [
-        {
-          "id": "GT-033",
-          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
-          "section": null
-        },
         {
           "id": "GT-034",
           "text": "Basic economy flights cannot be modified.",
@@ -230,11 +210,6 @@
       "tool_name": "update_reservation_baggages",
       "statements": [
         {
-          "id": "GT-047",
-          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
-          "section": null
-        },
-        {
           "id": "GT-048",
           "text": "The user can add but not remove checked bags.",
           "section": null
@@ -270,11 +245,6 @@
       "tool_id": "update_reservation_passengers",
       "tool_name": "update_reservation_passengers",
       "statements": [
-        {
-          "id": "GT-054",
-          "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
-          "section": null
-        },
         {
           "id": "GT-055",
           "text": "The user can modify passengers but cannot modify the number of passengers.",

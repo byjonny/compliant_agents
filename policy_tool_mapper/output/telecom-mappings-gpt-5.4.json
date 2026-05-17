@@ -3,10 +3,10 @@
     "policy_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/input/TelecomPolicy.md",
     "openapi_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/input/TelecomTools.json",
     "total_tools": 13,
-    "total_statements": 38,
-    "total_mappings": 167,
+    "total_statements": 43,
+    "total_mappings": 172,
     "sweep_iterations": 1,
-    "timestamp": "2026-05-08T14:26:18.928294+00:00"
+    "timestamp": "2026-05-15T18:34:43.522642+00:00"
   },
   "mappings": [
     {
@@ -14,73 +14,73 @@
       "tool_name": "disable_roaming",
       "statements": [
         {
-          "id": "PS-003",
+          "id": "PS-001",
+          "text": "As a telecom agent, you can help users with  **technical support**, **overdue bill payment**, **line suspension**, and **plan options**.",
+          "section": "Telecom Agent Policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-006",
+          "id": "PS-005",
           "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-007",
+          "id": "PS-006",
           "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-008",
+          "id": "PS-007",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
-          "section": "Customer",
-          "confidence": "high"
-        },
-        {
-          "id": "PS-009",
-          "text": "There are four account status types: **Active**, **Suspended**, **Pending Verification**, and **Closed**.",
           "section": "Customer",
           "confidence": "medium"
         },
         {
-          "id": "PS-011",
+          "id": "PS-010",
           "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-012",
-          "text": "There are four line status types: **Active**, **Suspended**, **Pending Activation**, and **Closed**.",
-          "section": "Line",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-035",
+          "id": "PS-040",
           "text": "If a line is roaming enabled, the user can use their phone's data connection in areas outside their home network.",
           "section": "Data Roaming",
           "confidence": "high"
         },
         {
-          "id": "PS-036",
+          "id": "PS-041",
           "text": "We offer data roaming to users who are traveling outside their home network.",
           "section": "Data Roaming",
           "confidence": "medium"
         },
         {
-          "id": "PS-038",
+          "id": "PS-042",
+          "text": "If a user is traveling outside their home network, you should check if the line is roaming enabled. If it is not, you should enable it at no cost for the user.",
+          "section": "Data Roaming",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
           "confidence": "high"
@@ -93,90 +93,78 @@
       "statements": [
         {
           "id": "PS-002",
-          "text": "As a telecom agent, you can help users with  **technical support**, **overdue bill payment**, **line suspension**, and **plan options**.",
-          "section": "Telecom Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-003",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-006",
+          "id": "PS-005",
           "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-007",
+          "id": "PS-006",
           "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-008",
+          "id": "PS-007",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
           "section": "Customer",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-009",
+          "id": "PS-008",
           "text": "There are four account status types: **Active**, **Suspended**, **Pending Verification**, and **Closed**.",
           "section": "Customer",
           "confidence": "medium"
         },
         {
-          "id": "PS-011",
+          "id": "PS-010",
           "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-012",
+          "id": "PS-011",
           "text": "There are four line status types: **Active**, **Suspended**, **Pending Activation**, and **Closed**.",
           "section": "Line",
           "confidence": "medium"
         },
         {
-          "id": "PS-017",
-          "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
-          "section": "Customer Lookup",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-035",
+          "id": "PS-040",
           "text": "If a line is roaming enabled, the user can use their phone's data connection in areas outside their home network.",
           "section": "Data Roaming",
           "confidence": "high"
         },
         {
-          "id": "PS-036",
+          "id": "PS-041",
           "text": "We offer data roaming to users who are traveling outside their home network.",
           "section": "Data Roaming",
           "confidence": "high"
         },
         {
-          "id": "PS-037",
+          "id": "PS-042",
           "text": "If a user is traveling outside their home network, you should check if the line is roaming enabled. If it is not, you should enable it at no cost for the user.",
           "section": "Data Roaming",
           "confidence": "high"
         },
         {
-          "id": "PS-038",
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
           "confidence": "high"
@@ -188,91 +176,127 @@
       "tool_name": "get_bills_for_customer",
       "statements": [
         {
-          "id": "PS-003",
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-007",
+          "id": "PS-006",
           "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-008",
+          "id": "PS-007",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
           "section": "Customer",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-015",
+          "id": "PS-014",
           "text": "Each bill contains:\n- bill ID\n- customer ID\n- billing period (start and end dates)\n- issue date\n- total amount due\n- due date\n- line items (charges, fees, credits)\n- status",
           "section": "Bill",
           "confidence": "high"
         },
         {
-          "id": "PS-016",
+          "id": "PS-015",
           "text": "There are five bill status types: **Draft**, **Issued**, **Paid**, **Overdue**, **Awaiting Payment**, and **Disputed**.",
           "section": "Bill",
           "confidence": "high"
         },
         {
-          "id": "PS-017",
+          "id": "PS-016",
           "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
           "section": "Customer Lookup",
           "confidence": "high"
         },
         {
-          "id": "PS-019",
+          "id": "PS-018",
           "text": "You can help the user make a payment for an overdue bill.",
           "section": "Overdue Bill Payment",
           "confidence": "medium"
         },
         {
-          "id": "PS-020",
+          "id": "PS-019",
           "text": "To do so you need to follow these steps:\n- Check the bill status to make sure it is overdue.\n- Check the bill amount due\n- Send the user a payment request for the overdue bill.\n    - This will change the status of the bill to AWAITING PAYMENT.\n- Inform the user that a payment request has been sent. They should:\n    - Check their payment requests using the check_payment_request tool.\n- If the user accepts the payment request, use the make_payment tool to make the payment.\n- After the payment is made, the bill status will be updated to PAID.\n- Always check that the bill status is updated to PAID before informing the user that the bill has been paid.",
           "section": "Overdue Bill Payment",
           "confidence": "high"
         },
         {
-          "id": "PS-021",
-          "text": "- A user can only have one bill in the AWAITING PAYMENT status at a time.",
+          "id": "PS-020",
+          "text": "A user can only have one bill in the AWAITING PAYMENT status at a time.",
           "section": "Overdue Bill Payment",
           "confidence": "medium"
         },
         {
-          "id": "PS-022",
-          "text": "- The send payement request tool will not check if the bill is overdue. You should always check that the bill is overdue before sending a payment request.",
+          "id": "PS-021",
+          "text": "The send payement request tool will not check if the bill is overdue. You should always check that the bill is overdue before sending a payment request.",
           "section": "Overdue Bill Payment",
           "confidence": "high"
         },
         {
+          "id": "PS-022",
+          "text": "You can help the user extend the due date for a bill.",
+          "section": "Payment Due Date Extension",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "To do so you need to follow these steps:\n- Check the bill status.\n- Check the bill's current due date.\n- Check whether the customer has received a payment extension in the last 90 days.\n- Confirm the requested new due date.\n- Extend the bill due date if the request is eligible.",
+          "section": "Payment Due Date Extension",
+          "confidence": "high"
+        },
+        {
           "id": "PS-024",
+          "text": "A bill due date can be extended only if all of the following are true:\n- The bill status is Issued or Overdue.\n- The requested new due date is after the current due date and no more than 14 days after the current due date.\n- The customer has not received a payment extension in the last 90 days.",
+          "section": "Payment Due Date Extension",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
+          "text": "You must not extend the due date for a bill whose status is Paid, Disputed, Draft, or Awaiting Payment.",
+          "section": "Payment Due Date Extension",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-026",
+          "text": "You must not extend the due date if the requested new due date is more than 14 days after the current due date.",
+          "section": "Payment Due Date Extension",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-027",
+          "text": "You must not extend the due date if the customer received a payment extension in the last 90 days.",
+          "section": "Payment Due Date Extension",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
           "text": "A line can be suspended for the following reasons:\n- The user has an overdue bill.\n- The line's contract end date is in the past.",
           "section": "Line Suspension",
           "confidence": "medium"
         },
         {
-          "id": "PS-025",
+          "id": "PS-030",
           "text": "You are allowed to lift the suspension after the user has paid all their overdue bills.",
           "section": "Line Suspension",
           "confidence": "medium"
         },
         {
-          "id": "PS-038",
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
           "confidence": "medium"
@@ -284,37 +308,73 @@
       "tool_name": "get_customer_by_id",
       "statements": [
         {
-          "id": "PS-003",
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-008",
+          "id": "PS-007",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
           "section": "Customer",
           "confidence": "high"
         },
         {
-          "id": "PS-017",
+          "id": "PS-008",
+          "text": "There are four account status types: **Active**, **Suspended**, **Pending Verification**, and **Closed**.",
+          "section": "Customer",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "Each payment method includes:\n- method type (Credit Card, Debit Card, PayPal)\n- account number last 4 digits\n- expiration date (MM/YYYY format)",
+          "section": "Payment Method",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "Each bill contains:\n- bill ID\n- customer ID\n- billing period (start and end dates)\n- issue date\n- total amount due\n- due date\n- line items (charges, fees, credits)\n- status",
+          "section": "Bill",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
           "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
           "section": "Customer Lookup",
           "confidence": "high"
         },
         {
-          "id": "PS-038",
+          "id": "PS-023",
+          "text": "To do so you need to follow these steps:\n- Check the bill status.\n- Check the bill's current due date.\n- Check whether the customer has received a payment extension in the last 90 days.\n- Confirm the requested new due date.\n- Extend the bill due date if the request is eligible.",
+          "section": "Payment Due Date Extension",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-024",
+          "text": "A bill due date can be extended only if all of the following are true:\n- The bill status is Issued or Overdue.\n- The requested new due date is after the current due date and no more than 14 days after the current due date.\n- The customer has not received a payment extension in the last 90 days.",
+          "section": "Payment Due Date Extension",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-027",
+          "text": "You must not extend the due date if the customer received a payment extension in the last 90 days.",
+          "section": "Payment Due Date Extension",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
           "confidence": "high"
@@ -326,55 +386,43 @@
       "tool_name": "get_customer_by_name",
       "statements": [
         {
-          "id": "PS-003",
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-006",
-          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
-          "section": "Telecom Agent Policy",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-007",
-          "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
-          "section": "Telecom Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-008",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
           "section": "Customer",
           "confidence": "high"
         },
         {
-          "id": "PS-017",
+          "id": "PS-016",
           "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
           "section": "Customer Lookup",
           "confidence": "high"
         },
         {
-          "id": "PS-018",
+          "id": "PS-017",
           "text": "For name lookup, date of birth is required for verification purposes.",
           "section": "Customer Lookup",
           "confidence": "high"
         },
         {
-          "id": "PS-038",
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
           "confidence": "high"
@@ -386,55 +434,49 @@
       "tool_name": "get_customer_by_phone",
       "statements": [
         {
-          "id": "PS-003",
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-008",
+          "id": "PS-006",
+          "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
+          "section": "Telecom Agent Policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
           "section": "Customer",
           "confidence": "high"
         },
         {
-          "id": "PS-011",
+          "id": "PS-010",
           "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-017",
+          "id": "PS-016",
           "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
           "section": "Customer Lookup",
           "confidence": "high"
         },
         {
-          "id": "PS-032",
-          "text": "To refuel data you should:\n- Ask them how much data they want to refuel\n- Confirm the price\n- Apply the refueled data to the line associated with the phone number the user provided.",
-          "section": "Data Refueling",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-034",
-          "text": "To do so you need to follow these steps\n- Make sure you know what line the user wants to change the plan for.\n- Gather available plans\n- Ask the user to select one.\n- Calculate the price of the new plan.\n- Confirm the price.\n- Apply the plan to the line associated with the phone number the user provided.",
-          "section": "Change Plan",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-038",
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
           "confidence": "high"
@@ -446,73 +488,55 @@
       "tool_name": "get_data_usage",
       "statements": [
         {
-          "id": "PS-003",
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-006",
-          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
-          "section": "Telecom Agent Policy",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-007",
-          "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
-          "section": "Telecom Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-008",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
           "section": "Customer",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-011",
+          "id": "PS-010",
           "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-013",
+          "id": "PS-012",
           "text": "Each plan specifies:\n- plan ID\n- name\n- data limit (in GB)\n- monthly price\n- data refueling price per GB",
           "section": "Plan",
           "confidence": "high"
         },
         {
-          "id": "PS-017",
-          "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
-          "section": "Customer Lookup",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-028",
+          "id": "PS-033",
           "text": "Each plan specify the maxium data usage per month.",
           "section": "Data Refueling",
           "confidence": "high"
         },
         {
-          "id": "PS-029",
+          "id": "PS-034",
           "text": "If the user's data usage for a line exceeds the plan's data limit, data connectivity will be lost.",
           "section": "Data Refueling",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-038",
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
           "confidence": "medium"
@@ -524,157 +548,175 @@
       "tool_name": "get_details_by_id",
       "statements": [
         {
-          "id": "PS-003",
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-008",
+          "id": "PS-006",
+          "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
+          "section": "Telecom Agent Policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-007",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
           "section": "Customer",
           "confidence": "high"
         },
         {
-          "id": "PS-009",
+          "id": "PS-008",
           "text": "There are four account status types: **Active**, **Suspended**, **Pending Verification**, and **Closed**.",
           "section": "Customer",
           "confidence": "high"
         },
         {
-          "id": "PS-010",
+          "id": "PS-009",
           "text": "Each payment method includes:\n- method type (Credit Card, Debit Card, PayPal)\n- account number last 4 digits\n- expiration date (MM/YYYY format)",
           "section": "Payment Method",
           "confidence": "high"
         },
         {
-          "id": "PS-011",
+          "id": "PS-010",
           "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-012",
+          "id": "PS-011",
           "text": "There are four line status types: **Active**, **Suspended**, **Pending Activation**, and **Closed**.",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-013",
+          "id": "PS-012",
           "text": "Each plan specifies:\n- plan ID\n- name\n- data limit (in GB)\n- monthly price\n- data refueling price per GB",
           "section": "Plan",
           "confidence": "high"
         },
         {
-          "id": "PS-014",
+          "id": "PS-013",
           "text": "Each device has:\n- device ID\n- device type (phone, tablet, router, watch, other)\n- model\n- IMEI number (optional)\n- eSIM capability\n- activation status\n- activation date\n- last eSIM transfer date",
           "section": "Device",
           "confidence": "high"
         },
         {
-          "id": "PS-015",
+          "id": "PS-014",
           "text": "Each bill contains:\n- bill ID\n- customer ID\n- billing period (start and end dates)\n- issue date\n- total amount due\n- due date\n- line items (charges, fees, credits)\n- status",
           "section": "Bill",
           "confidence": "high"
         },
         {
-          "id": "PS-016",
+          "id": "PS-015",
           "text": "There are five bill status types: **Draft**, **Issued**, **Paid**, **Overdue**, **Awaiting Payment**, and **Disputed**.",
           "section": "Bill",
           "confidence": "high"
         },
         {
-          "id": "PS-017",
-          "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
-          "section": "Customer Lookup",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-020",
+          "id": "PS-019",
           "text": "To do so you need to follow these steps:\n- Check the bill status to make sure it is overdue.\n- Check the bill amount due\n- Send the user a payment request for the overdue bill.\n    - This will change the status of the bill to AWAITING PAYMENT.\n- Inform the user that a payment request has been sent. They should:\n    - Check their payment requests using the check_payment_request tool.\n- If the user accepts the payment request, use the make_payment tool to make the payment.\n- After the payment is made, the bill status will be updated to PAID.\n- Always check that the bill status is updated to PAID before informing the user that the bill has been paid.",
           "section": "Overdue Bill Payment",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
           "id": "PS-021",
-          "text": "- A user can only have one bill in the AWAITING PAYMENT status at a time.",
+          "text": "The send payement request tool will not check if the bill is overdue. You should always check that the bill is overdue before sending a payment request.",
           "section": "Overdue Bill Payment",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-022",
-          "text": "- The send payement request tool will not check if the bill is overdue. You should always check that the bill is overdue before sending a payment request.",
-          "section": "Overdue Bill Payment",
-          "confidence": "medium"
+          "id": "PS-023",
+          "text": "To do so you need to follow these steps:\n- Check the bill status.\n- Check the bill's current due date.\n- Check whether the customer has received a payment extension in the last 90 days.\n- Confirm the requested new due date.\n- Extend the bill due date if the request is eligible.",
+          "section": "Payment Due Date Extension",
+          "confidence": "high"
         },
         {
           "id": "PS-024",
-          "text": "A line can be suspended for the following reasons:\n- The user has an overdue bill.\n- The line's contract end date is in the past.",
-          "section": "Line Suspension",
-          "confidence": "medium"
+          "text": "A bill due date can be extended only if all of the following are true:\n- The bill status is Issued or Overdue.\n- The requested new due date is after the current due date and no more than 14 days after the current due date.\n- The customer has not received a payment extension in the last 90 days.",
+          "section": "Payment Due Date Extension",
+          "confidence": "high"
         },
         {
           "id": "PS-025",
-          "text": "You are allowed to lift the suspension after the user has paid all their overdue bills.",
-          "section": "Line Suspension",
-          "confidence": "medium"
+          "text": "You must not extend the due date for a bill whose status is Paid, Disputed, Draft, or Awaiting Payment.",
+          "section": "Payment Due Date Extension",
+          "confidence": "high"
         },
         {
           "id": "PS-026",
-          "text": "You are not allowed to lift the suspension if the line's contract end date is in the past, even if the user has paid all their overdue bills.",
-          "section": "Line Suspension",
-          "confidence": "medium"
+          "text": "You must not extend the due date if the requested new due date is more than 14 days after the current due date.",
+          "section": "Payment Due Date Extension",
+          "confidence": "high"
         },
         {
-          "id": "PS-028",
-          "text": "Each plan specify the maxium data usage per month.",
-          "section": "Data Refueling",
-          "confidence": "medium"
+          "id": "PS-027",
+          "text": "You must not extend the due date if the customer received a payment extension in the last 90 days.",
+          "section": "Payment Due Date Extension",
+          "confidence": "high"
         },
         {
           "id": "PS-029",
-          "text": "If the user's data usage for a line exceeds the plan's data limit, data connectivity will be lost.",
-          "section": "Data Refueling",
-          "confidence": "medium"
+          "text": "A line can be suspended for the following reasons:\n- The user has an overdue bill.\n- The line's contract end date is in the past.",
+          "section": "Line Suspension",
+          "confidence": "high"
         },
         {
           "id": "PS-030",
-          "text": "You can add more data to the line by \"refueling\" data at a price per GB specified by the plan.",
+          "text": "You are allowed to lift the suspension after the user has paid all their overdue bills.",
+          "section": "Line Suspension",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-031",
+          "text": "You are not allowed to lift the suspension if the line's contract end date is in the past, even if the user has paid all their overdue bills.",
+          "section": "Line Suspension",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
+          "text": "Each plan specify the maxium data usage per month.",
+          "section": "Data Refueling",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-034",
+          "text": "If the user's data usage for a line exceeds the plan's data limit, data connectivity will be lost.",
+          "section": "Data Refueling",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-037",
+          "text": "To refuel data you should:\n- Ask them how much data they want to refuel\n- Confirm the price\n- Apply the refueled data to the line associated with the phone number the user provided.",
           "section": "Data Refueling",
           "confidence": "medium"
         },
         {
-          "id": "PS-034",
+          "id": "PS-039",
           "text": "To do so you need to follow these steps\n- Make sure you know what line the user wants to change the plan for.\n- Gather available plans\n- Ask the user to select one.\n- Calculate the price of the new plan.\n- Confirm the price.\n- Apply the plan to the line associated with the phone number the user provided.",
           "section": "Change Plan",
           "confidence": "medium"
         },
         {
-          "id": "PS-035",
-          "text": "If a line is roaming enabled, the user can use their phone's data connection in areas outside their home network.",
-          "section": "Data Roaming",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-037",
+          "id": "PS-042",
           "text": "If a user is traveling outside their home network, you should check if the line is roaming enabled. If it is not, you should enable it at no cost for the user.",
           "section": "Data Roaming",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-038",
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
           "confidence": "high"
@@ -686,109 +728,91 @@
       "tool_name": "refuel_data",
       "statements": [
         {
-          "id": "PS-003",
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-006",
-          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
-          "section": "Telecom Agent Policy",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-007",
-          "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
-          "section": "Telecom Agent Policy",
+          "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
+          "section": "Customer",
           "confidence": "medium"
         },
         {
           "id": "PS-008",
-          "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
-          "section": "Customer",
-          "confidence": "high"
-        },
-        {
-          "id": "PS-009",
           "text": "There are four account status types: **Active**, **Suspended**, **Pending Verification**, and **Closed**.",
           "section": "Customer",
           "confidence": "medium"
         },
         {
-          "id": "PS-011",
+          "id": "PS-010",
           "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-012",
+          "id": "PS-011",
           "text": "There are four line status types: **Active**, **Suspended**, **Pending Activation**, and **Closed**.",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-013",
+          "id": "PS-012",
           "text": "Each plan specifies:\n- plan ID\n- name\n- data limit (in GB)\n- monthly price\n- data refueling price per GB",
           "section": "Plan",
           "confidence": "high"
         },
         {
-          "id": "PS-015",
+          "id": "PS-014",
           "text": "Each bill contains:\n- bill ID\n- customer ID\n- billing period (start and end dates)\n- issue date\n- total amount due\n- due date\n- line items (charges, fees, credits)\n- status",
           "section": "Bill",
           "confidence": "high"
         },
         {
-          "id": "PS-016",
-          "text": "There are five bill status types: **Draft**, **Issued**, **Paid**, **Overdue**, **Awaiting Payment**, and **Disputed**.",
-          "section": "Bill",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-028",
+          "id": "PS-033",
           "text": "Each plan specify the maxium data usage per month.",
           "section": "Data Refueling",
           "confidence": "high"
         },
         {
-          "id": "PS-029",
+          "id": "PS-034",
           "text": "If the user's data usage for a line exceeds the plan's data limit, data connectivity will be lost.",
           "section": "Data Refueling",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-030",
+          "id": "PS-035",
           "text": "You can add more data to the line by \"refueling\" data at a price per GB specified by the plan.",
           "section": "Data Refueling",
           "confidence": "high"
         },
         {
-          "id": "PS-031",
+          "id": "PS-036",
           "text": "The maximum amount of data that can be refueled is 2GB.",
           "section": "Data Refueling",
           "confidence": "high"
         },
         {
-          "id": "PS-032",
+          "id": "PS-037",
           "text": "To refuel data you should:\n- Ask them how much data they want to refuel\n- Confirm the price\n- Apply the refueled data to the line associated with the phone number the user provided.",
           "section": "Data Refueling",
           "confidence": "high"
         },
         {
-          "id": "PS-038",
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
           "confidence": "medium"
@@ -800,88 +824,88 @@
       "tool_name": "resume_line",
       "statements": [
         {
-          "id": "PS-002",
+          "id": "PS-001",
           "text": "As a telecom agent, you can help users with  **technical support**, **overdue bill payment**, **line suspension**, and **plan options**.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-006",
+          "id": "PS-005",
           "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-007",
+          "id": "PS-006",
           "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-008",
+          "id": "PS-007",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
           "section": "Customer",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-011",
+          "id": "PS-010",
           "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-012",
+          "id": "PS-011",
           "text": "There are four line status types: **Active**, **Suspended**, **Pending Activation**, and **Closed**.",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-023",
+          "id": "PS-028",
           "text": "When a line is suspended, the user will not have service.",
           "section": "Line Suspension",
           "confidence": "high"
         },
         {
-          "id": "PS-024",
+          "id": "PS-029",
           "text": "A line can be suspended for the following reasons:\n- The user has an overdue bill.\n- The line's contract end date is in the past.",
           "section": "Line Suspension",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-025",
+          "id": "PS-030",
           "text": "You are allowed to lift the suspension after the user has paid all their overdue bills.",
           "section": "Line Suspension",
           "confidence": "high"
         },
         {
-          "id": "PS-026",
+          "id": "PS-031",
           "text": "You are not allowed to lift the suspension if the line's contract end date is in the past, even if the user has paid all their overdue bills.",
           "section": "Line Suspension",
           "confidence": "high"
         },
         {
-          "id": "PS-027",
+          "id": "PS-032",
           "text": "After you resume the line, the user will have to reboot their device to get service.",
           "section": "Line Suspension",
           "confidence": "high"
         },
         {
-          "id": "PS-038",
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
-          "confidence": "medium"
+          "confidence": "high"
         }
       ]
     },
@@ -890,70 +914,70 @@
       "tool_name": "send_payment_request",
       "statements": [
         {
-          "id": "PS-003",
+          "id": "PS-001",
+          "text": "As a telecom agent, you can help users with  **technical support**, **overdue bill payment**, **line suspension**, and **plan options**.",
+          "section": "Telecom Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-008",
+          "id": "PS-007",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
           "section": "Customer",
           "confidence": "high"
         },
         {
-          "id": "PS-015",
+          "id": "PS-014",
           "text": "Each bill contains:\n- bill ID\n- customer ID\n- billing period (start and end dates)\n- issue date\n- total amount due\n- due date\n- line items (charges, fees, credits)\n- status",
           "section": "Bill",
           "confidence": "high"
         },
         {
-          "id": "PS-016",
+          "id": "PS-015",
           "text": "There are five bill status types: **Draft**, **Issued**, **Paid**, **Overdue**, **Awaiting Payment**, and **Disputed**.",
           "section": "Bill",
           "confidence": "high"
         },
         {
-          "id": "PS-019",
+          "id": "PS-018",
           "text": "You can help the user make a payment for an overdue bill.",
           "section": "Overdue Bill Payment",
           "confidence": "high"
         },
         {
-          "id": "PS-020",
+          "id": "PS-019",
           "text": "To do so you need to follow these steps:\n- Check the bill status to make sure it is overdue.\n- Check the bill amount due\n- Send the user a payment request for the overdue bill.\n    - This will change the status of the bill to AWAITING PAYMENT.\n- Inform the user that a payment request has been sent. They should:\n    - Check their payment requests using the check_payment_request tool.\n- If the user accepts the payment request, use the make_payment tool to make the payment.\n- After the payment is made, the bill status will be updated to PAID.\n- Always check that the bill status is updated to PAID before informing the user that the bill has been paid.",
           "section": "Overdue Bill Payment",
           "confidence": "high"
         },
         {
+          "id": "PS-020",
+          "text": "A user can only have one bill in the AWAITING PAYMENT status at a time.",
+          "section": "Overdue Bill Payment",
+          "confidence": "high"
+        },
+        {
           "id": "PS-021",
-          "text": "- A user can only have one bill in the AWAITING PAYMENT status at a time.",
+          "text": "The send payement request tool will not check if the bill is overdue. You should always check that the bill is overdue before sending a payment request.",
           "section": "Overdue Bill Payment",
           "confidence": "high"
-        },
-        {
-          "id": "PS-022",
-          "text": "- The send payement request tool will not check if the bill is overdue. You should always check that the bill is overdue before sending a payment request.",
-          "section": "Overdue Bill Payment",
-          "confidence": "high"
-        },
-        {
-          "id": "PS-038",
-          "text": "You must first identify the customer.",
-          "section": "Technical Support",
-          "confidence": "medium"
         }
       ]
     },
@@ -963,90 +987,84 @@
       "statements": [
         {
           "id": "PS-001",
-          "text": "The current time is 2025-02-25 12:08:00 EST.",
-          "section": "Telecom Agent Policy",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-002",
           "text": "As a telecom agent, you can help users with  **technical support**, **overdue bill payment**, **line suspension**, and **plan options**.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-003",
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-006",
+          "id": "PS-005",
           "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-007",
+          "id": "PS-006",
           "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-008",
+          "id": "PS-007",
           "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
           "section": "Customer",
           "confidence": "medium"
         },
         {
-          "id": "PS-009",
+          "id": "PS-008",
           "text": "There are four account status types: **Active**, **Suspended**, **Pending Verification**, and **Closed**.",
           "section": "Customer",
           "confidence": "medium"
         },
         {
-          "id": "PS-011",
+          "id": "PS-010",
           "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-012",
+          "id": "PS-011",
           "text": "There are four line status types: **Active**, **Suspended**, **Pending Activation**, and **Closed**.",
           "section": "Line",
           "confidence": "high"
         },
         {
-          "id": "PS-017",
+          "id": "PS-016",
           "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
           "section": "Customer Lookup",
           "confidence": "medium"
         },
         {
-          "id": "PS-023",
+          "id": "PS-028",
           "text": "When a line is suspended, the user will not have service.",
           "section": "Line Suspension",
           "confidence": "high"
         },
         {
-          "id": "PS-024",
+          "id": "PS-029",
           "text": "A line can be suspended for the following reasons:\n- The user has an overdue bill.\n- The line's contract end date is in the past.",
           "section": "Line Suspension",
           "confidence": "high"
         },
         {
-          "id": "PS-038",
+          "id": "PS-043",
           "text": "You must first identify the customer.",
           "section": "Technical Support",
           "confidence": "medium"
@@ -1058,56 +1076,62 @@
       "tool_name": "transfer_to_human_agents",
       "statements": [
         {
-          "id": "PS-003",
+          "id": "PS-002",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-004",
+          "id": "PS-003",
           "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-005",
+          "id": "PS-004",
           "text": "You should deny user requests that are against this policy.",
           "section": "Telecom Agent Policy",
           "confidence": "medium"
         },
         {
-          "id": "PS-006",
+          "id": "PS-005",
           "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
         },
         {
-          "id": "PS-007",
+          "id": "PS-006",
           "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
           "section": "Telecom Agent Policy",
           "confidence": "high"
+        },
+        {
+          "id": "PS-007",
+          "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
+          "section": "Customer",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-043",
+          "text": "You must first identify the customer.",
+          "section": "Technical Support",
+          "confidence": "medium"
         }
       ]
     }
   ],
   "statement_index": {
     "PS-001": {
-      "text": "The current time is 2025-02-25 12:08:00 EST.",
+      "text": "As a telecom agent, you can help users with  **technical support**, **overdue bill payment**, **line suspension**, and **plan options**.",
       "section": "Telecom Agent Policy",
       "mapped_to_tools": [
+        "disable_roaming",
+        "resume_line",
+        "send_payment_request",
         "suspend_line"
       ]
     },
     "PS-002": {
-      "text": "As a telecom agent, you can help users with  **technical support**, **overdue bill payment**, **line suspension**, and **plan options**.",
-      "section": "Telecom Agent Policy",
-      "mapped_to_tools": [
-        "enable_roaming",
-        "resume_line",
-        "suspend_line"
-      ]
-    },
-    "PS-003": {
       "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
       "section": "Telecom Agent Policy",
       "mapped_to_tools": [
@@ -1125,7 +1149,7 @@
         "transfer_to_human_agents"
       ]
     },
-    "PS-004": {
+    "PS-003": {
       "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously. If you respond to the user, you should not make a tool call at the same time.",
       "section": "Telecom Agent Policy",
       "mapped_to_tools": [
@@ -1144,7 +1168,7 @@
         "transfer_to_human_agents"
       ]
     },
-    "PS-005": {
+    "PS-004": {
       "text": "You should deny user requests that are against this policy.",
       "section": "Telecom Agent Policy",
       "mapped_to_tools": [
@@ -1163,36 +1187,32 @@
         "transfer_to_human_agents"
       ]
     },
-    "PS-006": {
+    "PS-005": {
       "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
       "section": "Telecom Agent Policy",
       "mapped_to_tools": [
         "disable_roaming",
         "enable_roaming",
-        "get_customer_by_name",
-        "get_data_usage",
-        "refuel_data",
         "resume_line",
         "suspend_line",
         "transfer_to_human_agents"
       ]
     },
-    "PS-007": {
+    "PS-006": {
       "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
       "section": "Telecom Agent Policy",
       "mapped_to_tools": [
         "disable_roaming",
         "enable_roaming",
         "get_bills_for_customer",
-        "get_customer_by_name",
-        "get_data_usage",
-        "refuel_data",
+        "get_customer_by_phone",
+        "get_details_by_id",
         "resume_line",
         "suspend_line",
         "transfer_to_human_agents"
       ]
     },
-    "PS-008": {
+    "PS-007": {
       "text": "Each customer has a profile containing:\n- customer ID\n- full name\n- date of birth\n- email\n- phone number\n- address (street, city, state, zip code)\n- account status\n- created date\n- payment methods\n- line IDs associated with their account\n- bill IDs\n- last extension date (for payment extensions)\n- goodwill credit usage for the year",
       "section": "Customer",
       "mapped_to_tools": [
@@ -1207,28 +1227,30 @@
         "refuel_data",
         "resume_line",
         "send_payment_request",
-        "suspend_line"
+        "suspend_line",
+        "transfer_to_human_agents"
       ]
     },
-    "PS-009": {
+    "PS-008": {
       "text": "There are four account status types: **Active**, **Suspended**, **Pending Verification**, and **Closed**.",
       "section": "Customer",
       "mapped_to_tools": [
-        "disable_roaming",
         "enable_roaming",
+        "get_customer_by_id",
         "get_details_by_id",
         "refuel_data",
         "suspend_line"
       ]
     },
-    "PS-010": {
+    "PS-009": {
       "text": "Each payment method includes:\n- method type (Credit Card, Debit Card, PayPal)\n- account number last 4 digits\n- expiration date (MM/YYYY format)",
       "section": "Payment Method",
       "mapped_to_tools": [
+        "get_customer_by_id",
         "get_details_by_id"
       ]
     },
-    "PS-011": {
+    "PS-010": {
       "text": "Each line has the following attributes:\n- line ID\n- phone number\n- status\n- plan ID\n- device ID (if applicable)\n- data usage (in GB)\n- data refueling (in GB)\n- roaming status\n- contract end date\n- last plan change date\n- last SIM replacement date\n- suspension start date (if applicable)",
       "section": "Line",
       "mapped_to_tools": [
@@ -1242,11 +1264,10 @@
         "suspend_line"
       ]
     },
-    "PS-012": {
+    "PS-011": {
       "text": "There are four line status types: **Active**, **Suspended**, **Pending Activation**, and **Closed**.",
       "section": "Line",
       "mapped_to_tools": [
-        "disable_roaming",
         "enable_roaming",
         "get_details_by_id",
         "refuel_data",
@@ -1254,7 +1275,7 @@
         "suspend_line"
       ]
     },
-    "PS-013": {
+    "PS-012": {
       "text": "Each plan specifies:\n- plan ID\n- name\n- data limit (in GB)\n- monthly price\n- data refueling price per GB",
       "section": "Plan",
       "mapped_to_tools": [
@@ -1263,55 +1284,52 @@
         "refuel_data"
       ]
     },
-    "PS-014": {
+    "PS-013": {
       "text": "Each device has:\n- device ID\n- device type (phone, tablet, router, watch, other)\n- model\n- IMEI number (optional)\n- eSIM capability\n- activation status\n- activation date\n- last eSIM transfer date",
       "section": "Device",
       "mapped_to_tools": [
         "get_details_by_id"
       ]
     },
-    "PS-015": {
+    "PS-014": {
       "text": "Each bill contains:\n- bill ID\n- customer ID\n- billing period (start and end dates)\n- issue date\n- total amount due\n- due date\n- line items (charges, fees, credits)\n- status",
       "section": "Bill",
       "mapped_to_tools": [
         "get_bills_for_customer",
+        "get_customer_by_id",
         "get_details_by_id",
         "refuel_data",
         "send_payment_request"
       ]
     },
-    "PS-016": {
+    "PS-015": {
       "text": "There are five bill status types: **Draft**, **Issued**, **Paid**, **Overdue**, **Awaiting Payment**, and **Disputed**.",
       "section": "Bill",
       "mapped_to_tools": [
         "get_bills_for_customer",
         "get_details_by_id",
-        "refuel_data",
         "send_payment_request"
       ]
     },
-    "PS-017": {
+    "PS-016": {
       "text": "You can look up customer information using:\n- Phone number\n- Customer ID\n- Full name with date of birth",
       "section": "Customer Lookup",
       "mapped_to_tools": [
-        "enable_roaming",
         "get_bills_for_customer",
         "get_customer_by_id",
         "get_customer_by_name",
         "get_customer_by_phone",
-        "get_data_usage",
-        "get_details_by_id",
         "suspend_line"
       ]
     },
-    "PS-018": {
+    "PS-017": {
       "text": "For name lookup, date of birth is required for verification purposes.",
       "section": "Customer Lookup",
       "mapped_to_tools": [
         "get_customer_by_name"
       ]
     },
-    "PS-019": {
+    "PS-018": {
       "text": "You can help the user make a payment for an overdue bill.",
       "section": "Overdue Bill Payment",
       "mapped_to_tools": [
@@ -1319,7 +1337,7 @@
         "send_payment_request"
       ]
     },
-    "PS-020": {
+    "PS-019": {
       "text": "To do so you need to follow these steps:\n- Check the bill status to make sure it is overdue.\n- Check the bill amount due\n- Send the user a payment request for the overdue bill.\n    - This will change the status of the bill to AWAITING PAYMENT.\n- Inform the user that a payment request has been sent. They should:\n    - Check their payment requests using the check_payment_request tool.\n- If the user accepts the payment request, use the make_payment tool to make the payment.\n- After the payment is made, the bill status will be updated to PAID.\n- Always check that the bill status is updated to PAID before informing the user that the bill has been paid.",
       "section": "Overdue Bill Payment",
       "mapped_to_tools": [
@@ -1328,8 +1346,16 @@
         "send_payment_request"
       ]
     },
+    "PS-020": {
+      "text": "A user can only have one bill in the AWAITING PAYMENT status at a time.",
+      "section": "Overdue Bill Payment",
+      "mapped_to_tools": [
+        "get_bills_for_customer",
+        "send_payment_request"
+      ]
+    },
     "PS-021": {
-      "text": "- A user can only have one bill in the AWAITING PAYMENT status at a time.",
+      "text": "The send payement request tool will not check if the bill is overdue. You should always check that the bill is overdue before sending a payment request.",
       "section": "Overdue Bill Payment",
       "mapped_to_tools": [
         "get_bills_for_customer",
@@ -1338,15 +1364,56 @@
       ]
     },
     "PS-022": {
-      "text": "- The send payement request tool will not check if the bill is overdue. You should always check that the bill is overdue before sending a payment request.",
-      "section": "Overdue Bill Payment",
+      "text": "You can help the user extend the due date for a bill.",
+      "section": "Payment Due Date Extension",
       "mapped_to_tools": [
-        "get_bills_for_customer",
-        "get_details_by_id",
-        "send_payment_request"
+        "get_bills_for_customer"
       ]
     },
     "PS-023": {
+      "text": "To do so you need to follow these steps:\n- Check the bill status.\n- Check the bill's current due date.\n- Check whether the customer has received a payment extension in the last 90 days.\n- Confirm the requested new due date.\n- Extend the bill due date if the request is eligible.",
+      "section": "Payment Due Date Extension",
+      "mapped_to_tools": [
+        "get_bills_for_customer",
+        "get_customer_by_id",
+        "get_details_by_id"
+      ]
+    },
+    "PS-024": {
+      "text": "A bill due date can be extended only if all of the following are true:\n- The bill status is Issued or Overdue.\n- The requested new due date is after the current due date and no more than 14 days after the current due date.\n- The customer has not received a payment extension in the last 90 days.",
+      "section": "Payment Due Date Extension",
+      "mapped_to_tools": [
+        "get_bills_for_customer",
+        "get_customer_by_id",
+        "get_details_by_id"
+      ]
+    },
+    "PS-025": {
+      "text": "You must not extend the due date for a bill whose status is Paid, Disputed, Draft, or Awaiting Payment.",
+      "section": "Payment Due Date Extension",
+      "mapped_to_tools": [
+        "get_bills_for_customer",
+        "get_details_by_id"
+      ]
+    },
+    "PS-026": {
+      "text": "You must not extend the due date if the requested new due date is more than 14 days after the current due date.",
+      "section": "Payment Due Date Extension",
+      "mapped_to_tools": [
+        "get_bills_for_customer",
+        "get_details_by_id"
+      ]
+    },
+    "PS-027": {
+      "text": "You must not extend the due date if the customer received a payment extension in the last 90 days.",
+      "section": "Payment Due Date Extension",
+      "mapped_to_tools": [
+        "get_bills_for_customer",
+        "get_customer_by_id",
+        "get_details_by_id"
+      ]
+    },
+    "PS-028": {
       "text": "When a line is suspended, the user will not have service.",
       "section": "Line Suspension",
       "mapped_to_tools": [
@@ -1354,7 +1421,7 @@
         "suspend_line"
       ]
     },
-    "PS-024": {
+    "PS-029": {
       "text": "A line can be suspended for the following reasons:\n- The user has an overdue bill.\n- The line's contract end date is in the past.",
       "section": "Line Suspension",
       "mapped_to_tools": [
@@ -1364,7 +1431,7 @@
         "suspend_line"
       ]
     },
-    "PS-025": {
+    "PS-030": {
       "text": "You are allowed to lift the suspension after the user has paid all their overdue bills.",
       "section": "Line Suspension",
       "mapped_to_tools": [
@@ -1373,7 +1440,7 @@
         "resume_line"
       ]
     },
-    "PS-026": {
+    "PS-031": {
       "text": "You are not allowed to lift the suspension if the line's contract end date is in the past, even if the user has paid all their overdue bills.",
       "section": "Line Suspension",
       "mapped_to_tools": [
@@ -1381,14 +1448,14 @@
         "resume_line"
       ]
     },
-    "PS-027": {
+    "PS-032": {
       "text": "After you resume the line, the user will have to reboot their device to get service.",
       "section": "Line Suspension",
       "mapped_to_tools": [
         "resume_line"
       ]
     },
-    "PS-028": {
+    "PS-033": {
       "text": "Each plan specify the maxium data usage per month.",
       "section": "Data Refueling",
       "mapped_to_tools": [
@@ -1397,7 +1464,7 @@
         "refuel_data"
       ]
     },
-    "PS-029": {
+    "PS-034": {
       "text": "If the user's data usage for a line exceeds the plan's data limit, data connectivity will be lost.",
       "section": "Data Refueling",
       "mapped_to_tools": [
@@ -1406,52 +1473,49 @@
         "refuel_data"
       ]
     },
-    "PS-030": {
+    "PS-035": {
       "text": "You can add more data to the line by \"refueling\" data at a price per GB specified by the plan.",
       "section": "Data Refueling",
       "mapped_to_tools": [
-        "get_details_by_id",
         "refuel_data"
       ]
     },
-    "PS-031": {
+    "PS-036": {
       "text": "The maximum amount of data that can be refueled is 2GB.",
       "section": "Data Refueling",
       "mapped_to_tools": [
         "refuel_data"
       ]
     },
-    "PS-032": {
+    "PS-037": {
       "text": "To refuel data you should:\n- Ask them how much data they want to refuel\n- Confirm the price\n- Apply the refueled data to the line associated with the phone number the user provided.",
       "section": "Data Refueling",
       "mapped_to_tools": [
-        "get_customer_by_phone",
+        "get_details_by_id",
         "refuel_data"
       ]
     },
-    "PS-033": {
+    "PS-038": {
       "text": "You can help the user change to a different plan.",
       "section": "Change Plan",
       "mapped_to_tools": []
     },
-    "PS-034": {
+    "PS-039": {
       "text": "To do so you need to follow these steps\n- Make sure you know what line the user wants to change the plan for.\n- Gather available plans\n- Ask the user to select one.\n- Calculate the price of the new plan.\n- Confirm the price.\n- Apply the plan to the line associated with the phone number the user provided.",
       "section": "Change Plan",
       "mapped_to_tools": [
-        "get_customer_by_phone",
         "get_details_by_id"
       ]
     },
-    "PS-035": {
+    "PS-040": {
       "text": "If a line is roaming enabled, the user can use their phone's data connection in areas outside their home network.",
       "section": "Data Roaming",
       "mapped_to_tools": [
         "disable_roaming",
-        "enable_roaming",
-        "get_details_by_id"
+        "enable_roaming"
       ]
     },
-    "PS-036": {
+    "PS-041": {
       "text": "We offer data roaming to users who are traveling outside their home network.",
       "section": "Data Roaming",
       "mapped_to_tools": [
@@ -1459,15 +1523,16 @@
         "enable_roaming"
       ]
     },
-    "PS-037": {
+    "PS-042": {
       "text": "If a user is traveling outside their home network, you should check if the line is roaming enabled. If it is not, you should enable it at no cost for the user.",
       "section": "Data Roaming",
       "mapped_to_tools": [
+        "disable_roaming",
         "enable_roaming",
         "get_details_by_id"
       ]
     },
-    "PS-038": {
+    "PS-043": {
       "text": "You must first identify the customer.",
       "section": "Technical Support",
       "mapped_to_tools": [
@@ -1481,8 +1546,8 @@
         "get_details_by_id",
         "refuel_data",
         "resume_line",
-        "send_payment_request",
-        "suspend_line"
+        "suspend_line",
+        "transfer_to_human_agents"
       ]
     }
   }

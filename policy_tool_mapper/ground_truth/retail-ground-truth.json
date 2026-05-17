@@ -1,0 +1,281 @@
+{
+  "mappings": [
+    {
+      "tool_id": "calculate",
+      "tool_name": "calculate",
+      "statements": [
+      ]
+    },
+    {
+      "tool_id": "cancel_pending_order",
+      "tool_name": "cancel_pending_order",
+      "statements": [
+        {
+          "id": "GT-002",
+          "text": "An order can only be cancelled if its status is 'pending', and you should check its status before taking the action.",
+          "section": null
+        },
+        {
+          "id": "GT-003",
+          "text": "The user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.",
+          "section": null
+        },
+        {
+          "id": "GT-004",
+          "text": "After user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "exchange_delivered_order_items",
+      "tool_name": "exchange_delivered_order_items",
+      "statements": [
+        {
+          "id": "GT-006",
+          "text": "An order can only be exchanged if its status is 'delivered', and you should check its status before taking the action.",
+          "section": null
+        },
+        {
+          "id": "GT-007",
+          "text": "In particular, remember to remind the customer to confirm they have provided all items to be exchanged.",
+          "section": null
+        },
+        {
+          "id": "GT-008",
+          "text": "For a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.",
+          "section": null
+        },
+        {
+          "id": "GT-009",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": null
+        },
+        {
+          "id": "GT-010",
+          "text": "After user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.",
+          "section": null
+        },
+        {
+          "id": "GT-011",
+          "text": "Exchange or modify order tools can only be called once per order.",
+          "section": null
+        },
+        {
+          "id": "GT-012",
+          "text": "For a delivered order, return or exchange can be only done once by the agent.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "find_user_id_by_email",
+      "tool_name": "find_user_id_by_email",
+      "statements": [
+      ]
+    },
+    {
+      "tool_id": "find_user_id_by_name_zip",
+      "tool_name": "find_user_id_by_name_zip",
+      "statements": [
+      ]
+    },
+    {
+      "tool_id": "get_item_details",
+      "tool_name": "get_item_details",
+      "statements": [
+      ]
+    },
+    {
+      "tool_id": "get_order_details",
+      "tool_name": "get_order_details",
+      "statements": [
+      ]
+    },
+    {
+      "tool_id": "get_product_details",
+      "tool_name": "get_product_details",
+      "statements": [
+      ]
+    },
+    {
+      "tool_id": "get_user_details",
+      "tool_name": "get_user_details",
+      "statements": [
+      ]
+    },
+    {
+      "tool_id": "list_all_product_types",
+      "tool_name": "list_all_product_types",
+      "statements": [
+      ]
+    },
+    {
+      "tool_id": "modify_pending_order_address",
+      "tool_name": "modify_pending_order_address",
+      "statements": [
+        {
+          "id": "GT-023",
+          "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+          "section": null
+        },
+        {
+          "id": "GT-024",
+          "text": "For a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "modify_pending_order_items",
+      "tool_name": "modify_pending_order_items",
+      "statements": [
+        {
+          "id": "GT-026",
+          "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+          "section": null
+        },
+        {
+          "id": "GT-027",
+          "text": "This action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore.",
+          "section": null
+        },
+        {
+          "id": "GT-028",
+          "text": "So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.",
+          "section": null
+        },
+        {
+          "id": "GT-029",
+          "text": "For a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.",
+          "section": null
+        },
+        {
+          "id": "GT-030",
+          "text": "The user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.",
+          "section": null
+        },
+        {
+          "id": "GT-031",
+          "text": "Exchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "modify_pending_order_payment",
+      "tool_name": "modify_pending_order_payment",
+      "statements": [
+        {
+          "id": "GT-032",
+          "text": "An order can only be modified if its status is 'pending', and you should check its status before taking the action.",
+          "section": null
+        },
+        {
+          "id": "GT-033",
+          "text": "The user can only choose a single payment method different from the original payment method.",
+          "section": null
+        },
+        {
+          "id": "GT-034",
+          "text": "If the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.",
+          "section": null
+        },
+        {
+          "id": "GT-035",
+          "text": "After user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "modify_user_address",
+      "tool_name": "modify_user_address",
+      "statements": [
+      ]
+    },
+    {
+      "tool_id": "return_delivered_order_items",
+      "tool_name": "return_delivered_order_items",
+      "statements": [
+        {
+          "id": "GT-037",
+          "text": "An order can only be returned if its status is 'delivered', and you should check its status before taking the action.",
+          "section": null
+        },
+        {
+          "id": "GT-038",
+          "text": "The user needs to confirm the order id and the list of items to be returned.",
+          "section": null
+        },
+        {
+          "id": "GT-039",
+          "text": "The user needs to provide a payment method to receive the refund.",
+          "section": null
+        },
+        {
+          "id": "GT-040",
+          "text": "The refund must either go to the original payment method, or an existing gift card.",
+          "section": null
+        },
+        {
+          "id": "GT-041",
+          "text": "After user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.",
+          "section": null
+        },
+        {
+          "id": "GT-042",
+          "text": "For a delivered order, return or exchange can be only done once by the agent.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "transfer_to_human_agents",
+      "tool_name": "transfer_to_human_agents",
+      "statements": [
+        {
+          "id": "GT-043",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": null
+        }
+      ]
+    },
+    {
+      "tool_id": "apply_delivery_credit",
+      "tool_name": "apply_delivery_credit",
+      "statements": [
+        {
+          "id": "GT-047",
+          "text": "A delivery credit can be applied only if the delivery claim status is 'open'.",
+          "section": null
+        },
+        {
+          "id": "GT-048",
+          "text": "A delivery credit can be applied only if the claim was filed within 14 days after the actual delivery date.",
+          "section": null
+        },
+        {
+          "id": "GT-049",
+          "text": "A delivery credit can be applied only if all of the following are true: the actual delivery date was more than 3 days after the promised delivery date, the customer paid for expedited shipping, or the claim was filed within 48 hours after the actual delivery date.",
+          "section": null
+        },
+        {
+          "id": "GT-050",
+          "text": "Do not apply the delivery credit if the claim status is 'closed' or 'credit applied'.",
+          "section": null
+        },
+        {
+          "id": "GT-051",
+          "text": "Do not apply the delivery credit if the claim was filed more than 14 days after the actual delivery date, even if another condition is true.",
+          "section": null
+        },
+        {
+          "id": "GT-052",
+          "text": "Do not apply the delivery credit if none of the qualifying conditions are true.",
+          "section": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "domain": "retail",
+  "mode": "retrieval",
+  "models": [
+    "gpt-5.4"
+  ],
+  "timestamp": "2026-05-17T12:09:15.220876+00:00",
+  "results": [
+    {
+      "model": "gpt-5.4",
+      "mode": "retrieval",
+      "status": "ok",
+      "mappings": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/retail-mappings-gpt-5.4-retrieval.json",
+      "eval_high": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/retail-eval-gpt-5.4-retrieval-high.json",
+      "eval_all": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/retail-eval-gpt-5.4-retrieval-all.json",
+      "scores_high": {
+        "macro": {
+          "precision": 0.4392,
+          "recall": 0.8571,
+          "f1": 0.5554
+        },
+        "micro": {
+          "precision": 0.3563,
+          "recall": 0.8286,
+          "f1": 0.4983
+        }
+      },
+      "scores_all": {
+        "macro": {
+          "precision": 0.3568,
+          "recall": 0.8571,
+          "f1": 0.4853
+        },
+        "micro": {
+          "precision": 0.2742,
+          "recall": 0.8286,
+          "f1": 0.412
+        }
+      }
+    }
+  ]
+}

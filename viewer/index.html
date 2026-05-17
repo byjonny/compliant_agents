@@ -124,6 +124,27 @@
       box-shadow: var(--shadow);
       margin-bottom: 20px;
     }
+    .chart-card-head {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      min-height: 26px;
+      margin: -4px 0 4px;
+    }
+    .chart-export-btn {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #f8fafc;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 8px;
+    }
+    .chart-export-btn:hover {
+      border-color: var(--agent);
+      color: var(--agent);
+    }
     .chart-card canvas { max-height: 320px; }
     .budget-note {
       font-size: 11px; color: var(--muted);
@@ -1562,6 +1583,44 @@ function pctSigned(v) {
   return `${n >= 0 ? '+' : ''}${n.toFixed(1)}%`;
 }
 
+function csvCell(value) {
+  if (value == null) return '';
+  const s = String(value);
+  return /[";\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+function downloadCsv(filename, rows) {
+  const csv = rows.map(row => row.map(csvCell).join(';')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename.endsWith('.csv') ? filename : `${filename}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function exportChartCsv(chartId, filename) {
+  const canvas = $(chartId);
+  const chart = canvas ? Chart.getChart(canvas) : null;
+  if (!chart) return;
+  const labels = chart.data.labels || [];
+  const datasets = chart.data.datasets || [];
+  const rows = [['label', ...datasets.map(ds => ds.label || 'value')]];
+  labels.forEach((label, idx) => {
+    rows.push([
+      label,
+      ...datasets.map(ds => {
+        const value = Array.isArray(ds.data) ? ds.data[idx] : null;
+        return value == null ? '' : value;
+      }),
+    ]);
+  });
+  downloadCsv(filename, rows);
+}
+
 function modelRank(model) {
   const m = String(model || '').toLowerCase();
   if (m.includes('4.1-mini')) return 10;
@@ -2268,15 +2327,27 @@ function renderAnalyzer() {
   $('analysis-content').innerHTML = `
     <div class="analysis-grid">
       <section class="chart-card analysis-chart">
+        <div class="chart-card-head">
+          <button class="chart-export-btn" type="button" onclick="exportChartCsv('chart-policy', 'analysis-${esc($('analysis-domain').value)}-policy-violation-rate.csv')">CSV</button>
+        </div>
         <canvas id="chart-policy"></canvas>
       </section>
       <section class="chart-card analysis-chart">
+        <div class="chart-card-head">
+          <button class="chart-export-btn" type="button" onclick="exportChartCsv('chart-reward', 'analysis-${esc($('analysis-domain').value)}-reward.csv')">CSV</button>
+        </div>
         <canvas id="chart-reward"></canvas>
       </section>
       <section class="chart-card analysis-chart">
+        <div class="chart-card-head">
+          <button class="chart-export-btn" type="button" onclick="exportChartCsv('chart-latency', 'analysis-${esc($('analysis-domain').value)}-latency-change.csv')">CSV</button>
+        </div>
         <canvas id="chart-latency"></canvas>
       </section>
       <section class="chart-card analysis-chart">
+        <div class="chart-card-head">
+          <button class="chart-export-btn" type="button" onclick="exportChartCsv('chart-false-positive', 'analysis-${esc($('analysis-domain').value)}-false-positive-rate.csv')">CSV</button>
+        </div>
         <canvas id="chart-false-positive"></canvas>
       </section>
     </div>
@@ -2713,6 +2784,9 @@ function renderMapper() {
     <div class="mapper-grid">
       ${metrics.map((metric, idx) => `
         <section class="chart-card mapper-chart">
+          <div class="chart-card-head">
+            <button class="chart-export-btn" type="button" onclick="exportChartCsv('mapper-chart-${idx}', 'mapper-${esc($('mapper-domain').value)}-${esc(metric.replace('.', '-'))}.csv')">CSV</button>
+          </div>
           <canvas id="mapper-chart-${idx}"></canvas>
         </section>
       `).join('')}

@@ -119,7 +119,7 @@ def compute_compliance_metrics(results: Results) -> ComplianceMetrics:
         sim_attempted: dict[str, int] = defaultdict(int)
         sim_executed:  dict[str, int] = defaultdict(int)
 
-        for check in sim.reward_info.compliance_checks:
+        for check in sim.reward_info.compliance_checks or []:
             if check.skipped or check.type != ComplianceType.UNAUTHORIZED_ACTION:
                 if not check.skipped and not check.passed:
                     sim_violated = True  # non-UNAUTHORIZED_ACTION violation

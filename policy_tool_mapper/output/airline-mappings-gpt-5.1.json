@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "policy_file": "./policy_tool_mapper/input/airlinePolicy.md",
-    "openapi_file": "./policy_tool_mapper/input/airlineTools.json",
+    "policy_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/input/AirlinePolicy.md",
+    "openapi_file": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/input/AirlineTools.json",
     "total_tools": 14,
-    "total_statements": 74,
-    "total_mappings": 312,
+    "total_statements": 89,
+    "total_mappings": 424,
     "sweep_iterations": 1,
-    "timestamp": "2026-04-30T13:25:10.864123+00:00"
+    "timestamp": "2026-05-17T08:05:29.934123+00:00"
   },
   "mappings": [
     {
@@ -24,12 +24,6 @@
           "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
           "section": "Airline Agent Policy",
           "confidence": "high"
-        },
-        {
-          "id": "PS-004",
-          "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
         },
         {
           "id": "PS-005",
@@ -56,321 +50,279 @@
           "confidence": "medium"
         },
         {
-          "id": "PS-009",
-          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
-          "section": "Airline Agent Policy",
+          "id": "PS-010",
+          "text": "Each user has a profile containing:",
+          "section": "User",
           "confidence": "medium"
         },
         {
-          "id": "PS-010",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
-          "section": "User",
-          "confidence": "high"
-        },
-        {
           "id": "PS-011",
-          "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
+          "text": "- user id",
           "section": "User",
           "confidence": "high"
         },
         {
           "id": "PS-012",
-          "text": "There are three membership levels: **regular**, **silver**, **gold**.",
+          "text": "- email",
           "section": "User",
           "confidence": "medium"
         },
         {
           "id": "PS-013",
-          "text": "Each flight has the following attributes:\n- flight number\n- origin\n- destination\n- scheduled departure and arrival time (local time)",
+          "text": "- addresses",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "- date of birth",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-015",
+          "text": "- payment methods",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-016",
+          "text": "- membership level",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- reservation numbers",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-018",
+          "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-019",
+          "text": "There are three membership levels: **regular**, **silver**, **gold**.",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-020",
+          "text": "Each flight has the following attributes:",
           "section": "Flight",
           "confidence": "high"
         },
         {
-          "id": "PS-014",
+          "id": "PS-021",
+          "text": "- flight number",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "- origin",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-023",
+          "text": "- destination",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-024",
+          "text": "- scheduled departure and arrival time (local time)",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
           "text": "A flight can be available at multiple dates.",
           "section": "Flight",
           "confidence": "high"
         },
         {
-          "id": "PS-015",
-          "text": "For each date:\n- If the status is **available**, the flight has not taken off, available seats and prices are listed.\n- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.\n- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "id": "PS-026",
+          "text": "For each date:",
           "section": "Flight",
           "confidence": "high"
         },
         {
-          "id": "PS-016",
+          "id": "PS-027",
+          "text": "- If the status is **available**, the flight has not taken off, available seats and prices are listed.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
           "text": "There are three cabin classes: **basic economy**, **economy**, **business**.",
           "section": "Flight",
           "confidence": "high"
         },
         {
-          "id": "PS-017",
+          "id": "PS-031",
           "text": "**basic economy** is its own class, completely distinct from **economy**.",
           "section": "Flight",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-018",
+          "id": "PS-032",
           "text": "Seat availability and prices are listed for each cabin class.",
           "section": "Flight",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-019",
+          "id": "PS-033",
           "text": "Each reservation specifies the following:",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-020",
+          "id": "PS-034",
           "text": "- reservation id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-021",
+          "id": "PS-035",
           "text": "- user id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-022",
+          "id": "PS-036",
           "text": "- trip type",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-023",
+          "id": "PS-037",
           "text": "- flights",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-024",
+          "id": "PS-038",
           "text": "- passengers",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-025",
+          "id": "PS-039",
           "text": "- payment methods",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-026",
+          "id": "PS-040",
           "text": "- created time",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-027",
+          "id": "PS-041",
           "text": "- baggages",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-028",
+          "id": "PS-042",
           "text": "- travel insurance information",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-029",
+          "id": "PS-043",
           "text": "There are two types of trip: **one way** and **round trip**.",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-030",
+          "id": "PS-044",
           "text": "The agent must first obtain the user id from the user.",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-031",
+          "id": "PS-045",
           "text": "The agent should then ask for the trip type, origin, destination.",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-032",
+          "id": "PS-046",
           "text": "Cabin:\n- Cabin class must be the same across all the flights in a reservation.",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-033",
+          "id": "PS-047",
           "text": "Passengers: \n- Each reservation can have at most five passengers.",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-034",
+          "id": "PS-048",
           "text": "Payment: \n- Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-035",
+          "id": "PS-049",
           "text": "Checked bag allowance: \n- If the booking user is a regular member:\n  - 0 free checked bag for each basic economy passenger\n  - 1 free checked bag for each economy passenger\n  - 2 free checked bags for each business passenger",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-036",
+          "id": "PS-050",
           "text": "Do not add checked bags that the user does not need.",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-037",
+          "id": "PS-051",
           "text": "Travel insurance: \n- The agent should ask if the user wants to buy the travel insurance.",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-041",
-          "text": "Basic economy flights cannot be modified.",
-          "section": "Change flights",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-044",
-          "text": "The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!",
-          "section": "Change flights",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-048",
-          "text": "If the price after cabin change is higher than the original price, the user is required to pay for the difference.",
-          "section": "Change cabin",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-049",
-          "text": "If the price after cabin change is lower than the original price, the user is should be refunded the difference.",
-          "section": "Change cabin",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-050",
-          "text": "The user can add but not remove checked bags.",
-          "section": "Change baggage and insurance",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-051",
-          "text": "The user cannot add insurance after initial booking.",
-          "section": "Change baggage and insurance",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-052",
-          "text": "The user can modify passengers but cannot modify the number of passengers.",
-          "section": "Change passengers",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-053",
-          "text": "Even a human agent cannot modify the number of passengers.",
-          "section": "Change passengers",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-054",
+          "id": "PS-068",
           "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method.",
           "section": "Payment",
           "confidence": "medium"
         },
         {
-          "id": "PS-055",
+          "id": "PS-069",
           "text": "The payment method must already be in user profile for safety reasons.",
           "section": "Payment",
           "confidence": "high"
         },
         {
-          "id": "PS-061",
-          "text": "Otherwise, flight can be cancelled if any of the following is true:",
+          "id": "PS-081",
+          "text": "Refund:",
           "section": "Cancel flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-062",
-          "text": "The booking was made within the last 24 hrs",
-          "section": "Cancel flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-063",
-          "text": "The flight is cancelled by airline",
-          "section": "Cancel flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-064",
-          "text": "It is a business flight",
-          "section": "Cancel flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-065",
-          "text": "The user has travel insurance and the reason for cancellation is covered by insurance.",
-          "section": "Cancel flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-066",
-          "text": "The API does not check that cancellation rules are met, so the agent must make sure the rules apply before calling the API!",
-          "section": "Cancel flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-067",
+          "id": "PS-082",
           "text": "The refund will go to original payment methods within 5 to 7 business days.",
-          "section": "Refund:",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-068",
-          "text": "Do not proactively offer a compensation unless the user explicitly asks for one.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-069",
-          "text": "Do not compensate if the user is regular member and has no travel insurance and flies (basic) economy.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-070",
-          "text": "Always confirms the facts before offering compensation.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-071",
-          "text": "Only compensate if the user is a silver/gold member or has travel insurance or flies business.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-072",
-          "text": "If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $100 times the number of passengers.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-073",
-          "text": "If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $50 times the number of passengers.",
-          "section": "Refunds and Compensation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-074",
-          "text": "Do not offer compensation for any other reason than the ones listed above.",
-          "section": "Refunds and Compensation",
+          "section": "Cancel flight",
           "confidence": "medium"
         }
       ]
@@ -416,6 +368,12 @@
           "confidence": "high"
         },
         {
+          "id": "PS-002",
+          "text": "You also handle **refunds and compensation**.",
+          "section": "Airline Agent Policy",
+          "confidence": "medium"
+        },
+        {
           "id": "PS-003",
           "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
           "section": "Airline Agent Policy",
@@ -446,223 +404,259 @@
           "confidence": "medium"
         },
         {
-          "id": "PS-009",
-          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
-          "section": "Airline Agent Policy",
-          "confidence": "medium"
-        },
-        {
           "id": "PS-010",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+          "text": "Each user has a profile containing:",
           "section": "User",
           "confidence": "medium"
         },
         {
-          "id": "PS-019",
+          "id": "PS-011",
+          "text": "- user id",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "- addresses",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "- date of birth",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "- payment methods",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- membership level",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- reservation numbers",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
           "text": "Each reservation specifies the following:",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-020",
+          "id": "PS-034",
           "text": "- reservation id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-021",
+          "id": "PS-035",
           "text": "- user id",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-022",
+          "id": "PS-036",
           "text": "- trip type",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-023",
+          "id": "PS-037",
           "text": "- flights",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-024",
+          "id": "PS-038",
           "text": "- passengers",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-025",
+          "id": "PS-039",
           "text": "- payment methods",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-026",
+          "id": "PS-040",
           "text": "- created time",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-027",
+          "id": "PS-041",
           "text": "- baggages",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-028",
+          "id": "PS-042",
           "text": "- travel insurance information",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-038",
+          "id": "PS-052",
           "text": "First, the agent must obtain the user id and reservation id.",
           "section": "Modify flight",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-039",
+          "id": "PS-053",
           "text": "The user must provide their user id.",
           "section": "Modify flight",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-040",
+          "id": "PS-054",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Modify flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-044",
-          "text": "The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!",
-          "section": "Change flights",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-054",
+          "id": "PS-068",
           "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method.",
           "section": "Payment",
           "confidence": "medium"
         },
         {
-          "id": "PS-055",
+          "id": "PS-069",
           "text": "The payment method must already be in user profile for safety reasons.",
           "section": "Payment",
           "confidence": "medium"
         },
         {
-          "id": "PS-056",
+          "id": "PS-070",
           "text": "First, the agent must obtain the user id and reservation id.",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-057",
+          "id": "PS-071",
           "text": "The user must provide their user id.",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-058",
+          "id": "PS-072",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-059",
+          "id": "PS-073",
           "text": "The agent must also obtain the reason for cancellation (change of plan, airline cancelled flight, or other reasons)",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-060",
+          "id": "PS-074",
           "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-061",
+          "id": "PS-075",
           "text": "Otherwise, flight can be cancelled if any of the following is true:",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-062",
+          "id": "PS-076",
           "text": "The booking was made within the last 24 hrs",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-063",
+          "id": "PS-077",
           "text": "The flight is cancelled by airline",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-064",
+          "id": "PS-078",
           "text": "It is a business flight",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-065",
+          "id": "PS-079",
           "text": "The user has travel insurance and the reason for cancellation is covered by insurance.",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-066",
+          "id": "PS-080",
           "text": "The API does not check that cancellation rules are met, so the agent must make sure the rules apply before calling the API!",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-067",
-          "text": "The refund will go to original payment methods within 5 to 7 business days.",
-          "section": "Refund:",
+          "id": "PS-081",
+          "text": "Refund:",
+          "section": "Cancel flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-068",
+          "id": "PS-082",
+          "text": "The refund will go to original payment methods within 5 to 7 business days.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-083",
           "text": "Do not proactively offer a compensation unless the user explicitly asks for one.",
           "section": "Refunds and Compensation",
           "confidence": "medium"
         },
         {
-          "id": "PS-069",
+          "id": "PS-084",
           "text": "Do not compensate if the user is regular member and has no travel insurance and flies (basic) economy.",
           "section": "Refunds and Compensation",
           "confidence": "medium"
         },
         {
-          "id": "PS-070",
+          "id": "PS-085",
           "text": "Always confirms the facts before offering compensation.",
           "section": "Refunds and Compensation",
           "confidence": "medium"
         },
         {
-          "id": "PS-071",
+          "id": "PS-086",
           "text": "Only compensate if the user is a silver/gold member or has travel insurance or flies business.",
           "section": "Refunds and Compensation",
           "confidence": "medium"
         },
         {
-          "id": "PS-072",
+          "id": "PS-087",
           "text": "If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $100 times the number of passengers.",
           "section": "Refunds and Compensation",
           "confidence": "medium"
         },
         {
-          "id": "PS-073",
+          "id": "PS-088",
           "text": "If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $50 times the number of passengers.",
           "section": "Refunds and Compensation",
           "confidence": "medium"
         },
         {
-          "id": "PS-074",
+          "id": "PS-089",
           "text": "Do not offer compensation for any other reason than the ones listed above.",
           "section": "Refunds and Compensation",
           "confidence": "medium"
@@ -710,22 +704,82 @@
           "confidence": "medium"
         },
         {
-          "id": "PS-013",
-          "text": "Each flight has the following attributes:\n- flight number\n- origin\n- destination\n- scheduled departure and arrival time (local time)",
+          "id": "PS-020",
+          "text": "Each flight has the following attributes:",
           "section": "Flight",
           "confidence": "high"
         },
         {
-          "id": "PS-014",
+          "id": "PS-021",
+          "text": "- flight number",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "- origin",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "- destination",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-024",
+          "text": "- scheduled departure and arrival time (local time)",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
           "text": "A flight can be available at multiple dates.",
           "section": "Flight",
           "confidence": "high"
         },
         {
-          "id": "PS-015",
-          "text": "For each date:\n- If the status is **available**, the flight has not taken off, available seats and prices are listed.\n- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.\n- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "id": "PS-026",
+          "text": "For each date:",
           "section": "Flight",
           "confidence": "high"
+        },
+        {
+          "id": "PS-027",
+          "text": "- If the status is **available**, the flight has not taken off, available seats and prices are listed.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
+          "text": "There are three cabin classes: **basic economy**, **economy**, **business**.",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-031",
+          "text": "**basic economy** is its own class, completely distinct from **economy**.",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-032",
+          "text": "Seat availability and prices are listed for each cabin class.",
+          "section": "Flight",
+          "confidence": "medium"
         }
       ]
     },
@@ -770,115 +824,91 @@
           "confidence": "medium"
         },
         {
-          "id": "PS-010",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+          "id": "PS-017",
+          "text": "- reservation numbers",
           "section": "User",
           "confidence": "medium"
         },
         {
-          "id": "PS-019",
+          "id": "PS-033",
           "text": "Each reservation specifies the following:",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-020",
+          "id": "PS-034",
           "text": "- reservation id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-021",
+          "id": "PS-035",
           "text": "- user id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-022",
+          "id": "PS-036",
           "text": "- trip type",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-023",
+          "id": "PS-037",
           "text": "- flights",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-024",
+          "id": "PS-038",
           "text": "- passengers",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-025",
+          "id": "PS-039",
           "text": "- payment methods",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-026",
+          "id": "PS-040",
           "text": "- created time",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-027",
+          "id": "PS-041",
           "text": "- baggages",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-028",
+          "id": "PS-042",
           "text": "- travel insurance information",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-029",
-          "text": "There are two types of trip: **one way** and **round trip**.",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-030",
-          "text": "The agent must first obtain the user id from the user.",
-          "section": "Book flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-038",
+          "id": "PS-052",
           "text": "First, the agent must obtain the user id and reservation id.",
           "section": "Modify flight",
           "confidence": "high"
         },
         {
-          "id": "PS-039",
-          "text": "The user must provide their user id.",
-          "section": "Modify flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-040",
+          "id": "PS-054",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Modify flight",
           "confidence": "high"
         },
         {
-          "id": "PS-056",
+          "id": "PS-070",
           "text": "First, the agent must obtain the user id and reservation id.",
           "section": "Cancel flight",
           "confidence": "high"
         },
         {
-          "id": "PS-057",
-          "text": "The user must provide their user id.",
-          "section": "Cancel flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-058",
+          "id": "PS-072",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Cancel flight",
           "confidence": "high"
@@ -927,129 +957,153 @@
         },
         {
           "id": "PS-010",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+          "text": "Each user has a profile containing:",
           "section": "User",
           "confidence": "high"
         },
         {
           "id": "PS-011",
-          "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
+          "text": "- user id",
           "section": "User",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
           "id": "PS-012",
-          "text": "There are three membership levels: **regular**, **silver**, **gold**.",
+          "text": "- email",
           "section": "User",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-019",
+          "id": "PS-013",
+          "text": "- addresses",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-014",
+          "text": "- date of birth",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-015",
+          "text": "- payment methods",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-016",
+          "text": "- membership level",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-017",
+          "text": "- reservation numbers",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
           "text": "Each reservation specifies the following:",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-020",
+          "id": "PS-034",
           "text": "- reservation id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-021",
+          "id": "PS-035",
           "text": "- user id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-022",
+          "id": "PS-036",
           "text": "- trip type",
           "section": "Reservation",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-023",
+          "id": "PS-037",
           "text": "- flights",
           "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-024",
-          "text": "- passengers",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-025",
-          "text": "- payment methods",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-026",
-          "text": "- created time",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-027",
-          "text": "- baggages",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-028",
-          "text": "- travel insurance information",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-029",
-          "text": "There are two types of trip: **one way** and **round trip**.",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-030",
-          "text": "The agent must first obtain the user id from the user.",
-          "section": "Book flight",
           "confidence": "high"
         },
         {
           "id": "PS-038",
-          "text": "First, the agent must obtain the user id and reservation id.",
-          "section": "Modify flight",
+          "text": "- passengers",
+          "section": "Reservation",
           "confidence": "high"
         },
         {
           "id": "PS-039",
-          "text": "The user must provide their user id.",
-          "section": "Modify flight",
+          "text": "- payment methods",
+          "section": "Reservation",
           "confidence": "high"
         },
         {
           "id": "PS-040",
+          "text": "- created time",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-041",
+          "text": "- baggages",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-042",
+          "text": "- travel insurance information",
+          "section": "Reservation",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-044",
+          "text": "The agent must first obtain the user id from the user.",
+          "section": "Book flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-052",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": "Modify flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-053",
+          "text": "The user must provide their user id.",
+          "section": "Modify flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-054",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Modify flight",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-056",
+          "id": "PS-070",
           "text": "First, the agent must obtain the user id and reservation id.",
           "section": "Cancel flight",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-057",
+          "id": "PS-071",
           "text": "The user must provide their user id.",
           "section": "Cancel flight",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-058",
+          "id": "PS-072",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Cancel flight",
-          "confidence": "high"
+          "confidence": "medium"
         }
       ]
     },
@@ -1080,6 +1134,18 @@
           "text": "You should deny user requests that are against this policy.",
           "section": "Airline Agent Policy",
           "confidence": "medium"
+        },
+        {
+          "id": "PS-008",
+          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
+          "section": "Airline Agent Policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-009",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Airline Agent Policy",
+          "confidence": "medium"
         }
       ]
     },
@@ -1091,7 +1157,7 @@
           "id": "PS-004",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Airline Agent Policy",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
           "id": "PS-005",
@@ -1109,7 +1175,7 @@
           "id": "PS-007",
           "text": "You should deny user requests that are against this policy.",
           "section": "Airline Agent Policy",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
           "id": "PS-008",
@@ -1124,37 +1190,79 @@
           "confidence": "medium"
         },
         {
-          "id": "PS-013",
-          "text": "Each flight has the following attributes:\n- flight number\n- origin\n- destination\n- scheduled departure and arrival time (local time)",
+          "id": "PS-020",
+          "text": "Each flight has the following attributes:",
           "section": "Flight",
           "confidence": "high"
         },
         {
-          "id": "PS-014",
+          "id": "PS-021",
+          "text": "- flight number",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "- origin",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-023",
+          "text": "- destination",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-024",
+          "text": "- scheduled departure and arrival time (local time)",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
           "text": "A flight can be available at multiple dates.",
           "section": "Flight",
           "confidence": "high"
         },
         {
-          "id": "PS-015",
-          "text": "For each date:\n- If the status is **available**, the flight has not taken off, available seats and prices are listed.\n- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.\n- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "id": "PS-026",
+          "text": "For each date:",
           "section": "Flight",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-016",
+          "id": "PS-027",
+          "text": "- If the status is **available**, the flight has not taken off, available seats and prices are listed.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-028",
+          "text": "- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-029",
+          "text": "- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-030",
           "text": "There are three cabin classes: **basic economy**, **economy**, **business**.",
           "section": "Flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-017",
+          "id": "PS-031",
           "text": "**basic economy** is its own class, completely distinct from **economy**.",
           "section": "Flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-018",
+          "id": "PS-032",
           "text": "Seat availability and prices are listed for each cabin class.",
           "section": "Flight",
           "confidence": "medium"
@@ -1169,7 +1277,7 @@
           "id": "PS-004",
           "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
           "section": "Airline Agent Policy",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
           "id": "PS-005",
@@ -1193,60 +1301,96 @@
           "id": "PS-008",
           "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
           "section": "Airline Agent Policy",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
           "id": "PS-009",
           "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
           "section": "Airline Agent Policy",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-013",
-          "text": "Each flight has the following attributes:\n- flight number\n- origin\n- destination\n- scheduled departure and arrival time (local time)",
+          "id": "PS-020",
+          "text": "Each flight has the following attributes:",
           "section": "Flight",
           "confidence": "high"
         },
         {
-          "id": "PS-014",
+          "id": "PS-021",
+          "text": "- flight number",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-022",
+          "text": "- origin",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-023",
+          "text": "- destination",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-024",
+          "text": "- scheduled departure and arrival time (local time)",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-025",
           "text": "A flight can be available at multiple dates.",
-          "section": "Flight",
-          "confidence": "high"
-        },
-        {
-          "id": "PS-015",
-          "text": "For each date:\n- If the status is **available**, the flight has not taken off, available seats and prices are listed.\n- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.\n- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
           "section": "Flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-016",
+          "id": "PS-026",
+          "text": "For each date:",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-027",
+          "text": "- If the status is **available**, the flight has not taken off, available seats and prices are listed.",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-028",
+          "text": "- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-029",
+          "text": "- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-030",
           "text": "There are three cabin classes: **basic economy**, **economy**, **business**.",
           "section": "Flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-017",
+          "id": "PS-031",
           "text": "**basic economy** is its own class, completely distinct from **economy**.",
           "section": "Flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-018",
+          "id": "PS-032",
           "text": "Seat availability and prices are listed for each cabin class.",
           "section": "Flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-031",
-          "text": "The agent should then ask for the trip type, origin, destination.",
-          "section": "Book flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-032",
-          "text": "Cabin:\n- Cabin class must be the same across all the flights in a reservation.",
-          "section": "Book flight",
+          "id": "PS-058",
+          "text": "The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!",
+          "section": "Change flights",
           "confidence": "medium"
         }
       ]
@@ -1265,7 +1409,7 @@
           "id": "PS-002",
           "text": "You also handle **refunds and compensation**.",
           "section": "Airline Agent Policy",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
           "id": "PS-003",
@@ -1274,10 +1418,22 @@
           "confidence": "medium"
         },
         {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
+          "section": "Airline Agent Policy",
+          "confidence": "medium"
+        },
+        {
           "id": "PS-007",
           "text": "You should deny user requests that are against this policy.",
           "section": "Airline Agent Policy",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
           "id": "PS-008",
@@ -1286,109 +1442,151 @@
           "confidence": "medium"
         },
         {
-          "id": "PS-010",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
-          "section": "User",
-          "confidence": "high"
+          "id": "PS-009",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Airline Agent Policy",
+          "confidence": "medium"
         },
         {
-          "id": "PS-011",
-          "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
+          "id": "PS-010",
+          "text": "Each user has a profile containing:",
           "section": "User",
           "confidence": "medium"
         },
         {
-          "id": "PS-021",
+          "id": "PS-011",
+          "text": "- user id",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-012",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "- addresses",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "- date of birth",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "- payment methods",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-016",
+          "text": "- membership level",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
+          "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
+          "text": "Each reservation specifies the following:",
+          "section": "Reservation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-034",
+          "text": "- reservation id",
+          "section": "Reservation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-035",
           "text": "- user id",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-025",
+          "id": "PS-039",
           "text": "- payment methods",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-030",
-          "text": "The agent must first obtain the user id from the user.",
-          "section": "Book flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-034",
+          "id": "PS-048",
           "text": "Payment: \n- Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
           "section": "Book flight",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-038",
-          "text": "First, the agent must obtain the user id and reservation id.",
-          "section": "Modify flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-039",
-          "text": "The user must provide their user id.",
-          "section": "Modify flight",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-054",
+          "id": "PS-068",
           "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method.",
           "section": "Payment",
           "confidence": "medium"
         },
         {
-          "id": "PS-055",
+          "id": "PS-069",
           "text": "The payment method must already be in user profile for safety reasons.",
           "section": "Payment",
           "confidence": "medium"
         },
         {
-          "id": "PS-067",
-          "text": "The refund will go to original payment methods within 5 to 7 business days.",
-          "section": "Refund:",
+          "id": "PS-081",
+          "text": "Refund:",
+          "section": "Cancel flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-068",
+          "id": "PS-082",
+          "text": "The refund will go to original payment methods within 5 to 7 business days.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-083",
           "text": "Do not proactively offer a compensation unless the user explicitly asks for one.",
           "section": "Refunds and Compensation",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-069",
+          "id": "PS-084",
           "text": "Do not compensate if the user is regular member and has no travel insurance and flies (basic) economy.",
           "section": "Refunds and Compensation",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-070",
+          "id": "PS-085",
           "text": "Always confirms the facts before offering compensation.",
           "section": "Refunds and Compensation",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-071",
+          "id": "PS-086",
           "text": "Only compensate if the user is a silver/gold member or has travel insurance or flies business.",
           "section": "Refunds and Compensation",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-072",
+          "id": "PS-087",
           "text": "If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $100 times the number of passengers.",
           "section": "Refunds and Compensation",
           "confidence": "high"
         },
         {
-          "id": "PS-073",
+          "id": "PS-088",
           "text": "If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $50 times the number of passengers.",
           "section": "Refunds and Compensation",
           "confidence": "high"
         },
         {
-          "id": "PS-074",
+          "id": "PS-089",
           "text": "Do not offer compensation for any other reason than the ones listed above.",
           "section": "Refunds and Compensation",
           "confidence": "high"
@@ -1436,13 +1634,7 @@
           "confidence": "high"
         },
         {
-          "id": "PS-053",
-          "text": "Even a human agent cannot modify the number of passengers.",
-          "section": "Change passengers",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-060",
+          "id": "PS-074",
           "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
           "section": "Cancel flight",
           "confidence": "high"
@@ -1497,134 +1689,392 @@
         },
         {
           "id": "PS-010",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+          "text": "Each user has a profile containing:",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-011",
+          "text": "- user id",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-012",
+          "text": "- email",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-013",
+          "text": "- addresses",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-014",
+          "text": "- date of birth",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-015",
+          "text": "- payment methods",
           "section": "User",
           "confidence": "high"
         },
         {
-          "id": "PS-011",
+          "id": "PS-016",
+          "text": "- membership level",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-017",
+          "text": "- reservation numbers",
+          "section": "User",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-018",
           "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
           "section": "User",
           "confidence": "high"
         },
         {
           "id": "PS-019",
+          "text": "There are three membership levels: **regular**, **silver**, **gold**.",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-033",
           "text": "Each reservation specifies the following:",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-020",
+          "id": "PS-034",
           "text": "- reservation id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-021",
+          "id": "PS-035",
           "text": "- user id",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-025",
+          "id": "PS-037",
+          "text": "- flights",
+          "section": "Reservation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-038",
+          "text": "- passengers",
+          "section": "Reservation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-039",
           "text": "- payment methods",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-027",
+          "id": "PS-040",
+          "text": "- created time",
+          "section": "Reservation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-041",
           "text": "- baggages",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-030",
+          "id": "PS-042",
+          "text": "- travel insurance information",
+          "section": "Reservation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-044",
           "text": "The agent must first obtain the user id from the user.",
           "section": "Book flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-034",
-          "text": "Payment: \n- Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
+          "id": "PS-045",
+          "text": "The agent should then ask for the trip type, origin, destination.",
           "section": "Book flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-035",
+          "id": "PS-046",
+          "text": "Cabin:\n- Cabin class must be the same across all the flights in a reservation.",
+          "section": "Book flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-047",
+          "text": "Passengers: \n- Each reservation can have at most five passengers.",
+          "section": "Book flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-048",
+          "text": "Payment: \n- Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
+          "section": "Book flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-049",
           "text": "Checked bag allowance: \n- If the booking user is a regular member:\n  - 0 free checked bag for each basic economy passenger\n  - 1 free checked bag for each economy passenger\n  - 2 free checked bags for each business passenger",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-036",
+          "id": "PS-050",
           "text": "Do not add checked bags that the user does not need.",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-038",
-          "text": "First, the agent must obtain the user id and reservation id.",
-          "section": "Modify flight",
+          "id": "PS-051",
+          "text": "Travel insurance: \n- The agent should ask if the user wants to buy the travel insurance.",
+          "section": "Book flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-039",
+          "id": "PS-052",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": "Modify flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-053",
           "text": "The user must provide their user id.",
           "section": "Modify flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-040",
+          "id": "PS-054",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Modify flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-044",
+          "id": "PS-055",
+          "text": "Basic economy flights cannot be modified.",
+          "section": "Change flights",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-056",
+          "text": "Other reservations can be modified without changing the origin, destination, and trip type.",
+          "section": "Change flights",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-057",
+          "text": "Some flight segments can be kept, but their prices will not be updated based on the current price.",
+          "section": "Change flights",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-058",
           "text": "The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!",
           "section": "Change flights",
           "confidence": "medium"
         },
         {
-          "id": "PS-048",
+          "id": "PS-059",
+          "text": "Cabin cannot be changed if any flight in the reservation has already been flown.",
+          "section": "Change cabin",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-060",
+          "text": "In other cases, all reservations, including basic economy, can change cabin without changing the flights.",
+          "section": "Change cabin",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-061",
+          "text": "Cabin class must remain the same across all the flights in the same reservation; changing cabin for just one flight segment is not possible.",
+          "section": "Change cabin",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-062",
           "text": "If the price after cabin change is higher than the original price, the user is required to pay for the difference.",
           "section": "Change cabin",
           "confidence": "medium"
         },
         {
-          "id": "PS-049",
+          "id": "PS-063",
           "text": "If the price after cabin change is lower than the original price, the user is should be refunded the difference.",
           "section": "Change cabin",
           "confidence": "medium"
         },
         {
-          "id": "PS-050",
+          "id": "PS-064",
           "text": "The user can add but not remove checked bags.",
           "section": "Change baggage and insurance",
           "confidence": "high"
         },
         {
-          "id": "PS-051",
+          "id": "PS-065",
           "text": "The user cannot add insurance after initial booking.",
           "section": "Change baggage and insurance",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-066",
+          "text": "The user can modify passengers but cannot modify the number of passengers.",
+          "section": "Change passengers",
           "confidence": "medium"
         },
         {
-          "id": "PS-054",
+          "id": "PS-067",
+          "text": "Even a human agent cannot modify the number of passengers.",
+          "section": "Change passengers",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-068",
           "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method.",
           "section": "Payment",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-055",
+          "id": "PS-069",
           "text": "The payment method must already be in user profile for safety reasons.",
           "section": "Payment",
           "confidence": "high"
         },
         {
-          "id": "PS-066",
+          "id": "PS-070",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-071",
+          "text": "The user must provide their user id.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-072",
+          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-073",
+          "text": "The agent must also obtain the reason for cancellation (change of plan, airline cancelled flight, or other reasons)",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-074",
+          "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-075",
+          "text": "Otherwise, flight can be cancelled if any of the following is true:",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-076",
+          "text": "The booking was made within the last 24 hrs",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-077",
+          "text": "The flight is cancelled by airline",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-078",
+          "text": "It is a business flight",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-079",
+          "text": "The user has travel insurance and the reason for cancellation is covered by insurance.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-080",
           "text": "The API does not check that cancellation rules are met, so the agent must make sure the rules apply before calling the API!",
           "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-081",
+          "text": "Refund:",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-082",
+          "text": "The refund will go to original payment methods within 5 to 7 business days.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-083",
+          "text": "Do not proactively offer a compensation unless the user explicitly asks for one.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-084",
+          "text": "Do not compensate if the user is regular member and has no travel insurance and flies (basic) economy.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-085",
+          "text": "Always confirms the facts before offering compensation.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-086",
+          "text": "Only compensate if the user is a silver/gold member or has travel insurance or flies business.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-087",
+          "text": "If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $100 times the number of passengers.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-088",
+          "text": "If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $50 times the number of passengers.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-089",
+          "text": "Do not offer compensation for any other reason than the ones listed above.",
+          "section": "Refunds and Compensation",
           "confidence": "medium"
         }
       ]
@@ -1640,10 +2090,22 @@
           "confidence": "high"
         },
         {
+          "id": "PS-002",
+          "text": "You also handle **refunds and compensation**.",
+          "section": "Airline Agent Policy",
+          "confidence": "medium"
+        },
+        {
           "id": "PS-003",
           "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
           "section": "Airline Agent Policy",
           "confidence": "high"
+        },
+        {
+          "id": "PS-004",
+          "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
+          "section": "Airline Agent Policy",
+          "confidence": "medium"
         },
         {
           "id": "PS-005",
@@ -1676,195 +2138,285 @@
           "confidence": "medium"
         },
         {
-          "id": "PS-010",
-          "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+          "id": "PS-015",
+          "text": "- payment methods",
           "section": "User",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-011",
+          "id": "PS-017",
+          "text": "- reservation numbers",
+          "section": "User",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-018",
           "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
           "section": "User",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-016",
+          "id": "PS-020",
+          "text": "Each flight has the following attributes:",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-021",
+          "text": "- flight number",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-022",
+          "text": "- origin",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-023",
+          "text": "- destination",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-024",
+          "text": "- scheduled departure and arrival time (local time)",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-025",
+          "text": "A flight can be available at multiple dates.",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-026",
+          "text": "For each date:",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-027",
+          "text": "- If the status is **available**, the flight has not taken off, available seats and prices are listed.",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-028",
+          "text": "- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-029",
+          "text": "- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-030",
           "text": "There are three cabin classes: **basic economy**, **economy**, **business**.",
           "section": "Flight",
           "confidence": "high"
         },
         {
-          "id": "PS-019",
+          "id": "PS-031",
+          "text": "**basic economy** is its own class, completely distinct from **economy**.",
+          "section": "Flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-032",
+          "text": "Seat availability and prices are listed for each cabin class.",
+          "section": "Flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-033",
           "text": "Each reservation specifies the following:",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-020",
+          "id": "PS-034",
           "text": "- reservation id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-021",
+          "id": "PS-035",
           "text": "- user id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-022",
-          "text": "- trip type",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-023",
+          "id": "PS-037",
           "text": "- flights",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-024",
-          "text": "- passengers",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-025",
+          "id": "PS-039",
           "text": "- payment methods",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-026",
-          "text": "- created time",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-028",
-          "text": "- travel insurance information",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-029",
-          "text": "There are two types of trip: **one way** and **round trip**.",
-          "section": "Reservation",
-          "confidence": "medium"
-        },
-        {
-          "id": "PS-030",
+          "id": "PS-044",
           "text": "The agent must first obtain the user id from the user.",
           "section": "Book flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-032",
+          "id": "PS-046",
           "text": "Cabin:\n- Cabin class must be the same across all the flights in a reservation.",
           "section": "Book flight",
           "confidence": "high"
         },
         {
-          "id": "PS-035",
-          "text": "Checked bag allowance: \n- If the booking user is a regular member:\n  - 0 free checked bag for each basic economy passenger\n  - 1 free checked bag for each economy passenger\n  - 2 free checked bags for each business passenger",
+          "id": "PS-048",
+          "text": "Payment: \n- Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
           "section": "Book flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-038",
+          "id": "PS-052",
           "text": "First, the agent must obtain the user id and reservation id.",
           "section": "Modify flight",
           "confidence": "high"
         },
         {
-          "id": "PS-039",
+          "id": "PS-053",
           "text": "The user must provide their user id.",
           "section": "Modify flight",
           "confidence": "high"
         },
         {
-          "id": "PS-040",
+          "id": "PS-054",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Modify flight",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "id": "PS-041",
+          "id": "PS-055",
           "text": "Basic economy flights cannot be modified.",
           "section": "Change flights",
           "confidence": "high"
         },
         {
-          "id": "PS-042",
+          "id": "PS-056",
           "text": "Other reservations can be modified without changing the origin, destination, and trip type.",
           "section": "Change flights",
           "confidence": "high"
         },
         {
-          "id": "PS-043",
+          "id": "PS-057",
           "text": "Some flight segments can be kept, but their prices will not be updated based on the current price.",
           "section": "Change flights",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-044",
+          "id": "PS-058",
           "text": "The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!",
           "section": "Change flights",
           "confidence": "high"
         },
         {
-          "id": "PS-045",
+          "id": "PS-059",
           "text": "Cabin cannot be changed if any flight in the reservation has already been flown.",
           "section": "Change cabin",
           "confidence": "high"
         },
         {
-          "id": "PS-046",
+          "id": "PS-060",
           "text": "In other cases, all reservations, including basic economy, can change cabin without changing the flights.",
           "section": "Change cabin",
           "confidence": "high"
         },
         {
-          "id": "PS-047",
+          "id": "PS-061",
           "text": "Cabin class must remain the same across all the flights in the same reservation; changing cabin for just one flight segment is not possible.",
           "section": "Change cabin",
           "confidence": "high"
         },
         {
-          "id": "PS-048",
+          "id": "PS-062",
           "text": "If the price after cabin change is higher than the original price, the user is required to pay for the difference.",
           "section": "Change cabin",
           "confidence": "high"
         },
         {
-          "id": "PS-049",
+          "id": "PS-063",
           "text": "If the price after cabin change is lower than the original price, the user is should be refunded the difference.",
           "section": "Change cabin",
           "confidence": "high"
         },
         {
-          "id": "PS-052",
+          "id": "PS-066",
           "text": "The user can modify passengers but cannot modify the number of passengers.",
           "section": "Change passengers",
           "confidence": "medium"
         },
         {
-          "id": "PS-054",
+          "id": "PS-068",
           "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method.",
           "section": "Payment",
           "confidence": "high"
         },
         {
-          "id": "PS-055",
+          "id": "PS-069",
           "text": "The payment method must already be in user profile for safety reasons.",
           "section": "Payment",
           "confidence": "high"
         },
         {
-          "id": "PS-066",
+          "id": "PS-080",
           "text": "The API does not check that cancellation rules are met, so the agent must make sure the rules apply before calling the API!",
           "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-083",
+          "text": "Do not proactively offer a compensation unless the user explicitly asks for one.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-084",
+          "text": "Do not compensate if the user is regular member and has no travel insurance and flies (basic) economy.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-085",
+          "text": "Always confirms the facts before offering compensation.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-086",
+          "text": "Only compensate if the user is a silver/gold member or has travel insurance or flies business.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-087",
+          "text": "If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $100 times the number of passengers.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-088",
+          "text": "If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $50 times the number of passengers.",
+          "section": "Refunds and Compensation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-089",
+          "text": "Do not offer compensation for any other reason than the ones listed above.",
+          "section": "Refunds and Compensation",
           "confidence": "medium"
         }
       ]
@@ -1877,11 +2429,23 @@
           "id": "PS-001",
           "text": "As an airline agent, you can help users **book**, **modify**, or **cancel** flight reservations.",
           "section": "Airline Agent Policy",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
           "id": "PS-003",
           "text": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-005",
+          "text": "You should only make one tool call at a time, and if you make a tool call, you should not respond to the user simultaneously.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-006",
+          "text": "If you respond to the user, you should not make a tool call at the same time.",
           "section": "Airline Agent Policy",
           "confidence": "high"
         },
@@ -1895,73 +2459,181 @@
           "id": "PS-008",
           "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
           "section": "Airline Agent Policy",
-          "confidence": "medium"
+          "confidence": "high"
         },
         {
-          "id": "PS-019",
+          "id": "PS-009",
+          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
+          "section": "Airline Agent Policy",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-033",
           "text": "Each reservation specifies the following:",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-020",
+          "id": "PS-034",
           "text": "- reservation id",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-021",
+          "id": "PS-035",
           "text": "- user id",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-023",
+          "id": "PS-037",
           "text": "- flights",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-024",
+          "id": "PS-038",
           "text": "- passengers",
           "section": "Reservation",
           "confidence": "high"
         },
         {
-          "id": "PS-026",
+          "id": "PS-039",
+          "text": "- payment methods",
+          "section": "Reservation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-040",
           "text": "- created time",
           "section": "Reservation",
           "confidence": "medium"
         },
         {
-          "id": "PS-038",
+          "id": "PS-041",
+          "text": "- baggages",
+          "section": "Reservation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-042",
+          "text": "- travel insurance information",
+          "section": "Reservation",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-044",
+          "text": "The agent must first obtain the user id from the user.",
+          "section": "Book flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-045",
+          "text": "The agent should then ask for the trip type, origin, destination.",
+          "section": "Book flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-047",
+          "text": "Passengers: \n- Each reservation can have at most five passengers.",
+          "section": "Book flight",
+          "confidence": "high"
+        },
+        {
+          "id": "PS-051",
+          "text": "Travel insurance: \n- The agent should ask if the user wants to buy the travel insurance.",
+          "section": "Book flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-052",
           "text": "First, the agent must obtain the user id and reservation id.",
           "section": "Modify flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-039",
+          "id": "PS-053",
           "text": "The user must provide their user id.",
           "section": "Modify flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-040",
+          "id": "PS-054",
           "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
           "section": "Modify flight",
           "confidence": "medium"
         },
         {
-          "id": "PS-052",
+          "id": "PS-058",
+          "text": "The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!",
+          "section": "Change flights",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-064",
+          "text": "The user can add but not remove checked bags.",
+          "section": "Change baggage and insurance",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-066",
           "text": "The user can modify passengers but cannot modify the number of passengers.",
           "section": "Change passengers",
           "confidence": "high"
         },
         {
-          "id": "PS-053",
+          "id": "PS-067",
           "text": "Even a human agent cannot modify the number of passengers.",
           "section": "Change passengers",
           "confidence": "high"
+        },
+        {
+          "id": "PS-068",
+          "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method.",
+          "section": "Payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-069",
+          "text": "The payment method must already be in user profile for safety reasons.",
+          "section": "Payment",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-070",
+          "text": "First, the agent must obtain the user id and reservation id.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-071",
+          "text": "The user must provide their user id.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-072",
+          "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-073",
+          "text": "The agent must also obtain the reason for cancellation (change of plan, airline cancelled flight, or other reasons)",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-074",
+          "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
+          "section": "Cancel flight",
+          "confidence": "medium"
+        },
+        {
+          "id": "PS-080",
+          "text": "The API does not check that cancellation rules are met, so the agent must make sure the rules apply before calling the API!",
+          "section": "Cancel flight",
+          "confidence": "medium"
         }
       ]
     }
@@ -1983,7 +2655,9 @@
       "text": "You also handle **refunds and compensation**.",
       "section": "Airline Agent Policy",
       "mapped_to_tools": [
-        "send_certificate"
+        "cancel_reservation",
+        "send_certificate",
+        "update_reservation_flights"
       ]
     },
     "PS-003": {
@@ -2002,7 +2676,6 @@
       "text": "You should not provide any information, knowledge, or procedures not provided by the user or available tools, or give subjective recommendations or comments.",
       "section": "Airline Agent Policy",
       "mapped_to_tools": [
-        "book_reservation",
         "calculate",
         "get_flight_status",
         "get_reservation_details",
@@ -2010,7 +2683,8 @@
         "list_all_airports",
         "search_direct_flight",
         "search_onestop_flight",
-        "transfer_to_human_agents"
+        "transfer_to_human_agents",
+        "update_reservation_flights"
       ]
     },
     "PS-005": {
@@ -2026,9 +2700,11 @@
         "list_all_airports",
         "search_direct_flight",
         "search_onestop_flight",
+        "send_certificate",
         "transfer_to_human_agents",
         "update_reservation_baggages",
-        "update_reservation_flights"
+        "update_reservation_flights",
+        "update_reservation_passengers"
       ]
     },
     "PS-006": {
@@ -2044,9 +2720,11 @@
         "list_all_airports",
         "search_direct_flight",
         "search_onestop_flight",
+        "send_certificate",
         "transfer_to_human_agents",
         "update_reservation_baggages",
-        "update_reservation_flights"
+        "update_reservation_flights",
+        "update_reservation_passengers"
       ]
     },
     "PS-007": {
@@ -2078,6 +2756,7 @@
         "get_flight_status",
         "get_reservation_details",
         "get_user_details",
+        "list_all_airports",
         "search_direct_flight",
         "search_onestop_flight",
         "send_certificate",
@@ -2091,109 +2770,271 @@
       "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.",
       "section": "Airline Agent Policy",
       "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation",
         "get_flight_status",
         "get_reservation_details",
         "get_user_details",
+        "list_all_airports",
         "search_direct_flight",
         "search_onestop_flight",
+        "send_certificate",
         "transfer_to_human_agents",
         "update_reservation_baggages",
-        "update_reservation_flights"
+        "update_reservation_flights",
+        "update_reservation_passengers"
       ]
     },
     "PS-010": {
-      "text": "Each user has a profile containing:\n- user id\n- email\n- addresses\n- date of birth\n- payment methods\n- membership level\n- reservation numbers",
+      "text": "Each user has a profile containing:",
       "section": "User",
       "mapped_to_tools": [
         "book_reservation",
         "cancel_reservation",
-        "get_reservation_details",
+        "get_user_details",
+        "send_certificate",
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-011": {
+      "text": "- user id",
+      "section": "User",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
+        "get_user_details",
+        "send_certificate",
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-012": {
+      "text": "- email",
+      "section": "User",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
+        "get_user_details",
+        "send_certificate",
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-013": {
+      "text": "- addresses",
+      "section": "User",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
+        "get_user_details",
+        "send_certificate",
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-014": {
+      "text": "- date of birth",
+      "section": "User",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
+        "get_user_details",
+        "send_certificate",
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-015": {
+      "text": "- payment methods",
+      "section": "User",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
         "get_user_details",
         "send_certificate",
         "update_reservation_baggages",
         "update_reservation_flights"
       ]
     },
-    "PS-011": {
+    "PS-016": {
+      "text": "- membership level",
+      "section": "User",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
+        "get_user_details",
+        "send_certificate",
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-017": {
+      "text": "- reservation numbers",
+      "section": "User",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
+        "get_reservation_details",
+        "get_user_details",
+        "update_reservation_baggages",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-018": {
       "text": "There are three types of payment methods: **credit card**, **gift card**, **travel certificate**.",
       "section": "User",
       "mapped_to_tools": [
         "book_reservation",
-        "get_user_details",
         "send_certificate",
         "update_reservation_baggages",
         "update_reservation_flights"
       ]
     },
-    "PS-012": {
+    "PS-019": {
       "text": "There are three membership levels: **regular**, **silver**, **gold**.",
       "section": "User",
       "mapped_to_tools": [
         "book_reservation",
-        "get_user_details"
+        "update_reservation_baggages"
       ]
     },
-    "PS-013": {
-      "text": "Each flight has the following attributes:\n- flight number\n- origin\n- destination\n- scheduled departure and arrival time (local time)",
+    "PS-020": {
+      "text": "Each flight has the following attributes:",
       "section": "Flight",
       "mapped_to_tools": [
         "book_reservation",
         "get_flight_status",
         "search_direct_flight",
-        "search_onestop_flight"
+        "search_onestop_flight",
+        "update_reservation_flights"
       ]
     },
-    "PS-014": {
+    "PS-021": {
+      "text": "- flight number",
+      "section": "Flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "get_flight_status",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-022": {
+      "text": "- origin",
+      "section": "Flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "get_flight_status",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-023": {
+      "text": "- destination",
+      "section": "Flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "get_flight_status",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-024": {
+      "text": "- scheduled departure and arrival time (local time)",
+      "section": "Flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "get_flight_status",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-025": {
       "text": "A flight can be available at multiple dates.",
       "section": "Flight",
       "mapped_to_tools": [
         "book_reservation",
         "get_flight_status",
         "search_direct_flight",
-        "search_onestop_flight"
+        "search_onestop_flight",
+        "update_reservation_flights"
       ]
     },
-    "PS-015": {
-      "text": "For each date:\n- If the status is **available**, the flight has not taken off, available seats and prices are listed.\n- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.\n- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+    "PS-026": {
+      "text": "For each date:",
       "section": "Flight",
       "mapped_to_tools": [
         "book_reservation",
         "get_flight_status",
         "search_direct_flight",
-        "search_onestop_flight"
+        "search_onestop_flight",
+        "update_reservation_flights"
       ]
     },
-    "PS-016": {
-      "text": "There are three cabin classes: **basic economy**, **economy**, **business**.",
+    "PS-027": {
+      "text": "- If the status is **available**, the flight has not taken off, available seats and prices are listed.",
       "section": "Flight",
       "mapped_to_tools": [
         "book_reservation",
+        "get_flight_status",
         "search_direct_flight",
         "search_onestop_flight",
         "update_reservation_flights"
       ]
     },
-    "PS-017": {
+    "PS-028": {
+      "text": "- If the status is **delayed** or **on time**, the flight has not taken off, cannot be booked.",
+      "section": "Flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "get_flight_status",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-029": {
+      "text": "- If the status is **flying**, the flight has taken off but not landed, cannot be booked.",
+      "section": "Flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "get_flight_status",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-030": {
+      "text": "There are three cabin classes: **basic economy**, **economy**, **business**.",
+      "section": "Flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "get_flight_status",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-031": {
       "text": "**basic economy** is its own class, completely distinct from **economy**.",
       "section": "Flight",
       "mapped_to_tools": [
         "book_reservation",
+        "get_flight_status",
         "search_direct_flight",
-        "search_onestop_flight"
+        "search_onestop_flight",
+        "update_reservation_flights"
       ]
     },
-    "PS-018": {
+    "PS-032": {
       "text": "Seat availability and prices are listed for each cabin class.",
       "section": "Flight",
       "mapped_to_tools": [
         "book_reservation",
+        "get_flight_status",
         "search_direct_flight",
-        "search_onestop_flight"
+        "search_onestop_flight",
+        "update_reservation_flights"
       ]
     },
-    "PS-019": {
+    "PS-033": {
       "text": "Each reservation specifies the following:",
       "section": "Reservation",
       "mapped_to_tools": [
@@ -2201,12 +3042,13 @@
         "cancel_reservation",
         "get_reservation_details",
         "get_user_details",
+        "send_certificate",
         "update_reservation_baggages",
         "update_reservation_flights",
         "update_reservation_passengers"
       ]
     },
-    "PS-020": {
+    "PS-034": {
       "text": "- reservation id",
       "section": "Reservation",
       "mapped_to_tools": [
@@ -2214,12 +3056,13 @@
         "cancel_reservation",
         "get_reservation_details",
         "get_user_details",
+        "send_certificate",
         "update_reservation_baggages",
         "update_reservation_flights",
         "update_reservation_passengers"
       ]
     },
-    "PS-021": {
+    "PS-035": {
       "text": "- user id",
       "section": "Reservation",
       "mapped_to_tools": [
@@ -2233,18 +3076,17 @@
         "update_reservation_passengers"
       ]
     },
-    "PS-022": {
+    "PS-036": {
       "text": "- trip type",
       "section": "Reservation",
       "mapped_to_tools": [
         "book_reservation",
         "cancel_reservation",
         "get_reservation_details",
-        "get_user_details",
-        "update_reservation_flights"
+        "get_user_details"
       ]
     },
-    "PS-023": {
+    "PS-037": {
       "text": "- flights",
       "section": "Reservation",
       "mapped_to_tools": [
@@ -2252,11 +3094,12 @@
         "cancel_reservation",
         "get_reservation_details",
         "get_user_details",
+        "update_reservation_baggages",
         "update_reservation_flights",
         "update_reservation_passengers"
       ]
     },
-    "PS-024": {
+    "PS-038": {
       "text": "- passengers",
       "section": "Reservation",
       "mapped_to_tools": [
@@ -2264,153 +3107,15 @@
         "cancel_reservation",
         "get_reservation_details",
         "get_user_details",
-        "update_reservation_flights",
-        "update_reservation_passengers"
-      ]
-    },
-    "PS-025": {
-      "text": "- payment methods",
-      "section": "Reservation",
-      "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation",
-        "get_reservation_details",
-        "get_user_details",
-        "send_certificate",
         "update_reservation_baggages",
-        "update_reservation_flights"
-      ]
-    },
-    "PS-026": {
-      "text": "- created time",
-      "section": "Reservation",
-      "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation",
-        "get_reservation_details",
-        "get_user_details",
-        "update_reservation_flights",
-        "update_reservation_passengers"
-      ]
-    },
-    "PS-027": {
-      "text": "- baggages",
-      "section": "Reservation",
-      "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation",
-        "get_reservation_details",
-        "get_user_details",
-        "update_reservation_baggages"
-      ]
-    },
-    "PS-028": {
-      "text": "- travel insurance information",
-      "section": "Reservation",
-      "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation",
-        "get_reservation_details",
-        "get_user_details",
-        "update_reservation_flights"
-      ]
-    },
-    "PS-029": {
-      "text": "There are two types of trip: **one way** and **round trip**.",
-      "section": "Reservation",
-      "mapped_to_tools": [
-        "book_reservation",
-        "get_reservation_details",
-        "get_user_details",
-        "update_reservation_flights"
-      ]
-    },
-    "PS-030": {
-      "text": "The agent must first obtain the user id from the user.",
-      "section": "Book flight",
-      "mapped_to_tools": [
-        "book_reservation",
-        "get_reservation_details",
-        "get_user_details",
-        "send_certificate",
-        "update_reservation_baggages",
-        "update_reservation_flights"
-      ]
-    },
-    "PS-031": {
-      "text": "The agent should then ask for the trip type, origin, destination.",
-      "section": "Book flight",
-      "mapped_to_tools": [
-        "book_reservation",
-        "search_onestop_flight"
-      ]
-    },
-    "PS-032": {
-      "text": "Cabin:\n- Cabin class must be the same across all the flights in a reservation.",
-      "section": "Book flight",
-      "mapped_to_tools": [
-        "book_reservation",
-        "search_onestop_flight",
-        "update_reservation_flights"
-      ]
-    },
-    "PS-033": {
-      "text": "Passengers: \n- Each reservation can have at most five passengers.",
-      "section": "Book flight",
-      "mapped_to_tools": [
-        "book_reservation"
-      ]
-    },
-    "PS-034": {
-      "text": "Payment: \n- Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
-      "section": "Book flight",
-      "mapped_to_tools": [
-        "book_reservation",
-        "send_certificate",
-        "update_reservation_baggages"
-      ]
-    },
-    "PS-035": {
-      "text": "Checked bag allowance: \n- If the booking user is a regular member:\n  - 0 free checked bag for each basic economy passenger\n  - 1 free checked bag for each economy passenger\n  - 2 free checked bags for each business passenger",
-      "section": "Book flight",
-      "mapped_to_tools": [
-        "book_reservation",
-        "update_reservation_baggages",
-        "update_reservation_flights"
-      ]
-    },
-    "PS-036": {
-      "text": "Do not add checked bags that the user does not need.",
-      "section": "Book flight",
-      "mapped_to_tools": [
-        "book_reservation",
-        "update_reservation_baggages"
-      ]
-    },
-    "PS-037": {
-      "text": "Travel insurance: \n- The agent should ask if the user wants to buy the travel insurance.",
-      "section": "Book flight",
-      "mapped_to_tools": [
-        "book_reservation"
-      ]
-    },
-    "PS-038": {
-      "text": "First, the agent must obtain the user id and reservation id.",
-      "section": "Modify flight",
-      "mapped_to_tools": [
-        "cancel_reservation",
-        "get_reservation_details",
-        "get_user_details",
-        "send_certificate",
-        "update_reservation_baggages",
-        "update_reservation_flights",
         "update_reservation_passengers"
       ]
     },
     "PS-039": {
-      "text": "The user must provide their user id.",
-      "section": "Modify flight",
+      "text": "- payment methods",
+      "section": "Reservation",
       "mapped_to_tools": [
+        "book_reservation",
         "cancel_reservation",
         "get_reservation_details",
         "get_user_details",
@@ -2421,6 +3126,145 @@
       ]
     },
     "PS-040": {
+      "text": "- created time",
+      "section": "Reservation",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
+        "get_reservation_details",
+        "get_user_details",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-041": {
+      "text": "- baggages",
+      "section": "Reservation",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
+        "get_reservation_details",
+        "get_user_details",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-042": {
+      "text": "- travel insurance information",
+      "section": "Reservation",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
+        "get_reservation_details",
+        "get_user_details",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-043": {
+      "text": "There are two types of trip: **one way** and **round trip**.",
+      "section": "Reservation",
+      "mapped_to_tools": [
+        "book_reservation"
+      ]
+    },
+    "PS-044": {
+      "text": "The agent must first obtain the user id from the user.",
+      "section": "Book flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "get_user_details",
+        "update_reservation_baggages",
+        "update_reservation_flights",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-045": {
+      "text": "The agent should then ask for the trip type, origin, destination.",
+      "section": "Book flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-046": {
+      "text": "Cabin:\n- Cabin class must be the same across all the flights in a reservation.",
+      "section": "Book flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "update_reservation_baggages",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-047": {
+      "text": "Passengers: \n- Each reservation can have at most five passengers.",
+      "section": "Book flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-048": {
+      "text": "Payment: \n- Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards.",
+      "section": "Book flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "send_certificate",
+        "update_reservation_baggages",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-049": {
+      "text": "Checked bag allowance: \n- If the booking user is a regular member:\n  - 0 free checked bag for each basic economy passenger\n  - 1 free checked bag for each economy passenger\n  - 2 free checked bags for each business passenger",
+      "section": "Book flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-050": {
+      "text": "Do not add checked bags that the user does not need.",
+      "section": "Book flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-051": {
+      "text": "Travel insurance: \n- The agent should ask if the user wants to buy the travel insurance.",
+      "section": "Book flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-052": {
+      "text": "First, the agent must obtain the user id and reservation id.",
+      "section": "Modify flight",
+      "mapped_to_tools": [
+        "cancel_reservation",
+        "get_reservation_details",
+        "get_user_details",
+        "update_reservation_baggages",
+        "update_reservation_flights",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-053": {
+      "text": "The user must provide their user id.",
+      "section": "Modify flight",
+      "mapped_to_tools": [
+        "cancel_reservation",
+        "get_user_details",
+        "update_reservation_baggages",
+        "update_reservation_flights",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-054": {
       "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
       "section": "Modify flight",
       "mapped_to_tools": [
@@ -2432,112 +3276,113 @@
         "update_reservation_passengers"
       ]
     },
-    "PS-041": {
+    "PS-055": {
       "text": "Basic economy flights cannot be modified.",
       "section": "Change flights",
       "mapped_to_tools": [
-        "book_reservation",
+        "update_reservation_baggages",
         "update_reservation_flights"
       ]
     },
-    "PS-042": {
+    "PS-056": {
       "text": "Other reservations can be modified without changing the origin, destination, and trip type.",
       "section": "Change flights",
       "mapped_to_tools": [
+        "update_reservation_baggages",
         "update_reservation_flights"
       ]
     },
-    "PS-043": {
+    "PS-057": {
       "text": "Some flight segments can be kept, but their prices will not be updated based on the current price.",
       "section": "Change flights",
       "mapped_to_tools": [
+        "update_reservation_baggages",
         "update_reservation_flights"
       ]
     },
-    "PS-044": {
+    "PS-058": {
       "text": "The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!",
       "section": "Change flights",
       "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation",
+        "search_onestop_flight",
         "update_reservation_baggages",
-        "update_reservation_flights"
-      ]
-    },
-    "PS-045": {
-      "text": "Cabin cannot be changed if any flight in the reservation has already been flown.",
-      "section": "Change cabin",
-      "mapped_to_tools": [
-        "update_reservation_flights"
-      ]
-    },
-    "PS-046": {
-      "text": "In other cases, all reservations, including basic economy, can change cabin without changing the flights.",
-      "section": "Change cabin",
-      "mapped_to_tools": [
-        "update_reservation_flights"
-      ]
-    },
-    "PS-047": {
-      "text": "Cabin class must remain the same across all the flights in the same reservation; changing cabin for just one flight segment is not possible.",
-      "section": "Change cabin",
-      "mapped_to_tools": [
-        "update_reservation_flights"
-      ]
-    },
-    "PS-048": {
-      "text": "If the price after cabin change is higher than the original price, the user is required to pay for the difference.",
-      "section": "Change cabin",
-      "mapped_to_tools": [
-        "book_reservation",
-        "update_reservation_baggages",
-        "update_reservation_flights"
-      ]
-    },
-    "PS-049": {
-      "text": "If the price after cabin change is lower than the original price, the user is should be refunded the difference.",
-      "section": "Change cabin",
-      "mapped_to_tools": [
-        "book_reservation",
-        "update_reservation_baggages",
-        "update_reservation_flights"
-      ]
-    },
-    "PS-050": {
-      "text": "The user can add but not remove checked bags.",
-      "section": "Change baggage and insurance",
-      "mapped_to_tools": [
-        "book_reservation",
-        "update_reservation_baggages"
-      ]
-    },
-    "PS-051": {
-      "text": "The user cannot add insurance after initial booking.",
-      "section": "Change baggage and insurance",
-      "mapped_to_tools": [
-        "book_reservation",
-        "update_reservation_baggages"
-      ]
-    },
-    "PS-052": {
-      "text": "The user can modify passengers but cannot modify the number of passengers.",
-      "section": "Change passengers",
-      "mapped_to_tools": [
-        "book_reservation",
         "update_reservation_flights",
         "update_reservation_passengers"
       ]
     },
-    "PS-053": {
-      "text": "Even a human agent cannot modify the number of passengers.",
-      "section": "Change passengers",
+    "PS-059": {
+      "text": "Cabin cannot be changed if any flight in the reservation has already been flown.",
+      "section": "Change cabin",
       "mapped_to_tools": [
-        "book_reservation",
-        "transfer_to_human_agents",
+        "update_reservation_baggages",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-060": {
+      "text": "In other cases, all reservations, including basic economy, can change cabin without changing the flights.",
+      "section": "Change cabin",
+      "mapped_to_tools": [
+        "update_reservation_baggages",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-061": {
+      "text": "Cabin class must remain the same across all the flights in the same reservation; changing cabin for just one flight segment is not possible.",
+      "section": "Change cabin",
+      "mapped_to_tools": [
+        "update_reservation_baggages",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-062": {
+      "text": "If the price after cabin change is higher than the original price, the user is required to pay for the difference.",
+      "section": "Change cabin",
+      "mapped_to_tools": [
+        "update_reservation_baggages",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-063": {
+      "text": "If the price after cabin change is lower than the original price, the user is should be refunded the difference.",
+      "section": "Change cabin",
+      "mapped_to_tools": [
+        "update_reservation_baggages",
+        "update_reservation_flights"
+      ]
+    },
+    "PS-064": {
+      "text": "The user can add but not remove checked bags.",
+      "section": "Change baggage and insurance",
+      "mapped_to_tools": [
+        "update_reservation_baggages",
         "update_reservation_passengers"
       ]
     },
-    "PS-054": {
+    "PS-065": {
+      "text": "The user cannot add insurance after initial booking.",
+      "section": "Change baggage and insurance",
+      "mapped_to_tools": [
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-066": {
+      "text": "The user can modify passengers but cannot modify the number of passengers.",
+      "section": "Change passengers",
+      "mapped_to_tools": [
+        "update_reservation_baggages",
+        "update_reservation_flights",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-067": {
+      "text": "Even a human agent cannot modify the number of passengers.",
+      "section": "Change passengers",
+      "mapped_to_tools": [
+        "update_reservation_baggages",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-068": {
       "text": "If the flights are changed, the user needs to provide a single gift card or credit card for payment or refund method.",
       "section": "Payment",
       "mapped_to_tools": [
@@ -2545,10 +3390,11 @@
         "cancel_reservation",
         "send_certificate",
         "update_reservation_baggages",
-        "update_reservation_flights"
+        "update_reservation_flights",
+        "update_reservation_passengers"
       ]
     },
-    "PS-055": {
+    "PS-069": {
       "text": "The payment method must already be in user profile for safety reasons.",
       "section": "Payment",
       "mapped_to_tools": [
@@ -2556,171 +3402,199 @@
         "cancel_reservation",
         "send_certificate",
         "update_reservation_baggages",
-        "update_reservation_flights"
+        "update_reservation_flights",
+        "update_reservation_passengers"
       ]
     },
-    "PS-056": {
+    "PS-070": {
       "text": "First, the agent must obtain the user id and reservation id.",
       "section": "Cancel flight",
       "mapped_to_tools": [
         "cancel_reservation",
         "get_reservation_details",
-        "get_user_details"
+        "get_user_details",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
       ]
     },
-    "PS-057": {
+    "PS-071": {
       "text": "The user must provide their user id.",
       "section": "Cancel flight",
       "mapped_to_tools": [
         "cancel_reservation",
-        "get_reservation_details",
-        "get_user_details"
+        "get_user_details",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
       ]
     },
-    "PS-058": {
+    "PS-072": {
       "text": "If the user doesn't know their reservation id, the agent should help locate it using available tools.",
       "section": "Cancel flight",
       "mapped_to_tools": [
         "cancel_reservation",
         "get_reservation_details",
-        "get_user_details"
+        "get_user_details",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
       ]
     },
-    "PS-059": {
+    "PS-073": {
       "text": "The agent must also obtain the reason for cancellation (change of plan, airline cancelled flight, or other reasons)",
       "section": "Cancel flight",
       "mapped_to_tools": [
-        "cancel_reservation"
+        "cancel_reservation",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
       ]
     },
-    "PS-060": {
+    "PS-074": {
       "text": "If any portion of the flight has already been flown, the agent cannot help and transfer is needed.",
       "section": "Cancel flight",
       "mapped_to_tools": [
         "cancel_reservation",
-        "transfer_to_human_agents"
+        "transfer_to_human_agents",
+        "update_reservation_baggages",
+        "update_reservation_passengers"
       ]
     },
-    "PS-061": {
+    "PS-075": {
       "text": "Otherwise, flight can be cancelled if any of the following is true:",
       "section": "Cancel flight",
       "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation"
+        "cancel_reservation",
+        "update_reservation_baggages"
       ]
     },
-    "PS-062": {
+    "PS-076": {
       "text": "The booking was made within the last 24 hrs",
       "section": "Cancel flight",
       "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation"
+        "cancel_reservation",
+        "update_reservation_baggages"
       ]
     },
-    "PS-063": {
+    "PS-077": {
       "text": "The flight is cancelled by airline",
       "section": "Cancel flight",
       "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation"
+        "cancel_reservation",
+        "update_reservation_baggages"
       ]
     },
-    "PS-064": {
+    "PS-078": {
       "text": "It is a business flight",
       "section": "Cancel flight",
       "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation"
+        "cancel_reservation",
+        "update_reservation_baggages"
       ]
     },
-    "PS-065": {
+    "PS-079": {
       "text": "The user has travel insurance and the reason for cancellation is covered by insurance.",
       "section": "Cancel flight",
       "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation"
+        "cancel_reservation",
+        "update_reservation_baggages"
       ]
     },
-    "PS-066": {
+    "PS-080": {
       "text": "The API does not check that cancellation rules are met, so the agent must make sure the rules apply before calling the API!",
+      "section": "Cancel flight",
+      "mapped_to_tools": [
+        "cancel_reservation",
+        "update_reservation_baggages",
+        "update_reservation_flights",
+        "update_reservation_passengers"
+      ]
+    },
+    "PS-081": {
+      "text": "Refund:",
       "section": "Cancel flight",
       "mapped_to_tools": [
         "book_reservation",
         "cancel_reservation",
+        "send_certificate",
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-082": {
+      "text": "The refund will go to original payment methods within 5 to 7 business days.",
+      "section": "Cancel flight",
+      "mapped_to_tools": [
+        "book_reservation",
+        "cancel_reservation",
+        "send_certificate",
+        "update_reservation_baggages"
+      ]
+    },
+    "PS-083": {
+      "text": "Do not proactively offer a compensation unless the user explicitly asks for one.",
+      "section": "Refunds and Compensation",
+      "mapped_to_tools": [
+        "cancel_reservation",
+        "send_certificate",
         "update_reservation_baggages",
         "update_reservation_flights"
       ]
     },
-    "PS-067": {
-      "text": "The refund will go to original payment methods within 5 to 7 business days.",
-      "section": "Refund:",
-      "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation",
-        "send_certificate"
-      ]
-    },
-    "PS-068": {
-      "text": "Do not proactively offer a compensation unless the user explicitly asks for one.",
-      "section": "Refunds and Compensation",
-      "mapped_to_tools": [
-        "book_reservation",
-        "cancel_reservation",
-        "send_certificate"
-      ]
-    },
-    "PS-069": {
+    "PS-084": {
       "text": "Do not compensate if the user is regular member and has no travel insurance and flies (basic) economy.",
       "section": "Refunds and Compensation",
       "mapped_to_tools": [
-        "book_reservation",
         "cancel_reservation",
-        "send_certificate"
+        "send_certificate",
+        "update_reservation_baggages",
+        "update_reservation_flights"
       ]
     },
-    "PS-070": {
+    "PS-085": {
       "text": "Always confirms the facts before offering compensation.",
       "section": "Refunds and Compensation",
       "mapped_to_tools": [
-        "book_reservation",
         "cancel_reservation",
-        "send_certificate"
+        "send_certificate",
+        "update_reservation_baggages",
+        "update_reservation_flights"
       ]
     },
-    "PS-071": {
+    "PS-086": {
       "text": "Only compensate if the user is a silver/gold member or has travel insurance or flies business.",
       "section": "Refunds and Compensation",
       "mapped_to_tools": [
-        "book_reservation",
         "cancel_reservation",
-        "send_certificate"
+        "send_certificate",
+        "update_reservation_baggages",
+        "update_reservation_flights"
       ]
     },
-    "PS-072": {
+    "PS-087": {
       "text": "If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $100 times the number of passengers.",
       "section": "Refunds and Compensation",
       "mapped_to_tools": [
-        "book_reservation",
         "cancel_reservation",
-        "send_certificate"
+        "send_certificate",
+        "update_reservation_baggages",
+        "update_reservation_flights"
       ]
     },
-    "PS-073": {
+    "PS-088": {
       "text": "If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $50 times the number of passengers.",
       "section": "Refunds and Compensation",
       "mapped_to_tools": [
-        "book_reservation",
         "cancel_reservation",
-        "send_certificate"
+        "send_certificate",
+        "update_reservation_baggages",
+        "update_reservation_flights"
       ]
     },
-    "PS-074": {
+    "PS-089": {
       "text": "Do not offer compensation for any other reason than the ones listed above.",
       "section": "Refunds and Compensation",
       "mapped_to_tools": [
-        "book_reservation",
         "cancel_reservation",
-        "send_certificate"
+        "send_certificate",
+        "update_reservation_baggages",
+        "update_reservation_flights"
       ]
     }
   }

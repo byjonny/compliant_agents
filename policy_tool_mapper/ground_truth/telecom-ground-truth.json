@@ -19,11 +19,6 @@
           "id": "GT-002",
           "text": "If a user is traveling outside their home network, you should check if the line is roaming enabled. If it is not, you should enable it at no cost for the user.",
           "section": null
-        },
-        {
-          "id": "GT-003",
-          "text": "We offer data roaming to users who are traveling outside their home network.",
-          "section": null
         }
       ]
     },
@@ -45,21 +40,6 @@
           "id": "GT-006",
           "text": "The maximum amount of data that can be refueled is 2GB.",
           "section": null
-        },
-        {
-          "id": "GT-007",
-          "text": "Ask them how much data they want to refuel",
-          "section": null
-        },
-        {
-          "id": "GT-008",
-          "text": "Confirm the price",
-          "section": null
-        },
-        {
-          "id": "GT-009",
-          "text": "Apply the refueled data to the line associated with the phone number the user provided.",
-          "section": null
         }
       ]
     },
@@ -75,11 +55,6 @@
         {
           "id": "GT-011",
           "text": "You are not allowed to lift the suspension if the line's contract end date is in the past, even if the user has paid all their overdue bills.",
-          "section": null
-        },
-        {
-          "id": "GT-012",
-          "text": "After you resume the line, the user will have to reboot their device to get service.",
           "section": null
         }
       ]
@@ -111,6 +86,32 @@
       ]
     },
     {
+      "tool_id": "extend_payment_due_date",
+      "tool_name": "extend_payment_due_date",
+      "statements": [
+        {
+          "id": "GT-023",
+          "text": "A bill due date can be extended only if all of the following are true: The bill status is Issued or Overdue. The requested new due date is after the current due date and no more than 14 days after the current due date. The customer has not received a payment extension in the last 90 days.",
+          "section": null
+        },
+        {
+          "id": "GT-024",
+          "text": "You must not extend the due date for a bill whose status is Paid, Disputed, Draft, or Awaiting Payment.",
+          "section": null
+        },
+        {
+          "id": "GT-025",
+          "text": "You must not extend the due date if the requested new due date is more than 14 days after the current due date.",
+          "section": null
+        },
+        {
+          "id": "GT-026",
+          "text": "You must not extend the due date if the customer received a payment extension in the last 90 days.",
+          "section": null
+        }
+      ]
+    },
+    {
       "tool_id": "suspend_line",
       "tool_name": "suspend_line",
       "statements": [
@@ -122,27 +123,6 @@
         {
           "id": "GT-018",
           "text": "A line can be suspended for the following reasons: The user has an overdue bill. The line's contract end date is in the past.",
-          "section": null
-        }
-      ]
-    },
-    {
-      "tool_id": "transfer_to_human_agents",
-      "tool_name": "transfer_to_human_agents",
-      "statements": [
-        {
-          "id": "GT-019",
-          "text": "You should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions.",
-          "section": null
-        },
-        {
-          "id": "GT-020",
-          "text": "To transfer, first make a tool call to transfer_to_human_agents, and then send the message YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON. to the user.",
-          "section": null
-        },
-        {
-          "id": "GT-021",
-          "text": "You should try your best to resolve the issue for the user before transferring the user to a human agent.",
           "section": null
         }
       ]

@@ -1,0 +1,42 @@
+{
+  "domain": "airline",
+  "mode": "retrieval",
+  "models": [
+    "gpt-5.4"
+  ],
+  "timestamp": "2026-05-15T16:56:35.350020+00:00",
+  "results": [
+    {
+      "model": "gpt-5.4",
+      "mode": "retrieval",
+      "status": "ok",
+      "mappings": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-mappings-gpt-5.4-retrieval.json",
+      "eval_high": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-eval-gpt-5.4-retrieval-high.json",
+      "eval_all": "/Users/jonaswalcher/Desktop/EntwicklungsPraktikum/COMPLIANCE AGENTS/tau2-bench/policy_tool_mapper/output/airline-eval-gpt-5.4-retrieval-all.json",
+      "scores_high": {
+        "macro": {
+          "precision": 0.4278,
+          "recall": 0.4942,
+          "f1": 0.4377
+        },
+        "micro": {
+          "precision": 0.3077,
+          "recall": 0.58,
+          "f1": 0.4021
+        }
+      },
+      "scores_all": {
+        "macro": {
+          "precision": 0.3911,
+          "recall": 0.5273,
+          "f1": 0.4316
+        },
+        "micro": {
+          "precision": 0.2653,
+          "recall": 0.62,
+          "f1": 0.3716
+        }
+      }
+    }
+  ]
+}

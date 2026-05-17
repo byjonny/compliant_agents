@@ -58,8 +58,8 @@ def main() -> None:
         ),
     )
     parser.add_argument(
-        "--ce-threshold", type=float, default=0.0,
-        help="Cross-encoder score threshold; lower = more recall (retrieval mode only, default: 0.0).",
+        "--ce-top-k", type=int, default=20,
+        help="Number of cross-encoder reranked candidates to keep per tool (retrieval mode only, default: 20).",
     )
     parser.add_argument(
         "--evaluate", action="store_true",
@@ -110,7 +110,7 @@ def main() -> None:
         extra_config = {
             "embed_model":  args.embed_model,
             "ce_model":     args.ce_model,
-            "ce_threshold": args.ce_threshold,
+            "ce_top_k":     args.ce_top_k,
         }
     else:
         app = app_llm
@@ -132,7 +132,7 @@ def main() -> None:
     print(f"  Model:    {args.model}")
     if args.mode == "retrieval":
         print(f"  Embed:    {args.embed_model}")
-        print(f"  Reranker: {args.ce_model}  threshold={args.ce_threshold}")
+        print(f"  Reranker: {args.ce_model}  top_k={args.ce_top_k}")
     print()
 
     result = asyncio.run(

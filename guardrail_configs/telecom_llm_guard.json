@@ -1,0 +1,47 @@
+{
+  "type": "sequential",
+  "guards": [
+    {
+      "type": "llm_guard",
+      "tool_name": "disable_roaming",
+      "mappings_file": "policy_tool_mapper/ground_truth/telecom-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "enable_roaming",
+      "mappings_file": "policy_tool_mapper/ground_truth/telecom-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "refuel_data",
+      "mappings_file": "policy_tool_mapper/ground_truth/telecom-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "resume_line",
+      "mappings_file": "policy_tool_mapper/ground_truth/telecom-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "send_payment_request",
+      "mappings_file": "policy_tool_mapper/ground_truth/telecom-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "extend_payment_due_date",
+      "mappings_file": "policy_tool_mapper/ground_truth/telecom-ground-truth.json",
+      "history_window": 1000
+    },
+    {
+      "type": "llm_guard",
+      "tool_name": "suspend_line",
+      "mappings_file": "policy_tool_mapper/ground_truth/telecom-ground-truth.json",
+      "history_window": 1000
+    }
+  ]
+}
