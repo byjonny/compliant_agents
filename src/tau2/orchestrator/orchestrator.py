@@ -362,6 +362,8 @@ class BaseOrchestrator(ABC, Generic[BaseAgentT, BaseUserT, TrajectoryItemT]):
                 tool_results.append(tool_result)
                 continue
 
+            ## MIDDLEWARE IMPLEMENTATION
+
             verdict, rejection = self.guardrail_middleware.evaluate(
                 tool_call, self.environment, history
             )
@@ -382,7 +384,6 @@ class BaseOrchestrator(ABC, Generic[BaseAgentT, BaseUserT, TrajectoryItemT]):
                     )
                 )
                 tool_results.append(rejection)
-                # print("[orchestrator.py] Guardrail block detected")
 
 
         return tool_results

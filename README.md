@@ -8,6 +8,8 @@ The important idea is simple:
 User simulator → Agent → Guardrail middleware → Tool execution
 ```
 
+![Architecture diagram](figs/architecture.png)
+
 The agent still decides what tool to call. The guardrail middleware sees that tool call before it reaches the real tool. If the call violates a mapped policy rule, the guard blocks it and returns feedback to the agent instead of executing the side effect.
 
 The project currently supports experiments across:
