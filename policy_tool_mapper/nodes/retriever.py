@@ -28,7 +28,7 @@ from policy_tool_mapper.state import (
 _TOP_K_BM25    = 30
 _TOP_K_BIENC   = 30
 _CE_MODEL      = "BAAI/bge-reranker-v2-m3"
-_CE_TOP_K      = 20
+_CE_TOP_K      = 30
 _EMBED_MODEL   = "text-embedding-3-small"   # best OpenAI embedding for cost/quality
 
 _cross_encoder: Any = None   # cached after first load

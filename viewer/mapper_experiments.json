@@ -8940,5 +8940,87 @@
       "Summary written \u2192 policy_tool_mapper/output/viewer-mapper-summary-20260517_134900-retail-retail_mapper_run-5480276aa3.json"
     ],
     "error": null
+  },
+  {
+    "id": "e2a2e4d5d3",
+    "name": "Retail mapper run",
+    "domain": "retail",
+    "models": [
+      "claude-haiku-4-5-20251001"
+    ],
+    "mode": "retrieval",
+    "embed_model": "text-embedding-3-large",
+    "ce_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    "ce_top_k": 30,
+    "skip_mapping": false,
+    "status": "cancelled",
+    "created_at": "2026-05-18T15:37:26",
+    "started_at": "2026-05-18T15:37:26",
+    "finished_at": "2026-05-18T15:38:02",
+    "command": [
+      "/Users/jonaswalcher/.local/bin/uv",
+      "run",
+      "python",
+      "policy_tool_mapper/run_pipeline.py",
+      "--domain",
+      "retail",
+      "--models",
+      "claude-haiku-4-5-20251001",
+      "--mode",
+      "retrieval",
+      "--summary",
+      "policy_tool_mapper/output/viewer-mapper-summary-20260518_153726-retail-retail_mapper_run-e2a2e4d5d3.json",
+      "--embed-model",
+      "text-embedding-3-large",
+      "--ce-model",
+      "cross-encoder/ms-marco-MiniLM-L-6-v2",
+      "--ce-top-k",
+      "30"
+    ],
+    "summary_path": "policy_tool_mapper/output/viewer-mapper-summary-20260518_153726-retail-retail_mapper_run-e2a2e4d5d3.json",
+    "metrics": {},
+    "logs": [],
+    "error": "Cancelled by user"
+  },
+  {
+    "id": "46241f81ee",
+    "name": "Airline mapper run",
+    "domain": "airline",
+    "models": [
+      "claude-haiku-4-5-20251001"
+    ],
+    "mode": "retrieval",
+    "embed_model": "text-embedding-3-large",
+    "ce_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    "ce_top_k": 30,
+    "skip_mapping": false,
+    "status": "running",
+    "created_at": "2026-05-18T15:42:45",
+    "started_at": "2026-05-18T15:42:45",
+    "finished_at": null,
+    "command": [
+      "/Users/jonaswalcher/.local/bin/uv",
+      "run",
+      "python",
+      "policy_tool_mapper/run_pipeline.py",
+      "--domain",
+      "airline",
+      "--models",
+      "claude-haiku-4-5-20251001",
+      "--mode",
+      "retrieval",
+      "--summary",
+      "policy_tool_mapper/output/viewer-mapper-summary-20260518_154245-airline-airline_mapper_run-46241f81ee.json",
+      "--embed-model",
+      "text-embedding-3-large",
+      "--ce-model",
+      "cross-encoder/ms-marco-MiniLM-L-6-v2",
+      "--ce-top-k",
+      "30"
+    ],
+    "summary_path": "policy_tool_mapper/output/viewer-mapper-summary-20260518_154245-airline-airline_mapper_run-46241f81ee.json",
+    "metrics": {},
+    "logs": [],
+    "error": null
   }
 ]

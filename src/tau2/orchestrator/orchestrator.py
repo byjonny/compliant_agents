@@ -362,11 +362,16 @@ class BaseOrchestrator(ABC, Generic[BaseAgentT, BaseUserT, TrajectoryItemT]):
                 tool_results.append(tool_result)
                 continue
 
-            ## MIDDLEWARE IMPLEMENTATION
+
+
+            ## GUARDRAIL MIDDLEWARE
 
             verdict, rejection = self.guardrail_middleware.evaluate(
                 tool_call, self.environment, history
             )
+
+
+
             if verdict.allowed:
                 tool_result = self.environment.get_response(tool_call)
                 if tool_result.error:

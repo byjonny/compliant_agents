@@ -721,6 +721,8 @@
     .table-wrap.scroll-x {
       overflow-x: auto;
       overflow-y: hidden;
+      overscroll-behavior-x: contain;
+      scrollbar-gutter: stable;
       -webkit-overflow-scrolling: touch;
     }
     table { width: 100%; border-collapse: collapse; }
@@ -1916,6 +1918,7 @@ function renderExperiments() {
     $('experiments-content').innerHTML = emptyState('⚙', 'No experiments scheduled', 'Use the form above to queue a tau2 run');
     return;
   }
+  const previousScrollLeft = $('experiments-content').querySelector('.table-wrap.scroll-x')?.scrollLeft || 0;
 
   const rows = _experiments.slice().reverse().map(e => {
     const m = e.metrics || {};
@@ -1967,6 +1970,12 @@ function renderExperiments() {
         <tbody>${rows}</tbody>
       </table>
     </div>`;
+  const tableWrap = $('experiments-content').querySelector('.table-wrap.scroll-x');
+  if (tableWrap && previousScrollLeft) {
+    requestAnimationFrame(() => {
+      tableWrap.scrollLeft = previousScrollLeft;
+    });
+  }
 }
 
 // ════════════════════════════════════════════════════════════
