@@ -2769,9 +2769,9 @@ async function loadMapper() {
     const domains = data.domains || [];
     $('mapper-domain').innerHTML = domains.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
     if (domains.includes('airline')) $('mapper-domain').value = 'airline';
-    renderCheckGroup('mapper-metrics', MAPPER_METRICS, ['macro.f1', 'micro.f1']);
+    renderCheckGroup('mapper-metrics', MAPPER_METRICS, ['micro.recall', 'micro.precision']);
     renderCheckGroup('mapper-modes', MAPPER_MODES, ['llm', 'retrieval']);
-    renderCheckGroup('mapper-confs', MAPPER_CONFS, ['high', 'all']);
+    renderCheckGroup('mapper-confs', MAPPER_CONFS, ['high']);
     $('mapper-domain').onchange = renderMapper;
     renderMapper();
   } catch (e) {
