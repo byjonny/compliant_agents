@@ -270,9 +270,51 @@ def _run_experiment_worker():
                 _running_processes.pop(exp_id, None)
             _experiment_queue.task_done()
 
+def _reconcile_experiments_on_startup() -> None:
+    """Repair statuses for work that outlived or lost the viewer worker."""
+    changed = False
+    now = datetime.now().isoformat(timespec="seconds")
+    with _experiment_lock:
+        for exp in _experiments.values():
+            result_path = DATA / exp.result_id / "results.json"
+            if exp.status != "done" and result_path.exists():
+                exp.status = "done"
+                exp.finished_at = exp.finished_at or now
+                exp.error = None
+                summary = _load_summary(result_path) or {}
+                exp.metrics = {
+                    "reward": summary.get("avg_reward"),
+                    "policy_violation_rate": summary.get("policy_violation_rate"),
+                    "latency": summary.get("avg_latency"),
+                    "samples": summary.get("num_tasks"),
+                    "runs": summary.get("num_simulations"),
+                }
+                changed = True
+                continue
+
+            if exp.status in {"done", "failed", "cancelled"}:
+                continue
+
+            if exp.status == "queued":
+                exp.status = "cancelled"
+                exp.finished_at = exp.finished_at or now
+                exp.error = "Queued job was not resumed after viewer restart"
+                changed = True
+                continue
+
+            if not _matching_experiment_pids(exp):
+                exp.status = "failed"
+                exp.finished_at = exp.finished_at or now
+                exp.error = "No running process or result file found after viewer restart"
+                changed = True
+
+        if changed:
+            _save_experiments_db()
+
 def _ensure_worker():
     global _worker_started
     if _worker_started:
         return
+    _reconcile_experiments_on_startup()
     threading.Thread(target=_run_experiment_worker, daemon=True).start()
     _worker_started = True

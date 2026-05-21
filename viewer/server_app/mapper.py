@@ -319,9 +319,44 @@ def _run_mapper_experiment_worker():
                 _mapper_running_processes.pop(exp_id, None)
             _mapper_experiment_queue.task_done()
 
+def _reconcile_mapper_experiments_on_startup() -> None:
+    """Repair mapper statuses for work that lost its in-memory worker state."""
+    changed = False
+    now = datetime.now().isoformat(timespec="seconds")
+    with _mapper_experiment_lock:
+        for exp in _mapper_experiments.values():
+            summary_exists = bool(exp.summary_path and (REPO / exp.summary_path).exists())
+            if exp.status != "done" and summary_exists:
+                exp.status = "done"
+                exp.finished_at = exp.finished_at or now
+                exp.error = None
+                exp.metrics = _load_mapper_summary(exp)
+                changed = True
+                continue
+
+            if exp.status in {"done", "failed", "cancelled"}:
+                continue
+
+            if exp.status == "queued":
+                exp.status = "cancelled"
+                exp.finished_at = exp.finished_at or now
+                exp.error = "Queued mapper job was not resumed after viewer restart"
+                changed = True
+                continue
+
+            if not _matching_mapper_experiment_pids(exp):
+                exp.status = "failed"
+                exp.finished_at = exp.finished_at or now
+                exp.error = "No running process or summary file found after viewer restart"
+                changed = True
+
+        if changed:
+            _save_mapper_experiments_db()
+
 def _ensure_mapper_worker():
     global _mapper_worker_started
     if _mapper_worker_started:
         return
+    _reconcile_mapper_experiments_on_startup()
     threading.Thread(target=_run_mapper_experiment_worker, daemon=True).start()
     _mapper_worker_started = True
