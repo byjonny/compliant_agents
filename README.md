@@ -33,13 +33,11 @@ The main way to work with the project is the custom viewer in:
 It is not the old `web/leaderboard` app. The viewer is the project-specific UI for:
 
 - browsing all completed simulation runs
-- opening individual task conversations
 - comparing guarded vs unguarded experiments
 - analyzing reward, policy violation rate, latency, and guard blocks
-- scheduling full tau2 experiments from the browser
+- scheduling full experiments from the browser
 - scheduling policy-tool-mapper runs from the browser
-- cancelling queued or running experiments
-- exporting plots to `;`-separated CSV
+- run live chats with & without gaurd architecture in production mode
 
 Run it from the repository root:
 
@@ -51,24 +49,6 @@ Then open:
 
 ```text
 http://localhost:8765
-```
-
-Use a different port if needed:
-
-```bash
-VIEWER_PORT=8766 python3 viewer/server.py
-```
-
-The viewer reads simulation results from:
-
-```text
-data/simulations/
-```
-
-and policy-mapper results from:
-
-```text
-policy_tool_mapper/output/
 ```
 
 ---
@@ -92,6 +72,7 @@ Typical keys used by experiments:
 ```bash
 OPENAI_API_KEY=...
 ANTHROPIC_API_KEY=...
+HF_TOKEN=...
 ```
 
 The exact keys needed depend on the models you run.
@@ -111,12 +92,6 @@ uv run tau2 run \
   --user-llm <user_model> \
   --num-trials <n> \
   --max-concurrency <n>
-```
-
-Results are written to:
-
-```text
-data/simulations/<run_id>/results.json
 ```
 
 ### Baseline Without Guard
@@ -606,3 +581,9 @@ For policy-tool mapping:
 - report both macro and micro scores
 - compare `llm` vs `retrieval`
 - compare `high` vs `all` confidence slices
+
+---
+
+## Contribution
+
+My contribution covers the full guardrail middleware layer and all necessary tau2 adaptations around it, the complete custom viewer and web app, and the full policy-tool mapper pipeline.

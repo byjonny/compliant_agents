@@ -234,6 +234,13 @@
       gap: 6px;
       min-width: 220px;
     }
+    .analyzer-top .btn-run {
+      flex: 0 0 auto;
+      min-width: 190px;
+      min-height: 42px;
+      padding: 0 18px;
+      white-space: nowrap;
+    }
     .analyzer-domain label,
     .pair-label {
       font-size: 10px;
@@ -1973,6 +1980,13 @@
       .analysis-chart { min-height: 340px; }
       .pair-grid { grid-template-columns: 1fr; }
       .pair-head { text-align: left; }
+      .analyzer-top {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .analyzer-top .btn-run {
+        width: 100%;
+      }
       .mapper-controls { grid-template-columns: 1fr; }
       .mapper-grid { grid-template-columns: 1fr; }
     }
@@ -2016,8 +2030,8 @@
       <span class="nav-section-label">Test</span>
       <button class="header-nav-btn" id="btn-mapper-run" onclick="goMapperRun()">Mapper Exp</button>
       <button class="header-nav-btn" id="btn-mapper" onclick="goMapper()">Mapper Analyze</button>
-      <button class="header-nav-btn" id="btn-experiments" onclick="goExperiments()">Pipeline Exp</button>
-      <button class="header-nav-btn" id="btn-analyzer" onclick="goAnalyzer()">Pipeline Analyze</button>
+      <button class="header-nav-btn" id="btn-experiments" onclick="goExperiments()">Guard Exp</button>
+      <button class="header-nav-btn" id="btn-analyzer" onclick="goAnalyzer()">Guard Analyze</button>
     </div>
     <div class="nav-section">
       <span class="nav-section-label">Prod</span>
