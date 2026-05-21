@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>τ Trajectory Viewer</title>
+  <title>HALO Guardrail Cockpit</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,6 +50,11 @@
     body.modal-open {
       overflow: hidden;
     }
+    body.landing-mode {
+      background: #120b12;
+      color: #fff;
+      overflow-x: hidden;
+    }
 
     /* ── Header ── */
     .header {
@@ -65,13 +70,51 @@
     }
 
     .logo {
+      background: none;
+      border: 0;
       font-size: 17px;
+      font-family: inherit;
       font-weight: 800;
-      letter-spacing: -.5px;
+      letter-spacing: 0;
       color: var(--text);
       white-space: nowrap;
+      cursor: pointer;
     }
     .logo em { color: var(--agent); font-style: normal; }
+    body.landing-mode .header {
+      position: fixed;
+      left: 0;
+      right: 0;
+      background: rgba(20, 11, 16, .25);
+      border-bottom-color: rgba(255,255,255,.18);
+      color: #fff;
+      box-shadow: none;
+      backdrop-filter: blur(18px);
+    }
+    body.landing-mode .logo,
+    body.landing-mode .logo em {
+      color: #fff;
+    }
+    body.landing-mode .breadcrumb {
+      display: none;
+    }
+    body.landing-mode .nav-section {
+      border-left-color: rgba(255,255,255,.18);
+    }
+    body.landing-mode .nav-section-label {
+      color: rgba(255,255,255,.72);
+    }
+    body.landing-mode .header-nav-btn {
+      color: rgba(255,255,255,.78);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
+    }
+    body.landing-mode .header-nav-btn:hover,
+    body.landing-mode .header-nav-btn.active {
+      color: #fff;
+      border-color: rgba(255,255,255,.6);
+      background: rgba(255,255,255,.14);
+    }
 
     /* ── Header nav buttons ── */
     .header-actions {
@@ -129,7 +172,7 @@
       color: var(--muted); margin-bottom: 6px;
     }
     .budget-kpi-value {
-      font-size: 22px; font-weight: 800; letter-spacing: -.5px;
+      font-size: 22px; font-weight: 800; letter-spacing: 0;
     }
     .budget-kpi-value.agent { color: var(--agent); }
     .budget-kpi-value.user  { color: var(--user); }
@@ -628,6 +671,241 @@
       color: var(--muted);
     }
 
+    /* ── Production live chat + domain journey ── */
+    .live-layout,
+    .journey-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, .8fr) minmax(0, 1.25fr);
+      gap: 16px;
+      align-items: start;
+    }
+    .live-panel,
+    .journey-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .live-form-grid,
+    .journey-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .live-form-grid .field.wide,
+    .journey-form-grid .field.wide { grid-column: span 2; }
+    .guard-choice {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .guard-choice label {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px;
+      cursor: pointer;
+      display: grid;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 800;
+      min-height: 68px;
+    }
+    .guard-choice label.active {
+      border-color: var(--agent);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, .1);
+      background: var(--agent-bg);
+    }
+    .guard-choice input { display: none; }
+    .guard-choice span {
+      font-size: 11px;
+      line-height: 1.35;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .use-case-list {
+      display: grid;
+      gap: 8px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 3px;
+    }
+    .use-case-btn {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      padding: 10px;
+      display: grid;
+      gap: 6px;
+    }
+    .use-case-btn:hover,
+    .use-case-btn.active {
+      border-color: var(--agent);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, .1);
+    }
+    .use-case-title {
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+    .use-case-meta {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .live-start-btn {
+      width: 100%;
+      min-height: 54px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #0f172a, #1d4ed8);
+      box-shadow: 0 12px 24px rgba(29, 78, 216, .22);
+      font-size: 15px;
+      letter-spacing: .01em;
+    }
+    .live-start-btn:disabled {
+      background: #94a3b8;
+      box-shadow: none;
+    }
+    .chat-shell {
+      min-height: 620px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+    }
+    .chat-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .chat-messages {
+      min-height: 380px;
+      max-height: 560px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+    }
+    .live-msg {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      max-width: 88%;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .live-msg.assistant {
+      align-self: flex-start;
+      background: var(--agent-bg);
+      border-color: var(--agent-bd);
+    }
+    .live-msg.user {
+      align-self: flex-end;
+      background: var(--user-bg);
+      border-color: var(--user-bd);
+    }
+    .live-msg.tool {
+      align-self: flex-start;
+      background: var(--tool-bg);
+      border-color: var(--tool-bd);
+      max-width: 96%;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+    }
+    .live-msg.guardrail {
+      align-self: stretch;
+      max-width: 100%;
+      background: var(--fail-bg);
+      border-color: #fca5a5;
+      color: #7f1d1d;
+    }
+    .live-msg-head {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 5px;
+    }
+    .live-input-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+    .live-input-row textarea {
+      min-height: 78px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 9px;
+      font: inherit;
+      resize: vertical;
+    }
+    .live-snippets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 9px;
+    }
+    .snippet-hint {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .snippet-btn {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 10px;
+      display: grid;
+      gap: 2px;
+      text-align: left;
+    }
+    .snippet-btn small {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .snippet-btn:hover {
+      border-color: var(--agent);
+      color: var(--agent);
+      background: var(--agent-bg);
+    }
+    .interception-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 12px;
+    }
+    .interception-item {
+      border: 1px solid #fca5a5;
+      border-radius: 7px;
+      background: var(--fail-bg);
+      padding: 10px;
+      color: #7f1d1d;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .journey-result {
+      margin-top: 14px;
+    }
+
     .breadcrumb {
       display: flex;
       align-items: center;
@@ -653,6 +931,11 @@
 
     /* ── Main ── */
     .main { max-width: 1440px; margin: 0 auto; padding: 28px 20px; }
+    body.landing-mode .main {
+      width: 100%;
+      max-width: none;
+      padding: 0;
+    }
     body.wide-view .main {
       width: 80vw;
       max-width: none;
@@ -661,6 +944,439 @@
     /* ── Views ── */
     .view { display: none; }
     .view.active { display: block; }
+
+    /* ── Landing ── */
+    .landing-view {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      color: #fff;
+      isolation: isolate;
+      background: #DBBA95;
+    }
+    .landing-view::before {
+      content: "";
+      position: absolute;
+      inset: -26%;
+      z-index: -4;
+      background:
+        radial-gradient(ellipse at 7% 78%, rgba(254, 80, 5, .96) 0 23%, transparent 62%),
+        radial-gradient(ellipse at 82% 12%, rgba(208, 188, 225, .94) 0 31%, transparent 68%),
+        radial-gradient(ellipse at 42% 46%, rgba(219, 186, 149, .98) 0 32%, transparent 76%),
+        linear-gradient(118deg, #FE5005 0%, #DBBA95 46%, #D0BCE1 100%);
+      background-size: 128% 128%, 126% 126%, 112% 112%, 100% 100%;
+      background-position: 4% 78%, 88% 12%, 44% 48%, 50% 50%;
+      filter: blur(34px) saturate(1.08) contrast(1.02);
+      transform: scale(1.06);
+      animation: landingMesh 14s ease-in-out infinite alternate;
+    }
+    .landing-shader-fields {
+      position: absolute;
+      inset: -18%;
+      z-index: -3;
+      pointer-events: none;
+      filter: saturate(1.2) contrast(1.05);
+    }
+    .landing-shader-fields span {
+      position: absolute;
+      display: block;
+      border-radius: 46% 54% 58% 42%;
+      filter: blur(42px);
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
+    }
+    .shader-orange {
+      width: 58vw;
+      height: 78vh;
+      left: -10vw;
+      top: 12vh;
+      opacity: .58;
+      background:
+        radial-gradient(ellipse at 42% 45%, rgba(254, 80, 5, .86), rgba(254, 80, 5, .52) 42%, transparent 72%);
+      mix-blend-mode: soft-light;
+      animation: shaderFloatA 18s ease-in-out infinite alternate;
+    }
+    .shader-red {
+      width: 42vw;
+      height: 62vh;
+      right: -12vw;
+      bottom: -12vh;
+      opacity: .44;
+      background:
+        radial-gradient(ellipse at 58% 44%, rgba(254, 80, 5, .72), rgba(254, 80, 5, .44) 46%, transparent 74%);
+      mix-blend-mode: soft-light;
+      animation: shaderFloatB 20s ease-in-out infinite alternate;
+    }
+    .shader-lavender {
+      width: 46vw;
+      height: 116vh;
+      left: 42vw;
+      top: -30vh;
+      opacity: .72;
+      border-radius: 999px;
+      background:
+        linear-gradient(123deg, transparent 8%, rgba(208, 188, 225, .88) 35%, rgba(208, 188, 225, .72) 55%, transparent 92%);
+      filter: blur(58px);
+      mix-blend-mode: screen;
+      transform: rotate(-20deg);
+      animation: shaderBand 18s ease-in-out infinite alternate;
+    }
+    .shader-cyan {
+      width: 50vw;
+      height: 54vh;
+      left: 28vw;
+      bottom: -14vh;
+      opacity: .5;
+      background:
+        radial-gradient(ellipse at 50% 45%, rgba(219, 186, 149, .9), rgba(219, 186, 149, .52) 42%, transparent 72%);
+      mix-blend-mode: soft-light;
+      animation: shaderFloatC 19s ease-in-out infinite alternate;
+    }
+    .shader-peach {
+      width: 56vw;
+      height: 52vh;
+      left: 8vw;
+      top: -10vh;
+      opacity: .78;
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(219, 186, 149, .94), rgba(219, 186, 149, .55) 46%, transparent 74%);
+      mix-blend-mode: screen;
+      animation: shaderFloatD 22s ease-in-out infinite alternate;
+    }
+    .landing-view::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .74;
+      mix-blend-mode: soft-light;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.78'/%3E%3C/svg%3E"),
+        repeating-radial-gradient(circle at 18% 29%, rgba(255,255,255,.2) 0 .45px, transparent .65px 1.9px),
+        repeating-radial-gradient(circle at 79% 61%, rgba(30,12,7,.2) 0 .4px, transparent .62px 2.2px);
+      background-size: 180px 180px, 6px 6px, 7px 7px;
+      filter: contrast(1.72);
+      animation: landingGrain .42s steps(2) infinite;
+    }
+    .landing-veil {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(118deg, transparent 18%, rgba(208, 188, 225, .18) 36%, rgba(219, 186, 149, .12) 55%, transparent 76%),
+        linear-gradient(90deg, rgba(58, 20, 8, .18), rgba(58, 20, 8, .03) 42%, rgba(58, 20, 8, .1)),
+        linear-gradient(180deg, rgba(255, 244, 226, .08), rgba(28, 9, 8, .16));
+    }
+    .landing-inner {
+      width: min(1180px, calc(100% - 48px));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 118px 0 48px;
+      display: grid;
+      align-content: center;
+      gap: 34px;
+    }
+    .landing-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(360px, .78fr);
+      gap: 54px;
+      align-items: center;
+    }
+    .landing-kicker {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 11px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.86);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      backdrop-filter: blur(14px);
+    }
+    .landing-h1 {
+      margin-top: 18px;
+      max-width: 780px;
+      font-size: clamp(58px, 8vw, 118px);
+      line-height: .86;
+      font-weight: 900;
+      letter-spacing: 0;
+      color: #fff;
+      text-shadow: 0 20px 80px rgba(61, 8, 6, .28);
+    }
+    .landing-sub {
+      max-width: 620px;
+      margin-top: 20px;
+      color: rgba(255,255,255,.86);
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.25;
+      font-weight: 680;
+    }
+    .landing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .landing-cta,
+    .landing-secondary {
+      min-height: 46px;
+      border-radius: 999px;
+      padding: 0 18px;
+      border: 1px solid rgba(255,255,255,.32);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 850;
+      color: #120b12;
+      cursor: pointer;
+      transition: transform .16s ease, background .16s ease, border-color .16s ease;
+    }
+    .landing-cta {
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 18px 40px rgba(64, 8, 0, .24);
+    }
+    .landing-secondary {
+      color: #fff;
+      background: rgba(255,255,255,.1);
+      backdrop-filter: blur(14px);
+    }
+    .landing-cta:hover,
+    .landing-secondary:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.72);
+    }
+    .landing-points {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 34px;
+      max-width: 780px;
+    }
+    .landing-point {
+      min-height: 112px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 8px;
+      padding: 13px;
+      background: rgba(255,255,255,.1);
+      backdrop-filter: blur(18px);
+    }
+    .landing-point strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #fff;
+    }
+    .landing-point span {
+      color: rgba(255,255,255,.77);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .landing-visual {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 8px;
+      padding: 18px;
+      background: rgba(24, 10, 18, .22);
+      box-shadow: 0 40px 120px rgba(58, 7, 1, .24);
+      backdrop-filter: blur(22px);
+      overflow: hidden;
+    }
+    .landing-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(140deg, rgba(255,255,255,.16), transparent 42%);
+      pointer-events: none;
+    }
+    .cockpit-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(255,255,255,.8);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .cockpit-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #94fff5;
+      box-shadow: 0 0 18px rgba(148,255,245,.9);
+      animation: landingPulse 1.8s ease-in-out infinite;
+    }
+    .guard-flow {
+      position: relative;
+      display: grid;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .guard-flow::before {
+      content: "";
+      position: absolute;
+      left: 17px;
+      top: 24px;
+      bottom: 24px;
+      width: 2px;
+      background: linear-gradient(#fff, #a5f3fc, #fff);
+      opacity: .48;
+    }
+    .flow-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,.09);
+    }
+    .flow-index {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.86);
+      color: #201019;
+      font-size: 10px;
+      font-weight: 900;
+    }
+    .flow-title {
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .flow-note {
+      font-size: 11px;
+      color: rgba(255,255,255,.68);
+      margin-top: 2px;
+    }
+    .flow-pill {
+      padding: 6px 8px;
+      border-radius: 999px;
+      color: #091313;
+      background: rgba(165, 243, 252, .9);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .mini-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .mini-metric {
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      padding: 11px;
+      background: rgba(255,255,255,.09);
+    }
+    .mini-metric span {
+      display: block;
+      color: rgba(255,255,255,.68);
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+    .mini-metric strong {
+      font-size: 23px;
+      line-height: 1;
+    }
+    .signal-chart {
+      display: grid;
+      grid-template-columns: repeat(18, 1fr);
+      gap: 5px;
+      height: 96px;
+      align-items: end;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      background: rgba(8, 8, 14, .18);
+    }
+    .signal-chart i {
+      display: block;
+      border-radius: 999px 999px 2px 2px;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(165,243,252,.6));
+      min-height: 14px;
+      animation: barBreath 2.4s ease-in-out infinite alternate;
+      animation-delay: calc(var(--i) * -90ms);
+    }
+    .landing-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      font-weight: 750;
+    }
+    .landing-strip span {
+      padding: 8px 11px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(12px);
+    }
+    @keyframes landingMesh {
+      0% {
+        transform: translate3d(-1%, 1%, 0) scale(1.06) rotate(-.4deg);
+        background-position: 2% 78%, 90% 12%, 44% 48%, 50% 50%;
+      }
+      45% {
+        transform: translate3d(1.5%, -1%, 0) scale(1.09) rotate(.8deg);
+        background-position: 11% 72%, 82% 18%, 48% 44%, 49% 51%;
+      }
+      100% {
+        transform: translate3d(-.5%, -1.5%, 0) scale(1.08) rotate(-.2deg);
+        background-position: 8% 84%, 88% 8%, 40% 52%, 51% 49%;
+      }
+    }
+    @keyframes landingGrain {
+      0% { transform: translate3d(0, 0, 0); }
+      25% { transform: translate3d(-1.5%, .8%, 0); }
+      50% { transform: translate3d(.9%, -1.2%, 0); }
+      75% { transform: translate3d(-.7%, -1.4%, 0); }
+      100% { transform: translate3d(1.4%, 1%, 0); }
+    }
+    @keyframes shaderFloatA {
+      0% { transform: translate3d(-2%, 4%, 0) scale(1) rotate(-2deg); }
+      100% { transform: translate3d(7%, -2%, 0) scale(1.12) rotate(3deg); }
+    }
+    @keyframes shaderFloatB {
+      0% { transform: translate3d(3%, -1%, 0) scale(1.05) rotate(3deg); }
+      100% { transform: translate3d(-6%, 4%, 0) scale(1.14) rotate(-4deg); }
+    }
+    @keyframes shaderFloatC {
+      0% { transform: translate3d(-5%, 5%, 0) scale(.96); }
+      100% { transform: translate3d(8%, -9%, 0) scale(1.18); }
+    }
+    @keyframes shaderFloatD {
+      0% { transform: translate3d(-4%, -2%, 0) scale(1.04); }
+      100% { transform: translate3d(9%, 8%, 0) scale(1.2); }
+    }
+    @keyframes shaderBand {
+      0% { transform: translate3d(-5%, 2%, 0) rotate(-24deg) scaleX(.92); }
+      100% { transform: translate3d(7%, -3%, 0) rotate(-17deg) scaleX(1.08); }
+    }
+    @keyframes landingPulse {
+      50% { transform: scale(1.6); opacity: .65; }
+    }
+    @keyframes barBreath {
+      0% { transform: scaleY(.72); opacity: .65; }
+      100% { transform: scaleY(1); opacity: 1; }
+    }
 
     /* ── Page header ── */
     .ph { margin-bottom: 18px; }
@@ -1238,6 +1954,19 @@
     @media (max-width: 960px) {
       body.wide-view .main { width: 100%; }
       .experiment-layout { grid-template-columns: 1fr; }
+      .live-layout,
+      .journey-layout { grid-template-columns: 1fr; }
+      .landing-inner {
+        width: min(100% - 28px, 760px);
+        padding-top: 104px;
+      }
+      .landing-hero {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+      .landing-visual {
+        min-height: 430px;
+      }
       .command-card { position: static; }
       .experiment-form { grid-template-columns: 1fr 1fr; }
       .analysis-grid { grid-template-columns: 1fr; }
@@ -1255,35 +1984,148 @@
       .header-nav-btn { padding: 5px 8px; }
       .main { padding: 20px 12px; }
       .experiment-form { grid-template-columns: 1fr; }
+      .live-form-grid,
+      .journey-form-grid { grid-template-columns: 1fr; }
+      .live-form-grid .field.wide,
+      .journey-form-grid .field.wide { grid-column: span 1; }
+      .live-input-row { grid-template-columns: 1fr; }
+      .live-msg { max-width: 100%; }
+      .landing-points,
+      .mini-metrics {
+        grid-template-columns: 1fr;
+      }
+      .landing-actions {
+        align-items: stretch;
+      }
+      .landing-cta,
+      .landing-secondary {
+        flex: 1 1 100%;
+      }
       .field.wide, .btn-run { grid-column: span 1; }
     }
   </style>
 </head>
-<body>
+<body class="landing-mode">
 
 <!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
 <header class="header">
-  <div class="logo">Compliant <em>Agents</em></div>
+  <button class="logo" type="button" onclick="goLanding()">HALO <em>Cockpit</em></button>
   <nav class="breadcrumb" id="bc"></nav>
   <div class="header-actions">
     <div class="nav-section">
-      <span class="nav-section-label">Full Pipeline</span>
-      <button class="header-nav-btn" id="btn-experiments" onclick="goExperiments()">Experiments</button>
-      <button class="header-nav-btn" id="btn-analyzer" onclick="goAnalyzer()">Analyze</button>
+      <span class="nav-section-label">Test</span>
+      <button class="header-nav-btn" id="btn-mapper-run" onclick="goMapperRun()">Mapper Exp</button>
+      <button class="header-nav-btn" id="btn-mapper" onclick="goMapper()">Mapper Analyze</button>
+      <button class="header-nav-btn" id="btn-experiments" onclick="goExperiments()">Pipeline Exp</button>
+      <button class="header-nav-btn" id="btn-analyzer" onclick="goAnalyzer()">Pipeline Analyze</button>
     </div>
     <div class="nav-section">
-      <span class="nav-section-label">Policy Mapper</span>
-      <button class="header-nav-btn" id="btn-mapper-run" onclick="goMapperRun()">Experiments</button>
-      <button class="header-nav-btn" id="btn-mapper" onclick="goMapper()">Analyze</button>
+      <span class="nav-section-label">Prod</span>
+      <button class="header-nav-btn" id="btn-prod" onclick="goProd()">Live Chat</button>
     </div>
     <div class="nav-section">
-      <button class="header-nav-btn" id="btn-budget" onclick="gobudget()">💰 Budget</button>
+      <button class="header-nav-btn" id="btn-budget" onclick="gobudget()">Budget</button>
     </div>
   </div>
 </header>
 
 <!-- ═══════════════════════════ MAIN ════════════════════════════ -->
 <main class="main">
+
+  <!-- VIEW 0: Landing -->
+  <div class="view active" id="v-landing">
+    <section class="landing-view">
+      <div class="landing-veil"></div>
+      <div class="landing-shader-fields" aria-hidden="true">
+        <span class="shader-orange"></span>
+        <span class="shader-red"></span>
+        <span class="shader-lavender"></span>
+        <span class="shader-cyan"></span>
+        <span class="shader-peach"></span>
+      </div>
+      <div class="landing-inner">
+        <div class="landing-hero">
+          <div>
+            <div class="landing-kicker">Guardrail middleware as you go</div>
+            <h1 class="landing-h1">HALO</h1>
+            <p class="landing-sub">
+              Make agents safe before they act. Test policies, map tools, and watch live guardrail behavior in one cockpit.
+            </p>
+            <div class="landing-actions">
+              <button class="landing-cta" type="button" onclick="goAnalyzer()">Visit Cockpit</button>
+              <button class="landing-secondary" type="button" onclick="goProd()">Try Live Chat</button>
+            </div>
+            <div class="landing-points">
+              <div class="landing-point">
+                <strong>Test middleware</strong>
+                <span>Run policy-tool mapper experiments and full pipeline evaluations.</span>
+              </div>
+              <div class="landing-point">
+                <strong>Analyze results</strong>
+                <span>Compare runs, blocked actions, compliance, and guard impact.</span>
+              </div>
+              <div class="landing-point">
+                <strong>Operate live</strong>
+                <span>Chat with domain agents and see guardrail alerts as they happen.</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="landing-visual" aria-label="HALO cockpit preview">
+            <div class="cockpit-bar">
+              <span>Middleware Cockpit</span>
+              <span class="cockpit-dot"></span>
+            </div>
+            <div class="guard-flow">
+              <div class="flow-row">
+                <span class="flow-index">1</span>
+                <div>
+                  <div class="flow-title">Policy enters the loop</div>
+                  <div class="flow-note">Rules become checks before tools run.</div>
+                </div>
+                <span class="flow-pill">Mapped</span>
+              </div>
+              <div class="flow-row">
+                <span class="flow-index">2</span>
+                <div>
+                  <div class="flow-title">Agent asks to act</div>
+                  <div class="flow-note">Every risky action passes through HALO.</div>
+                </div>
+                <span class="flow-pill">Watched</span>
+              </div>
+              <div class="flow-row">
+                <span class="flow-index">3</span>
+                <div>
+                  <div class="flow-title">Guardrail decides</div>
+                  <div class="flow-note">Allow, block, and explain the moment.</div>
+                </div>
+                <span class="flow-pill">Live</span>
+              </div>
+            </div>
+            <div class="mini-metrics">
+              <div class="mini-metric"><span>Coverage</span><strong>92%</strong></div>
+              <div class="mini-metric"><span>Blocks</span><strong>18</strong></div>
+              <div class="mini-metric"><span>Live</span><strong>On</strong></div>
+            </div>
+            <div class="signal-chart">
+              <i style="--i:1;height:32%"></i><i style="--i:2;height:56%"></i><i style="--i:3;height:42%"></i>
+              <i style="--i:4;height:74%"></i><i style="--i:5;height:48%"></i><i style="--i:6;height:84%"></i>
+              <i style="--i:7;height:64%"></i><i style="--i:8;height:92%"></i><i style="--i:9;height:54%"></i>
+              <i style="--i:10;height:78%"></i><i style="--i:11;height:44%"></i><i style="--i:12;height:88%"></i>
+              <i style="--i:13;height:68%"></i><i style="--i:14;height:96%"></i><i style="--i:15;height:58%"></i>
+              <i style="--i:16;height:72%"></i><i style="--i:17;height:50%"></i><i style="--i:18;height:82%"></i>
+            </div>
+          </aside>
+        </div>
+        <div class="landing-strip">
+          <span>Policy mapper</span>
+          <span>Experiment analyzer</span>
+          <span>Production-style live chat</span>
+          <span>Guardrail alerts</span>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <!-- VIEW 1: Simulation list -->
   <div class="view" id="v-sims">
@@ -1379,7 +2221,7 @@
   </div>
 
   <!-- VIEW 1C: Guard architecture analyzer -->
-  <div class="view active" id="v-analyzer">
+  <div class="view" id="v-analyzer">
     <div class="ph">
       <div class="ph-title">Experiment Analyzer</div>
       <div class="ph-sub">Compare guarded and unguarded architectures by model and domain</div>
@@ -1403,6 +2245,123 @@
         <div class="empty-title">Choose experiment pairs</div>
         <div class="empty-sub">Select one or more runs for each model on both sides.</div>
       </div>
+    </div>
+  </div>
+
+  <!-- VIEW 1C.2: Production live chat -->
+  <div class="view" id="v-prod">
+    <div class="ph">
+      <div class="ph-title">Production Live Chat</div>
+      <div class="ph-sub">Try guarded interactions live and inspect every policy interception as it happens</div>
+    </div>
+
+    <div class="live-layout">
+      <section class="live-panel">
+        <div class="live-form-grid">
+          <div class="field">
+            <label for="prod-domain">Domain</label>
+            <select id="prod-domain"></select>
+          </div>
+          <div class="field wide">
+            <label>Guard</label>
+            <div class="guard-choice" id="prod-guard-choice">
+              <label class="active">
+                <input type="radio" name="prod-guard-mode" value="without" checked>
+                Without guard
+                <span>Use the null guardrail config.</span>
+              </label>
+              <label>
+                <input type="radio" name="prod-guard-mode" value="with">
+                With guard
+                <span>Use the domain LLM guard config.</span>
+              </label>
+            </div>
+          </div>
+          <div class="field wide" id="prod-guard-model-field">
+            <label for="prod-guard-llm">Guard Model</label>
+            <input id="prod-guard-llm" value="gpt-4.1-mini" list="model-options">
+          </div>
+        </div>
+        <button class="btn-run live-start-btn" id="btn-start-live" type="button" onclick="startLiveChat()">Start Live Chat</button>
+
+        <div style="margin-top:16px;margin-bottom:8px;font-size:12px;font-weight:800">Use Cases</div>
+        <div class="use-case-list" id="prod-use-cases"></div>
+      </section>
+
+      <section class="live-panel chat-shell">
+        <div class="chat-status">
+          <div>
+            <div style="font-size:12px;font-weight:800" id="live-title">No live session yet</div>
+            <div style="font-size:11px;color:var(--muted)" id="live-sub">Choose a domain and start a chat.</div>
+          </div>
+          <div id="live-status"><span class="status-pill st-queued">idle</span></div>
+        </div>
+        <div class="chat-messages" id="live-messages">
+          <div class="empty-state">
+            <div class="empty-title">Ready for a live run</div>
+            <div class="empty-sub">Start a session to chat with the assistant.</div>
+          </div>
+        </div>
+        <div>
+          <div class="live-input-row">
+            <textarea id="live-input" placeholder="Type the next user message"></textarea>
+            <button class="btn-run" id="btn-send-live" type="button" onclick="sendLiveMessage()" disabled>Send</button>
+          </div>
+          <div class="snippet-hint" id="live-snippet-hint">Click here to insert a label into the message.</div>
+          <div class="live-snippets" id="live-snippets"></div>
+          <div class="interception-list" id="live-interceptions"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- VIEW 1C.3: Bring in new domains -->
+  <div class="view" id="v-domains">
+    <div class="ph">
+      <div class="ph-title">Bring In New Domains</div>
+      <div class="ph-sub">Select domain-folder assets, stage mapper inputs, and start the first mapping run</div>
+    </div>
+
+    <div class="journey-layout">
+      <section class="journey-panel">
+        <div class="journey-form-grid">
+          <div class="field wide">
+            <label for="journey-domain">Domain Folder</label>
+            <select id="journey-domain"></select>
+          </div>
+          <div class="field wide">
+            <label for="journey-policy">Policy</label>
+            <select id="journey-policy"></select>
+          </div>
+          <div class="field wide">
+            <label for="journey-tasks">Tasks</label>
+            <select id="journey-tasks"></select>
+          </div>
+          <div class="field wide">
+            <label for="journey-tools">Tool Landscape</label>
+            <select id="journey-tools"></select>
+          </div>
+          <div class="field">
+            <label for="journey-mode">Mapper Mode</label>
+            <select id="journey-mode"></select>
+          </div>
+          <div class="field">
+            <label for="journey-models">Models</label>
+            <input id="journey-models" value="gpt-4.1-mini" list="model-options">
+          </div>
+          <div class="field wide">
+            <label for="journey-name">Run Name</label>
+            <input id="journey-name" value="New domain journey">
+          </div>
+        </div>
+        <button class="btn-run" id="btn-start-journey" type="button" onclick="startDomainJourney()">Start Your Journey</button>
+        <div class="journey-result" id="journey-result"></div>
+      </section>
+
+      <section class="journey-panel">
+        <h3 style="font-size:13px;margin-bottom:10px">Readiness</h3>
+        <div id="journey-readiness" class="insight-list"></div>
+      </section>
     </div>
   </div>
 
@@ -1446,6 +2405,10 @@
         <label class="check-pill" style="align-self:end;min-height:34px;border-radius:7px">
           <input id="mapper-run-skip" type="checkbox">
           Skip mapping
+        </label>
+        <label class="check-pill" style="align-self:end;min-height:34px;border-radius:7px">
+          <input id="mapper-run-skip-eval" type="checkbox">
+          Mapping only
         </label>
         <button class="btn-run" id="btn-schedule-mapper" type="submit">Schedule Mapper Run</button>
       </form>
@@ -1574,6 +2537,10 @@ let _mapperResults = [];
 let _mapperCharts = [];
 let _mapperExperiments = [];
 let _mapperOptions = null;
+let _liveOptions = null;
+let _liveSession = null;
+let _liveUseCaseId = null;
+let _domainJourneyOptions = null;
 
 // ════════════════════════════════════════════════════════════
 // UTILITIES
@@ -1583,6 +2550,8 @@ const $ = id => document.getElementById(id);
 function showView(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   $('v-' + name).classList.add('active');
+  document.body.classList.toggle('landing-mode', name === 'landing');
+  if (name === 'landing') document.body.classList.remove('wide-view');
 }
 
 async function api(path) {
@@ -1729,8 +2698,11 @@ function updateBreadcrumb() {
       'v-analyzer': 'Analyzer',
       'v-sims': 'All Simulations',
       'v-experiments': 'Full Pipeline Experiments',
+      'v-landing': 'HALO',
       'v-mapper-run': 'Policy Mapper Experiments',
       'v-mapper': 'Policy Mapper Analyzer',
+      'v-prod': 'Production Live Chat',
+      'v-domains': 'Domain Journey',
       'v-budget': 'Budget',
     }[activeView] || 'Analyzer';
     parts.push(`<span class="bc-current">${current}</span>`);
@@ -1773,6 +2745,13 @@ function tryJson(v) {
 function setHeaderActive(activeId) {
   document.querySelectorAll('.header-nav-btn').forEach(b => b.classList.remove('active'));
   if (activeId) $(activeId)?.classList.add('active');
+}
+
+function goLanding() {
+  _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
+  showView('landing');
+  setHeaderActive(null);
+  updateBreadcrumb();
 }
 
 async function goExperiments() {
@@ -2516,6 +3495,364 @@ function renderAnalyzer() {
 }
 
 // ════════════════════════════════════════════════════════════
+// PROD — LIVE CHAT
+// ════════════════════════════════════════════════════════════
+async function goProd() {
+  _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
+  showView('prod');
+  setHeaderActive('btn-prod');
+  updateBreadcrumb();
+  document.body.classList.add('wide-view');
+  await loadLiveOptions();
+}
+
+async function loadLiveOptions() {
+  if (_liveOptions) return;
+  _liveOptions = await api(`/api/live-options?ts=${Date.now()}`);
+  const domains = _liveOptions.domains || [];
+  $('prod-domain').innerHTML = domains.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
+  if (domains.includes('airline')) $('prod-domain').value = 'airline';
+  $('prod-guard-llm').value = _liveOptions.default_guard_llm || 'gpt-4.1-mini';
+  syncProdGuardMode();
+  syncProdDomain();
+}
+
+function hasLiveUseCaseSchema() {
+  return Boolean(_liveOptions?.schema_version >= 2 && _liveOptions?.use_cases);
+}
+
+function currentProdUseCases() {
+  if (!hasLiveUseCaseSchema()) return [];
+  const domain = $('prod-domain').value;
+  return (_liveOptions?.use_cases?.[domain] || []);
+}
+
+function selectedProdUseCase() {
+  return currentProdUseCases().find(c => c.id === _liveUseCaseId) || currentProdUseCases()[0] || null;
+}
+
+function prodGuardMode() {
+  return document.querySelector('input[name="prod-guard-mode"]:checked')?.value || 'without';
+}
+
+function syncProdGuardMode() {
+  const mode = prodGuardMode();
+  document.querySelectorAll('#prod-guard-choice label').forEach(label => {
+    const input = label.querySelector('input');
+    label.classList.toggle('active', input?.value === mode);
+  });
+  $('prod-guard-model-field').style.display = mode === 'with' ? '' : 'none';
+}
+
+function prodGuardrailConfig() {
+  if (prodGuardMode() !== 'with') return _liveOptions?.null_guardrail || 'guardrail_configs/null.json';
+  const domain = $('prod-domain').value;
+  return _liveOptions?.default_guardrails?.[domain] || `guardrail_configs/${domain}_llm_guard.json`;
+}
+
+function syncProdDomain() {
+  if (!_liveOptions) return;
+  const useCases = currentProdUseCases();
+  _liveSession = null;
+  syncLiveSendButton();
+  _liveUseCaseId = useCases[0]?.id || null;
+  $('live-input').value = useCases[0]?.opening || '';
+  renderProdUseCases();
+  renderLiveSnippets();
+}
+
+function renderProdUseCases() {
+  const useCases = currentProdUseCases();
+  if (!hasLiveUseCaseSchema()) {
+    $('prod-use-cases').innerHTML = emptyState('Sync', 'Live use cases not loaded', 'Restart the viewer server so /api/live-options serves the data-backed use-case schema.');
+    $('btn-start-live').disabled = true;
+    return;
+  }
+  if (!useCases.length) {
+    $('prod-use-cases').innerHTML = emptyState('No', 'No use cases found', 'Add curated use cases for this domain.');
+    $('btn-start-live').disabled = true;
+    return;
+  }
+  $('btn-start-live').disabled = false;
+  $('prod-use-cases').innerHTML = useCases.map(useCase => `
+    <button class="use-case-btn ${_liveUseCaseId === useCase.id ? 'active' : ''}" type="button" data-use-case-id="${esc(useCase.id)}">
+      <div class="use-case-title">${esc(useCase.title)}</div>
+      <div class="use-case-meta">${esc(useCase.summary || '')}</div>
+    </button>
+  `).join('');
+  $('prod-use-cases').querySelectorAll('[data-use-case-id]').forEach(btn => {
+    btn.addEventListener('click', () => chooseProdUseCase(btn.dataset.useCaseId));
+  });
+}
+
+function chooseProdUseCase(useCaseId) {
+  const useCase = currentProdUseCases().find(c => c.id === useCaseId);
+  if (!useCase) return;
+  _liveUseCaseId = useCase.id;
+  _liveSession = null;
+  syncLiveSendButton();
+  $('live-input').value = useCase.opening || '';
+  renderProdUseCases();
+  renderLiveSnippets();
+}
+
+function renderLiveSnippets() {
+  const useCase = selectedProdUseCase();
+  const snippets = useCase?.snippets || [];
+  if (!snippets.length) {
+    $('live-snippets').innerHTML = '';
+    return;
+  }
+  $('live-snippets').innerHTML = snippets.map(snippet => `
+    <button class="snippet-btn" type="button" data-snippet="${esc(snippet.text)}" title="Click here to insert ${esc(snippet.label)}" aria-label="Click here to insert ${esc(snippet.label)}">
+      <span>${esc(snippet.label)}</span>
+      <small>Click here to insert</small>
+    </button>
+  `).join('');
+  $('live-snippets').querySelectorAll('[data-snippet]').forEach(btn => {
+    btn.addEventListener('click', () => insertLiveSnippet(btn.dataset.snippet));
+  });
+}
+
+function insertLiveSnippet(text) {
+  const input = $('live-input');
+  const current = input.value.trim();
+  input.value = current ? `${current}\n${text}` : text;
+  input.focus();
+}
+
+function liveSessionUseCase() {
+  if (!_liveSession) return selectedProdUseCase();
+  const sessionCases = _liveOptions?.use_cases?.[_liveSession.domain] || [];
+  return sessionCases.find(c => String(c.task_id) === String(_liveSession.task_id)) || selectedProdUseCase();
+}
+
+function syncLiveSendButton() {
+  const isDone = ['done', 'failed'].includes(_liveSession?.status);
+  $('btn-send-live').disabled = !(_liveSession?.id && _liveSession.is_user_turn && !isDone);
+}
+
+function livePayload() {
+  const useCase = selectedProdUseCase();
+  return {
+    domain: $('prod-domain').value,
+    task_id: useCase?.task_id,
+    guardrail_config: prodGuardrailConfig(),
+    agent_llm: _liveOptions?.default_agent_llm || 'gpt-4.1-mini',
+    guard_llm: prodGuardMode() === 'with' ? $('prod-guard-llm').value : '',
+    initial_message: '',
+    max_steps: 40,
+  };
+}
+
+async function startLiveChat() {
+  if (!selectedProdUseCase()) {
+    $('live-messages').innerHTML = errState('Choose a use case first.');
+    return;
+  }
+  _liveSession = null;
+  $('btn-start-live').disabled = true;
+  syncLiveSendButton();
+  $('live-messages').innerHTML = loading();
+  $('live-interceptions').innerHTML = '';
+  try {
+    const response = await fetch('/api/live-sessions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(livePayload()),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Could not start live chat');
+    _liveSession = data;
+    renderLiveSession();
+  } catch (e) {
+    $('live-messages').innerHTML = errState(e.message);
+    syncLiveSendButton();
+  } finally {
+    $('btn-start-live').disabled = false;
+  }
+}
+
+async function refreshLiveSession() {
+  if (!_liveSession?.id) return;
+  try {
+    const data = await api(`/api/live-sessions/${encodeURIComponent(_liveSession.id)}`);
+    _liveSession = data;
+    renderLiveSession();
+  } catch (_) {}
+}
+
+async function sendLiveMessage() {
+  if (!_liveSession?.id) {
+    syncLiveSendButton();
+    return;
+  }
+  const message = $('live-input').value.trim();
+  if (!message) return;
+  $('btn-send-live').disabled = true;
+  try {
+    const response = await fetch(`/api/live-sessions/${encodeURIComponent(_liveSession.id)}/message`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message }),
+    });
+    const data = await response.json();
+    if (!response.ok && !data.messages) throw new Error(data.error || 'Could not send message');
+    _liveSession = data;
+    $('live-input').value = '';
+    renderLiveSession();
+  } catch (e) {
+    $('live-interceptions').innerHTML = errState(e.message);
+  } finally {
+    syncLiveSendButton();
+  }
+}
+
+function liveMessageCard(msg) {
+  if (msg.role === 'tool') return '';
+  const content = msg.content ?? '';
+  if (!String(content).trim()) return '';
+  if (!['assistant', 'user'].includes(msg.role)) return '';
+  const cls = msg.role === 'user' ? 'user' : 'assistant';
+  const label = msg.role === 'user' ? 'You' : 'Assistant';
+  return `
+    <div class="live-msg ${cls}">
+      <div class="live-msg-head">${label}</div>
+      ${esc(content || '(empty)')}
+    </div>
+  `;
+}
+
+function renderLiveSession() {
+  if (!_liveSession) return;
+  const guarded = _liveSession.guardrail_config && !_liveSession.guardrail_config.endsWith('/null.json');
+  const useCase = liveSessionUseCase();
+  $('live-title').textContent = useCase?.title || 'Live chat';
+  $('live-sub').textContent = guarded ? 'Guarded chat' : 'Chat without guard';
+  $('live-status').innerHTML = statusPill(_liveSession.status || 'running');
+  syncLiveSendButton();
+
+  const messages = _liveSession.messages || [];
+  const chatCards = messages.map(liveMessageCard).filter(Boolean);
+  $('live-messages').innerHTML = chatCards.length
+    ? chatCards.join('')
+    : emptyState('Chat', 'No messages yet', 'The session is starting.');
+  $('live-messages').scrollTop = $('live-messages').scrollHeight;
+
+  const events = _liveSession.guardrail_events || [];
+  $('live-interceptions').innerHTML = events.length ? `
+    <div style="font-size:12px;font-weight:800">Guardrail Alerts (${events.length})</div>
+    ${events.map(ev => `
+      <div class="interception-item">
+        <div style="font-weight:800">A policy guard blocked an action.</div>
+        <div>${esc(ev.reason || 'The request was stopped before it could be completed.')}</div>
+      </div>
+    `).join('')}
+  ` : '';
+}
+
+// ════════════════════════════════════════════════════════════
+// BRING IN NEW DOMAINS
+// ════════════════════════════════════════════════════════════
+async function goDomains() {
+  _simId = null; _simData = null; _taskId = null; _trialIdx = 0;
+  showView('domains');
+  setHeaderActive(null);
+  updateBreadcrumb();
+  document.body.classList.add('wide-view');
+  await loadDomainJourneyOptions();
+}
+
+async function loadDomainJourneyOptions() {
+  _domainJourneyOptions = await api('/api/domain-journey-options');
+  const domains = _domainJourneyOptions.domains || [];
+  $('journey-domain').innerHTML = domains.map(d => `<option value="${esc(d.name)}">${esc(d.name)}</option>`).join('');
+  const readyDomain = domains.find(d => (d.policies || []).length && (d.tasks || []).length && (d.tools || []).length);
+  if (readyDomain) $('journey-domain').value = readyDomain.name;
+  $('journey-mode').innerHTML = (_domainJourneyOptions.modes || ['retrieval', 'llm'])
+    .map(m => `<option value="${esc(m)}">${esc(m === 'retrieval' ? 'Retrieval' : 'LLM')}</option>`).join('');
+  $('journey-mode').value = 'retrieval';
+  syncJourneyDomain();
+}
+
+function selectedJourneyDomain() {
+  const name = $('journey-domain').value;
+  return (_domainJourneyOptions?.domains || []).find(d => d.name === name);
+}
+
+function fillJourneySelect(id, files) {
+  $(id).innerHTML = (files || []).map(f => `<option value="${esc(f.path)}">${esc(f.path)}</option>`).join('');
+}
+
+function setJourneyStartState(domain) {
+  const canStart = Boolean(domain && (domain.policies || []).length && (domain.tasks || []).length && (domain.tools || []).length);
+  $('btn-start-journey').disabled = !canStart;
+}
+
+function syncJourneyDomain() {
+  const domain = selectedJourneyDomain();
+  if (!domain) {
+    setJourneyStartState(null);
+    $('journey-readiness').innerHTML = emptyState('No', 'No importable domains', 'Create a new folder under data/tau2/domains or src/tau2/domains. Airline, retail, and telecom are excluded.');
+    return;
+  }
+  fillJourneySelect('journey-policy', domain.policies);
+  fillJourneySelect('journey-tasks', domain.tasks);
+  fillJourneySelect('journey-tools', domain.tools);
+  setJourneyStartState(domain);
+  $('journey-name').value = `${domain.name} journey mapper`;
+  const ready = [
+    ['Policy', domain.policies?.length, 'policy file selected for mapper input'],
+    ['Tasks', domain.tasks?.length, 'tasks staged for the journey record'],
+    ['Tools', domain.tools?.length, 'tools.py or OpenAPI JSON used to build tool specs'],
+    ['Ground truth', domain.has_ground_truth, domain.has_ground_truth ? 'eval will run' : 'mapping-only run until ground truth exists'],
+  ];
+  $('journey-readiness').innerHTML = ready.map(([label, ok, text]) => `
+    <div class="insight"><strong>${esc(label)}:</strong> ${ok ? badge('ready', 'pass') : badge('missing', label === 'Ground truth' ? 'warn' : 'fail')} ${esc(text)}</div>
+  `).join('');
+}
+
+function journeyPayload() {
+  return {
+    domain: $('journey-domain').value,
+    policy_file: $('journey-policy').value,
+    tasks_file: $('journey-tasks').value,
+    tools_file: $('journey-tools').value,
+    mode: $('journey-mode').value,
+    models: splitModels($('journey-models').value),
+    name: $('journey-name').value,
+  };
+}
+
+async function startDomainJourney() {
+  $('btn-start-journey').disabled = true;
+  $('journey-result').innerHTML = loading();
+  try {
+    const response = await fetch('/api/domain-journeys', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(journeyPayload()),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Could not start domain journey');
+    $('journey-result').innerHTML = `
+      <div class="insight-list">
+        <div class="insight"><strong>Mapper:</strong> ${statusPill(data.mapper_experiment?.status || 'queued')} <code>${esc(data.mapper_experiment?.id || '')}</code></div>
+        <div class="insight"><strong>Policy:</strong> <code>${esc(data.staged?.policy || '')}</code></div>
+        <div class="insight"><strong>Tools:</strong> <code>${esc(data.staged?.tools || '')}</code></div>
+        <div class="insight"><strong>Tasks:</strong> <code>${esc(data.staged?.tasks || '')}</code></div>
+        <div class="insight"><strong>Evaluation:</strong> ${data.skip_eval ? 'mapping-only until ground truth is available' : 'ground truth found; eval queued'}</div>
+      </div>
+    `;
+    _mapperOptions = null;
+  } catch (e) {
+    $('journey-result').innerHTML = errState(e.message);
+  } finally {
+    setJourneyStartState(selectedJourneyDomain());
+  }
+}
+
+// ════════════════════════════════════════════════════════════
 // POLICY MAPPER ANALYZER
 // ════════════════════════════════════════════════════════════
 const MAPPER_METRICS = [
@@ -2564,6 +3901,7 @@ function getMapperRunPayload() {
     ce_model: $('mapper-run-ce-model').value,
     ce_top_k: Number($('mapper-run-ce-top-k').value || 20),
     skip_mapping: $('mapper-run-skip').checked,
+    skip_eval: $('mapper-run-skip-eval').checked,
   };
 }
 
@@ -2580,6 +3918,7 @@ function buildMapperCommand(payload = getMapperRunPayload()) {
     parts.push(`--ce-top-k ${payload.ce_top_k}`);
   }
   if (payload.skip_mapping) parts.push('--skip-mapping');
+  if (payload.skip_eval) parts.push('--skip-eval');
   return parts.join(' \\\n  ');
 }
 
@@ -2649,6 +3988,9 @@ function mapperRunMetrics(exp) {
   const results = exp.metrics?.results || [];
   if (!results.length) return exp.error ? esc(exp.error) : '—';
   const chips = results.slice(0, 4).map(r => {
+    if (r.status === 'mapping_only') {
+      return `<div><code>${esc(r.model || exp.models?.[0] || '')}</code> mapping written</div>`;
+    }
     const high = r.scores_high?.micro?.f1 ?? r.scores_high?.overall?.micro?.f1;
     const all = r.scores_all?.micro?.f1 ?? r.scores_all?.overall?.micro?.f1;
     return `<div><code>${esc(r.model || exp.models?.[0] || '')}</code> high ${pct(high)} · all ${pct(all)}</div>`;
@@ -3656,6 +4998,7 @@ $('mapper-run-form').onsubmit = scheduleMapperRun;
 [
   'mapper-run-name', 'mapper-run-domain', 'mapper-run-mode', 'mapper-run-models',
   'mapper-run-embed', 'mapper-run-ce-model', 'mapper-run-ce-top-k', 'mapper-run-skip',
+  'mapper-run-skip-eval',
 ].forEach(id => {
   $(id).addEventListener('input', updateMapperCommandPreview);
   $(id).addEventListener('change', updateMapperCommandPreview);
@@ -3668,14 +5011,20 @@ $('mapper-run-mode').addEventListener('change', () => {
   });
   updateMapperCommandPreview();
 });
+$('prod-domain').addEventListener('change', syncProdDomain);
+document.querySelectorAll('input[name="prod-guard-mode"]').forEach(input => {
+  input.addEventListener('change', syncProdGuardMode);
+});
+$('journey-domain').addEventListener('change', syncJourneyDomain);
 
 // ════════════════════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════════════════════
-goAnalyzer();
+goLanding();
 setInterval(() => {
   if ($('v-experiments').classList.contains('active')) loadExperiments();
   if ($('v-mapper-run').classList.contains('active')) loadMapperExperiments();
+  if ($('v-prod').classList.contains('active')) refreshLiveSession();
 }, 2500);
 </script>
 </body>
