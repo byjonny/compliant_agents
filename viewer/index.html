@@ -2170,6 +2170,21 @@
           <select id="ex-domain"></select>
         </div>
         <div class="field wide">
+          <label>Guard</label>
+          <div class="guard-choice" id="ex-guard-choice">
+            <label>
+              <input type="radio" name="ex-guard-mode" value="without">
+              No guard
+              <span>Use the null guardrail config.</span>
+            </label>
+            <label class="active">
+              <input type="radio" name="ex-guard-mode" value="with" checked>
+              Guard
+              <span>Use the domain LLM guard config.</span>
+            </label>
+          </div>
+        </div>
+        <div class="field wide ex-guard-field">
           <label for="ex-guard">Guardrail Config</label>
           <select id="ex-guard"></select>
         </div>
@@ -2185,7 +2200,7 @@
           <label for="ex-user-llm">User Model</label>
           <input id="ex-user-llm" value="gpt-5.1" list="model-options">
         </div>
-        <div class="field">
+        <div class="field ex-guard-field">
           <label for="ex-guard-llm">Guard Model</label>
           <input id="ex-guard-llm" value="gpt-4.1-mini" list="model-options">
         </div>
@@ -2209,7 +2224,7 @@
           <label for="ex-task-ids">Task IDs</label>
           <textarea id="ex-task-ids" placeholder="0 1 4 5"></textarea>
         </div>
-        <div class="field">
+        <div class="field ex-guard-field">
           <label for="ex-prompt">Prompt</label>
           <input id="ex-prompt" value="LLM Guard">
         </div>
@@ -2404,15 +2419,15 @@
           <label for="mapper-run-models">Models</label>
           <textarea id="mapper-run-models" placeholder="gpt-4.1-mini gpt-4.1 gpt-5.1">gpt-4.1-mini</textarea>
         </div>
-        <div class="field wide">
+        <div class="field wide mapper-retrieval-field">
           <label for="mapper-run-embed">Embedding Model</label>
           <input id="mapper-run-embed" value="text-embedding-3-large">
         </div>
-        <div class="field wide">
+        <div class="field wide mapper-retrieval-field">
           <label for="mapper-run-ce-model">Cross Encoder</label>
           <input id="mapper-run-ce-model" value="cross-encoder/ms-marco-MiniLM-L-6-v2">
         </div>
-        <div class="field">
+        <div class="field mapper-retrieval-field">
           <label for="mapper-run-ce-top-k">CE Top K</label>
           <input id="mapper-run-ce-top-k" type="number" min="1" max="200" value="20">
         </div>
@@ -2801,15 +2816,41 @@ function inferPromptLabel(config) {
   return 'LLM Guard';
 }
 
+function experimentGuardMode() {
+  return document.querySelector('input[name="ex-guard-mode"]:checked')?.value || 'with';
+}
+
+function domainGuardrailConfig(domain = $('ex-domain').value) {
+  const candidate = _experimentOptions?.default_guardrails?.[domain] || `guardrail_configs/${domain}_llm_guard.json`;
+  const options = [...$('ex-guard').options].map(o => o.value);
+  return options.includes(candidate) ? candidate : (options.find(v => v.includes(`${domain}_llm_guard`)) || candidate);
+}
+
+function syncExperimentGuardMode() {
+  const withGuard = experimentGuardMode() === 'with';
+  const domain = $('ex-domain').value;
+  const config = withGuard ? domainGuardrailConfig(domain) : 'guardrail_configs/null.json';
+  if ([...$('ex-guard').options].some(o => o.value === config)) {
+    $('ex-guard').value = config;
+  }
+  document.querySelectorAll('#ex-guard-choice label').forEach(label => {
+    const input = label.querySelector('input');
+    label.classList.toggle('active', input?.value === experimentGuardMode());
+  });
+  document.querySelectorAll('.ex-guard-field').forEach(field => {
+    field.style.display = withGuard ? '' : 'none';
+  });
+  ['ex-guard', 'ex-guard-llm', 'ex-prompt'].forEach(id => {
+    $(id).disabled = !withGuard;
+  });
+  $('ex-prompt').value = withGuard ? inferPromptLabel($('ex-guard').value) : 'No Guard';
+  $('ex-name').value = `${domain[0].toUpperCase()}${domain.slice(1)} ${withGuard ? 'guard' : 'no guard'} run`;
+}
+
 function applyDomainDefaults() {
   const domain = $('ex-domain').value;
-  const guard = _experimentOptions?.default_guardrails?.[domain] || `guardrail_configs/${domain}_llm_guard.json`;
-  if ([...$('ex-guard').options].some(o => o.value === guard)) {
-    $('ex-guard').value = guard;
-  }
   $('ex-dataset').value = domain;
-  $('ex-name').value = `${domain[0].toUpperCase()}${domain.slice(1)} guard run`;
-  $('ex-prompt').value = inferPromptLabel($('ex-guard').value);
+  syncExperimentGuardMode();
 }
 
 function getExperimentPayload() {
@@ -2820,7 +2861,7 @@ function getExperimentPayload() {
     guardrail_config: $('ex-guard').value,
     agent_llm: $('ex-agent-llm').value,
     user_llm: $('ex-user-llm').value,
-    guard_llm: $('ex-guard-llm').value,
+    guard_llm: experimentGuardMode() === 'with' ? $('ex-guard-llm').value : '',
     num_trials: Number($('ex-trials').value || 1),
     max_concurrency: Number($('ex-concurrency').value || 1),
     task_split_name: $('ex-split').value,
@@ -3898,6 +3939,7 @@ async function loadMapperOptions() {
   $('mapper-run-embed').value = _mapperOptions.default_embed_model || 'text-embedding-3-large';
   $('mapper-run-ce-model').value = _mapperOptions.default_ce_model || 'cross-encoder/ms-marco-MiniLM-L-6-v2';
   $('mapper-run-ce-top-k').value = _mapperOptions.default_ce_top_k || 20;
+  syncMapperRetrievalFields();
   updateMapperCommandPreview();
 }
 
@@ -3939,6 +3981,16 @@ function buildMapperCommand(payload = getMapperRunPayload()) {
 function updateMapperCommandPreview() {
   if (!$('mapper-command-preview')) return;
   $('mapper-command-preview').textContent = buildMapperCommand();
+}
+
+function syncMapperRetrievalFields() {
+  const isRetrieval = $('mapper-run-mode').value === 'retrieval';
+  document.querySelectorAll('.mapper-retrieval-field').forEach(field => {
+    field.style.display = isRetrieval ? '' : 'none';
+  });
+  ['mapper-run-embed', 'mapper-run-ce-model', 'mapper-run-ce-top-k'].forEach(id => {
+    $(id).disabled = !isRetrieval;
+  });
 }
 
 function copyMapperCommand() {
@@ -5001,8 +5053,16 @@ $('ex-domain').addEventListener('change', () => {
   updateCommandPreview();
 });
 $('ex-guard').addEventListener('change', () => {
-  $('ex-prompt').value = inferPromptLabel($('ex-guard').value);
+  if (experimentGuardMode() === 'with') {
+    $('ex-prompt').value = inferPromptLabel($('ex-guard').value);
+  }
   updateCommandPreview();
+});
+document.querySelectorAll('input[name="ex-guard-mode"]').forEach(input => {
+  input.addEventListener('change', () => {
+    syncExperimentGuardMode();
+    updateCommandPreview();
+  });
 });
 $('analysis-domain').addEventListener('change', () => {
   renderAnalysisPairs();
@@ -5019,10 +5079,7 @@ $('mapper-run-form').onsubmit = scheduleMapperRun;
 });
 $('mapper-run-domain').addEventListener('change', syncMapperRunDefaults);
 $('mapper-run-mode').addEventListener('change', () => {
-  const isRetrieval = $('mapper-run-mode').value === 'retrieval';
-  ['mapper-run-embed', 'mapper-run-ce-model', 'mapper-run-ce-top-k'].forEach(id => {
-    $(id).disabled = !isRetrieval;
-  });
+  syncMapperRetrievalFields();
   updateMapperCommandPreview();
 });
 $('prod-domain').addEventListener('change', syncProdDomain);
