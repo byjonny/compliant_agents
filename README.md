@@ -42,7 +42,7 @@ It is not the old `web/leaderboard` app. The viewer is the project-specific UI f
 Run it from the repository root:
 
 ```bash
-python3 viewer/server.py
+uv run python viewer/server.py
 ```
 
 Then open:
