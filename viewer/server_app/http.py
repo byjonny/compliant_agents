@@ -7,10 +7,45 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from .config import HERE
-from .experiments import _cancel_experiment, _compact_experiment, _ensure_worker, _experiment_from_payload, get_experiment_options
-from .mapper import _cancel_mapper_experiment, _compact_mapper_experiment, _ensure_mapper_worker, _mapper_experiment_from_payload, get_mapper_options, get_policy_mapper_results
-from .simulations import get_all_simulations, get_analysis_runs, get_budget_data, get_simulation
-from .store import _experiment_lock, _experiment_queue, _experiments, _mapper_experiment_lock, _mapper_experiment_queue, _mapper_experiments, _save_experiments_db, _save_mapper_experiments_db
+from .domains import get_domain_journey_options, start_domain_journey
+from .experiments import (
+    _cancel_experiment,
+    _compact_experiment,
+    _ensure_worker,
+    _experiment_from_payload,
+    get_experiment_options,
+)
+from .live_chat import (
+    create_live_session,
+    get_live_options,
+    get_live_session,
+    send_live_message,
+)
+from .mapper import (
+    _cancel_mapper_experiment,
+    _compact_mapper_experiment,
+    _ensure_mapper_worker,
+    _mapper_experiment_from_payload,
+    get_mapper_options,
+    get_policy_mapper_results,
+)
+from .simulations import (
+    get_all_simulations,
+    get_analysis_runs,
+    get_budget_data,
+    get_simulation,
+)
+from .store import (
+    _experiment_lock,
+    _experiment_queue,
+    _experiments,
+    _mapper_experiment_lock,
+    _mapper_experiment_queue,
+    _mapper_experiments,
+    _save_experiments_db,
+    _save_mapper_experiments_db,
+)
+
 
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
@@ -63,6 +98,14 @@ class Handler(BaseHTTPRequestHandler):
             self._send_json(get_policy_mapper_results())
         elif path == "/api/mapper-options":
             self._send_json(get_mapper_options())
+        elif path == "/api/live-options":
+            self._send_json(get_live_options())
+        elif path == "/api/domain-journey-options":
+            self._send_json(get_domain_journey_options())
+        elif path.startswith("/api/live-sessions/"):
+            session_id = path[len("/api/live-sessions/"):]
+            data, status = get_live_session(session_id)
+            self._send_json(data, status)
         elif path == "/api/mapper-experiments":
             with _mapper_experiment_lock:
                 data = [_compact_mapper_experiment(exp) for exp in _mapper_experiments.values()]
@@ -87,6 +130,27 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         path = urlparse(self.path).path
+        if path == "/api/live-sessions":
+            try:
+                data = create_live_session(self._read_json())
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, 400)
+                return
+            self._send_json(data, 201)
+            return
+        if path.startswith("/api/live-sessions/") and path.endswith("/message"):
+            session_id = path[len("/api/live-sessions/"):-len("/message")]
+            data, status = send_live_message(session_id, self._read_json())
+            self._send_json(data, status)
+            return
+        if path == "/api/domain-journeys":
+            try:
+                data = start_domain_journey(self._read_json())
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, 400)
+                return
+            self._send_json(data, 201)
+            return
         if path.startswith("/api/mapper-experiments/") and path.endswith("/cancel"):
             exp_id = path[len("/api/mapper-experiments/"):-len("/cancel")]
             data, status = _cancel_mapper_experiment(exp_id)

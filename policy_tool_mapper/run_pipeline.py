@@ -253,6 +253,10 @@ def main() -> None:
         help="Skip policy-map step; only (re-)run eval on existing mapping files.",
     )
     parser.add_argument(
+        "--skip-eval", action="store_true",
+        help="Run mapping only. Useful when a new domain has no ground-truth file yet.",
+    )
+    parser.add_argument(
         "--compare", action="store_true",
         help=(
             "Print a unified comparison table across ALL existing eval files for "
@@ -273,6 +277,9 @@ def main() -> None:
     domain = args.domain
     models = args.models
     mode   = args.mode
+    if not models:
+        print("ERROR: --models requires at least one model", file=sys.stderr)
+        sys.exit(1)
 
     summary_path = Path(args.summary) if args.summary else (
         HERE / "output" / f"{domain.lower()}-pipeline-summary{_mode_suffix(mode)}.json"
@@ -280,9 +287,10 @@ def main() -> None:
 
     # ── Pre-flight checks ──────────────────────────────────────────────────────
     sample_paths = _paths(domain, models[0], mode)
+    required = ("policy", "tools") if args.skip_eval else ("policy", "tools", "ground_truth")
     missing = [
         str(sample_paths[k])
-        for k in ("policy", "tools", "ground_truth")
+        for k in required
         if not sample_paths[k].exists()
     ]
     if missing:
@@ -294,7 +302,7 @@ def main() -> None:
     print(f"Pipeline: domain={domain}  mode={mode}  models={models}")
     print(f"  Policy:       {sample_paths['policy']}")
     print(f"  Tools:        {sample_paths['tools']}")
-    print(f"  Ground truth: {sample_paths['ground_truth']}")
+    print(f"  Ground truth: {sample_paths['ground_truth'] if sample_paths['ground_truth'].exists() else 'not used'}")
 
     # ── Run ────────────────────────────────────────────────────────────────────
     results = []
@@ -318,6 +326,19 @@ def main() -> None:
             results.append({"model": model, "mode": mode, "status": "mapping_failed"})
             continue
 
+        if args.skip_eval:
+            results.append({
+                "model":    model,
+                "mode":     mode,
+                "status":   "mapping_only",
+                "mappings": str(paths["mappings"]),
+                "eval_high": None,
+                "eval_all":  None,
+                "scores_high": None,
+                "scores_all":  None,
+            })
+            continue
+
         eval_high_ok = run_eval(paths, model, mode, high_only=True)
         eval_all_ok  = run_eval(paths, model, mode, high_only=False)
 
@@ -337,6 +358,7 @@ def main() -> None:
         "domain":    domain,
         "mode":      mode,
         "models":    models,
+        "skip_eval": args.skip_eval,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "results":   results,
     }
@@ -361,6 +383,9 @@ def main() -> None:
     for r in results:
         if r.get("status") == "mapping_failed":
             print(f"{r['model']:<25} {'MAPPING FAILED'}")
+            continue
+        if r.get("status") == "mapping_only":
+            print(f"{r['model']:<25} {r['mode']:<12} {'map':<6} {'mapping written':>50}")
             continue
         for conf_label, key in [("high", "scores_high"), ("all", "scores_all")]:
             s = r.get(key)

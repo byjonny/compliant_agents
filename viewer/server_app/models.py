@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 
+
 @dataclass
 class Experiment:
     id: str
@@ -43,6 +44,7 @@ class MapperExperiment:
     ce_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
     ce_top_k: int = 20
     skip_mapping: bool = False
+    skip_eval: bool = False
     status: str = "queued"
     created_at: str = field(default_factory=lambda: datetime.now().isoformat(timespec="seconds"))
     started_at: str | None = None

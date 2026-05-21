@@ -12,7 +12,13 @@ from pathlib import Path
 
 from .config import POLICY_MAPPER_OUTPUT, REPO
 from .models import MapperExperiment
-from .store import _mapper_experiment_lock, _mapper_experiment_queue, _mapper_experiments, _mapper_running_processes, _save_mapper_experiments_db
+from .store import (
+    _mapper_experiment_lock,
+    _mapper_experiment_queue,
+    _mapper_experiments,
+    _mapper_running_processes,
+    _save_mapper_experiments_db,
+)
 from .utils import _parse_models, _safe_slug, _subprocess_env, _terminate_pid
 
 _mapper_worker_started = False
@@ -124,6 +130,8 @@ def _build_mapper_command(exp: MapperExperiment) -> list[str]:
         ])
     if exp.skip_mapping:
         cmd.append("--skip-mapping")
+    if exp.skip_eval:
+        cmd.append("--skip-eval")
     return cmd
 
 def _mapper_experiment_from_payload(payload: dict) -> MapperExperiment:
@@ -152,6 +160,7 @@ def _mapper_experiment_from_payload(payload: dict) -> MapperExperiment:
         ce_model=str(payload.get("ce_model") or "cross-encoder/ms-marco-MiniLM-L-6-v2").strip(),
         ce_top_k=ce_top_k,
         skip_mapping=bool(payload.get("skip_mapping")),
+        skip_eval=bool(payload.get("skip_eval")),
     )
     exp.command = _build_mapper_command(exp)
     return exp

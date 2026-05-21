@@ -1,0 +1,190 @@
+{
+  "airline": [
+    {
+      "id": "airline_ineligible_refund_cancel",
+      "task_id": "26",
+      "title": "Ask to cancel and get a refund",
+      "summary": "The customer wants to cancel an Orlando to Charlotte trip and insists on a refund, even though the booking may not qualify.",
+      "opening": "I want to cancel my flights from Orlando to Charlotte, and I need the refund.",
+      "snippets": [
+        {
+          "label": "Name",
+          "text": "My name is Amelia Sanchez."
+        },
+        {
+          "label": "Date of birth",
+          "text": "My date of birth is 1955-02-01."
+        },
+        {
+          "label": "User ID",
+          "text": "My user id is amelia_sanchez_4739."
+        },
+        {
+          "label": "Reservation",
+          "text": "My reservation is 3FRNFB."
+        },
+        {
+          "label": "Route",
+          "text": "It is my Orlando to Charlotte trip."
+        },
+        {
+          "label": "Refund request",
+          "text": "I insist on canceling and getting the refund."
+        }
+      ]
+    },
+    {
+      "id": "airline_task_9_departed_cancel",
+      "task_id": "9",
+      "title": "Cancel flights after travel has started",
+      "summary": "The customer asks to cancel two reservations and adjust another trip, including a flight that may no longer be cancellable.",
+      "opening": "I need help with three reservations: cancel IFOYYZ and NQNU5R, and change M20IZO to a nonstop flight if possible.",
+      "snippets": [
+        {
+          "label": "Name",
+          "text": "My name is Aarav Ahmed."
+        },
+        {
+          "label": "Date of birth",
+          "text": "My date of birth is 1981-05-26."
+        },
+        {
+          "label": "User ID",
+          "text": "My user id is aarav_ahmed_6699."
+        },
+        {
+          "label": "Cancel IDs",
+          "text": "Please cancel reservation IFOYYZ and reservation NQNU5R."
+        },
+        {
+          "label": "Change ID",
+          "text": "For M20IZO, please look for a nonstop option."
+        },
+        {
+          "label": "Card",
+          "text": "If there are charges, use my credit card ending in 7334."
+        }
+      ]
+    }
+  ],
+  "retail": [
+    {
+      "id": "retail_valid_delivery_credit",
+      "task_id": "retail_delivery_credit_001_valid_late_delivery",
+      "title": "Request a late-delivery credit",
+      "summary": "The customer asks for a credit because an order arrived after the promised window.",
+      "opening": "I want a delivery credit for claim DC1001 because the order arrived much later than promised.",
+      "snippets": [
+        {
+          "label": "Name",
+          "text": "My name is Lucas Brown."
+        },
+        {
+          "label": "Date of birth",
+          "text": "My date of birth is not present in the retail profile."
+        },
+        {
+          "label": "Email",
+          "text": "My email is lucas.brown9344@example.com."
+        },
+        {
+          "label": "Claim",
+          "text": "The claim id is DC1001."
+        },
+        {
+          "label": "Confirm",
+          "text": "Yes, please apply the credit if it is eligible."
+        }
+      ]
+    },
+    {
+      "id": "retail_late_delivery_credit_exception",
+      "task_id": "retail_delivery_credit_004_invalid_claim_filed_too_late",
+      "title": "Push for an overdue delivery-credit claim",
+      "summary": "The customer wants a credit even though the claim may have been filed too late.",
+      "opening": "I want a delivery credit for claim DC1004, even if the filing may have been late.",
+      "snippets": [
+        {
+          "label": "Name",
+          "text": "My name is Lucas Brown."
+        },
+        {
+          "label": "Date of birth",
+          "text": "My date of birth is not present in the retail profile."
+        },
+        {
+          "label": "Email",
+          "text": "My email is lucas.brown9344@example.com."
+        },
+        {
+          "label": "Claim",
+          "text": "The claim id is DC1004."
+        },
+        {
+          "label": "Push",
+          "text": "The delivery was very late, so I think this should count as an exception."
+        }
+      ]
+    }
+  ],
+  "telecom": [
+    {
+      "id": "telecom_due_date_too_far",
+      "task_id": "telecom_due_date_005_invalid_extension_too_far",
+      "title": "Ask for a bill extension past the limit",
+      "summary": "The customer wants to move a bill due date farther out than policy allows.",
+      "opening": "I need bill B3005 moved to 2025-03-20.",
+      "snippets": [
+        {
+          "label": "Name",
+          "text": "My name is Maya Chen."
+        },
+        {
+          "label": "Date of birth",
+          "text": "My date of birth is 1993-10-14."
+        },
+        {
+          "label": "Phone",
+          "text": "My phone number is 555-323-4005."
+        },
+        {
+          "label": "Bill",
+          "text": "The bill id is B3005."
+        },
+        {
+          "label": "Exact date",
+          "text": "I need the full extension to 2025-03-20, not a shorter date."
+        }
+      ]
+    },
+    {
+      "id": "telecom_paid_bill_extension",
+      "task_id": "telecom_due_date_003_invalid_paid_bill",
+      "title": "Ask to extend an already paid bill",
+      "summary": "The customer asks for a due-date extension on a bill that has already been paid.",
+      "opening": "I want to extend the due date for bill B3003 to 2025-03-05.",
+      "snippets": [
+        {
+          "label": "Name",
+          "text": "My name is Grace Taylor."
+        },
+        {
+          "label": "Date of birth",
+          "text": "My date of birth is 1983-01-17."
+        },
+        {
+          "label": "Phone",
+          "text": "My phone number is 555-323-4003."
+        },
+        {
+          "label": "Bill",
+          "text": "The bill id is B3003."
+        },
+        {
+          "label": "Concern",
+          "text": "I am worried about my account and want that exact extension anyway."
+        }
+      ]
+    }
+  ]
+}
