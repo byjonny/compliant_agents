@@ -19,6 +19,7 @@ def _parse_dir_name(name: str) -> dict:
     return {"date": f"{date} {time}".strip(), "domain": domain}
 
 def _arg_subset_matches(actual, expected) -> bool:
+    # Match nested tool arguments against partial criteria from task evaluation.
     if expected is None:
         return True
     if isinstance(expected, dict):
@@ -31,6 +32,7 @@ def _arg_subset_matches(actual, expected) -> bool:
     return actual == expected
 
 def _guard_block_is_expected(event: dict, task: dict | None) -> bool:
+    # A guard block is expected when it matches an unauthorized_action criterion.
     criteria = (task or {}).get("evaluation_criteria") or {}
     predicates = criteria.get("compliance") or []
     tool_name = event.get("tool_name")
@@ -45,6 +47,7 @@ def _guard_block_is_expected(event: dict, task: dict | None) -> bool:
     return False
 
 def _compute_guard_false_positives(run_id: str, sims: list, tasks: list) -> dict:
+    # Compare guardrail blocks with task criteria to estimate false positives.
     task_by_id = {str(t.get("id")): t for t in tasks if t.get("id") is not None}
     total_blocks = 0
     false_positive_blocks = 0
@@ -84,6 +87,7 @@ def _compute_guard_false_positives(run_id: str, sims: list, tasks: list) -> dict
     }
 
 def _load_summary(path: Path) -> dict | None:
+    # Convert a raw results.json into the compact dashboard summary shape.
     try:
         data = json.loads(path.read_text())
         info      = data.get("info") or {}
@@ -170,6 +174,7 @@ def _load_summary(path: Path) -> dict | None:
         return None
 
 def get_all_simulations() -> list:
+    # Scan every result directory and return only runs with readable summaries.
     if not DATA.exists():
         return []
     results = []
@@ -182,6 +187,7 @@ def get_all_simulations() -> list:
     return results
 
 def get_analysis_runs() -> dict:
+    # Package simulation summaries for the analysis/comparison view.
     runs = get_all_simulations()
     domains = sorted({r["domain"] for r in runs if r.get("domain")})
     models = sorted({r["model"] for r in runs if r.get("model")})
@@ -287,6 +293,7 @@ def get_budget_data() -> dict:
     }
 
 def get_simulation(sim_id: str) -> dict | None:
+    # Return the unmodified results.json payload for a single run.
     p = DATA / sim_id / "results.json"
     if not p.exists():
         return None

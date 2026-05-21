@@ -16,6 +16,7 @@ from server_app.mapper import _ensure_mapper_worker
 
 
 def main() -> None:
+    # Start background queues before accepting browser requests.
     _ensure_worker()
     _ensure_mapper_worker()
     server = ThreadingHTTPServer((HOST, PORT), Handler)

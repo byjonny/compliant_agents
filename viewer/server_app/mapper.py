@@ -24,6 +24,7 @@ from .utils import _parse_models, _safe_slug, _subprocess_env, _terminate_pid
 _mapper_worker_started = False
 
 def _parse_policy_mapper_eval_name(path: Path) -> dict | None:
+    # Decode output filenames into dimensions the UI can filter by.
     name = path.name
     marker = "-eval-"
     if marker not in name or not name.endswith(".json"):
@@ -46,6 +47,7 @@ def _parse_policy_mapper_eval_name(path: Path) -> dict | None:
     return {"domain": domain, "model": model, "mode": mode, "conf": conf}
 
 def get_policy_mapper_results() -> dict:
+    # Collect completed mapper evaluation JSON files for comparison charts.
     if not POLICY_MAPPER_OUTPUT.exists():
         return {"domains": [], "models": [], "results": []}
 
@@ -79,6 +81,7 @@ def get_policy_mapper_results() -> dict:
     }
 
 def _mapper_domains() -> list[str]:
+    # Mapper domains are inferred from staged policy files.
     input_dir = REPO / "policy_tool_mapper" / "input"
     domains = set()
     for path in input_dir.glob("*Policy.md"):
@@ -88,6 +91,7 @@ def _mapper_domains() -> list[str]:
     return sorted(domains or {"airline", "retail", "telecom"})
 
 def get_mapper_options() -> dict:
+    # Defaults mirror the policy_tool_mapper pipeline options.
     return {
         "domains": _mapper_domains(),
         "modes": ["retrieval", "llm"],
@@ -98,6 +102,7 @@ def get_mapper_options() -> dict:
     }
 
 def _build_mapper_command(exp: MapperExperiment) -> list[str]:
+    # Build the policy mapper pipeline command for a queued mapper run.
     uv_path = Path.home() / ".local" / "bin" / "uv"
     uv = str(uv_path if uv_path.exists() else "uv")
     exp.summary_path = (
@@ -135,6 +140,7 @@ def _build_mapper_command(exp: MapperExperiment) -> list[str]:
     return cmd
 
 def _mapper_experiment_from_payload(payload: dict) -> MapperExperiment:
+    # Validate and normalize mapper form data before scheduling it.
     domain = str(payload.get("domain") or "airline").strip().lower()
     if domain not in _mapper_domains():
         raise ValueError(f"Unsupported mapper domain: {domain}")
@@ -166,6 +172,7 @@ def _mapper_experiment_from_payload(payload: dict) -> MapperExperiment:
     return exp
 
 def _load_mapper_summary(exp: MapperExperiment) -> dict:
+    # The pipeline writes metrics to the summary path supplied in the command.
     if not exp.summary_path:
         return {}
     path = REPO / exp.summary_path
@@ -177,6 +184,7 @@ def _load_mapper_summary(exp: MapperExperiment) -> dict:
         return {}
 
 def _compact_mapper_experiment(exp: MapperExperiment) -> dict:
+    # Keep list responses small while preserving the latest log lines.
     data = asdict(exp)
     logs = data.pop("logs", [])
     data["log_count"] = len(logs)
@@ -184,6 +192,7 @@ def _compact_mapper_experiment(exp: MapperExperiment) -> dict:
     return data
 
 def _matching_mapper_experiment_pids(exp: MapperExperiment) -> list[int]:
+    # Find pipeline processes if the in-memory Popen handle was lost.
     tokens = [token for token in [exp.id, exp.summary_path] if token]
     if not tokens:
         return []
@@ -217,6 +226,7 @@ def _matching_mapper_experiment_pids(exp: MapperExperiment) -> list[int]:
     return pids
 
 def _cancel_mapper_experiment(exp_id: str) -> tuple[dict, int]:
+    # Cancellation mirrors normal experiments but targets mapper pipeline jobs.
     with _mapper_experiment_lock:
         exp = _mapper_experiments.get(exp_id)
         proc = _mapper_running_processes.get(exp_id)
@@ -262,6 +272,7 @@ def _cancel_mapper_experiment(exp_id: str) -> tuple[dict, int]:
         return (_compact_mapper_experiment(exp) if exp else {"id": exp_id, "status": "cancelling"}), 200
 
 def _run_mapper_experiment_worker():
+    # Single daemon worker for mapper experiments.
     while True:
         exp_id = _mapper_experiment_queue.get()
         with _mapper_experiment_lock:
@@ -277,6 +288,7 @@ def _run_mapper_experiment_worker():
             _save_mapper_experiments_db()
 
         try:
+            # Capture pipeline stdout so the browser can show live progress.
             proc = subprocess.Popen(
                 exp.command,
                 cwd=REPO,
@@ -297,6 +309,7 @@ def _run_mapper_experiment_worker():
 
             return_code = proc.wait()
             with _mapper_experiment_lock:
+                # Successful mapper runs load their summary JSON as metrics.
                 exp.finished_at = datetime.now().isoformat(timespec="seconds")
                 if exp.status == "cancelling":
                     exp.status = "cancelled"
@@ -354,6 +367,7 @@ def _reconcile_mapper_experiments_on_startup() -> None:
             _save_mapper_experiments_db()
 
 def _ensure_mapper_worker():
+    # Lazily start the mapper daemon once per server process.
     global _mapper_worker_started
     if _mapper_worker_started:
         return

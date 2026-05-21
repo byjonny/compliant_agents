@@ -26,6 +26,7 @@ LIVE_USE_CASES_PATH = REPO / "viewer" / "server_app" / "data" / "live_use_cases.
 
 
 def _clean_snippets(value: object) -> list[dict]:
+    # Keep only complete quick-reply snippets from the JSON config.
     if not isinstance(value, list):
         return []
     snippets = []
@@ -40,6 +41,7 @@ def _clean_snippets(value: object) -> list[dict]:
 
 
 def _load_live_use_cases() -> dict[str, list[dict]]:
+    # Load curated examples that seed the live chat UI per domain.
     try:
         raw = json.loads(LIVE_USE_CASES_PATH.read_text())
     except Exception:
@@ -77,6 +79,7 @@ def _load_live_use_cases() -> dict[str, list[dict]]:
 
 
 def get_live_options() -> dict:
+    # Return the domains, use cases, and guardrail choices available to live chat.
     configs = [
         _repo_rel(path)
         for path in sorted(GUARDRAILS.glob("*.json"))
@@ -107,6 +110,7 @@ def get_live_options() -> dict:
 
 
 def _make_controlled_user_class():
+    # Build a tau2 user simulator whose next message is supplied by the browser.
     from tau2.data_model.message import (
         APICompatibleMessage,
         Message,
@@ -122,11 +126,13 @@ def _make_controlled_user_class():
     )
 
     class _ControlledUserState(BaseModel):
+        # Store the conversation history in the shape expected by tau2 users.
         messages: list[APICompatibleMessage]
 
     class ControlledUser(HalfDuplexUser[_ControlledUserState]):
         def __init__(self, instructions: Optional[str] = None, tools: Optional[list] = None):
             super().__init__(instructions=instructions, tools=tools)
+            # The event is set when the app is not waiting for a user message.
             self._observation: list[Message] = []
             self._next_action: Optional[UserMessage] = None
             self._turn_finished = threading.Event()
@@ -135,6 +141,7 @@ def _make_controlled_user_class():
 
         @property
         def observation(self) -> list[Message]:
+            # Return a copy so callers cannot mutate internal session state.
             with self._lock:
                 return deepcopy(self._observation)
 
@@ -143,6 +150,7 @@ def _make_controlled_user_class():
             return not self._turn_finished.is_set()
 
         def set_action(self, action_msg: UserMessage) -> None:
+            # Called by the HTTP handler when the human submits a chat message.
             with self._lock:
                 if self._turn_finished.is_set():
                     raise RuntimeError("The live chat is not waiting for user input yet.")
@@ -154,6 +162,7 @@ def _make_controlled_user_class():
             message: Optional[ValidUserInputMessage] = None,
             state: Optional[_ControlledUserState] = None,
         ) -> None:
+            # Unblock any waiting request when the orchestrator stops the user.
             history = deepcopy(state.messages) if state else []
             with self._lock:
                 self._observation = history + ([message] if message else [])
@@ -163,6 +172,7 @@ def _make_controlled_user_class():
             self,
             message_history: Optional[list[Message]] = None,
         ) -> _ControlledUserState:
+            # Seed the user with any existing trajectory supplied by tau2.
             return _ControlledUserState(messages=list(message_history or []))
 
         def generate_next_message(
@@ -170,6 +180,7 @@ def _make_controlled_user_class():
             message: ValidUserInputMessage,
             state: _ControlledUserState,
         ) -> tuple[UserMessage, _ControlledUserState]:
+            # Pause the orchestrator until the browser provides the next message.
             with self._lock:
                 self._turn_finished.clear()
                 if isinstance(message, MultiToolMessage):
@@ -184,12 +195,14 @@ def _make_controlled_user_class():
                 response = self._next_action
                 self._next_action = None
             if response is None:
+                # If the session is released without input, end gracefully.
                 response = UserMessage(role="user", content=STOP)
             state.messages.append(response)
             return response, state
 
         @classmethod
         def is_stop(cls, message: UserMessage) -> bool:
+            # Match tau2's stop markers while ignoring tool-call messages.
             if message.is_tool_call() or message.content is None:
                 return False
             return (
@@ -203,6 +216,7 @@ def _make_controlled_user_class():
 
 @dataclass
 class LiveChatSession:
+    # Runtime container for one browser-controlled tau2 conversation.
     id: str
     domain: str
     task_id: str
@@ -220,10 +234,12 @@ class LiveChatSession:
     done_event: threading.Event = field(default_factory=threading.Event)
 
     def start(self) -> None:
+        # Run the orchestrator in the background so HTTP requests stay responsive.
         self.thread = threading.Thread(target=self._run, daemon=True)
         self.thread.start()
 
     def _run(self) -> None:
+        # The orchestrator owns the simulation loop; this wrapper records status.
         try:
             self.status = "running"
             assert self.orchestrator is not None
@@ -236,6 +252,7 @@ class LiveChatSession:
             self.done_event.set()
 
     def wait_for_user_turn(self, timeout: float = 180.0) -> bool:
+        # Poll until either the conversation ends or tau2 is ready for user input.
         started = time.monotonic()
         while time.monotonic() - started < timeout:
             if self.done_event.is_set():
@@ -246,6 +263,7 @@ class LiveChatSession:
         return False
 
     def snapshot(self) -> dict:
+        # Serialize current state for the frontend without exposing live objects.
         messages = []
         guardrail_events = []
         if self.orchestrator is not None:
@@ -288,6 +306,7 @@ class LiveChatSession:
 
 
 def _load_task(domain: str, task_id: str):
+    # Resolve a task ID through tau2's registered task loader.
     from tau2.run import get_tasks
 
     tasks = get_tasks(task_set_name=domain, task_split_name=None)
@@ -298,6 +317,7 @@ def _load_task(domain: str, task_id: str):
 
 
 def _build_live_session(payload: dict) -> LiveChatSession:
+    # Build all tau2 runtime objects needed for a browser-controlled chat.
     from tau2.data_model.message import UserMessage
     from tau2.guardrails.loader import load_middleware_from_file
     from tau2.orchestrator.orchestrator import Orchestrator
@@ -331,6 +351,7 @@ def _build_live_session(payload: dict) -> LiveChatSession:
         task=task,
     )
     try:
+        # Some domains expose user tools; others do not.
         user_tools = environment.get_user_tools(include=task.user_tools) or None
     except Exception:
         user_tools = None
@@ -364,12 +385,14 @@ def _build_live_session(payload: dict) -> LiveChatSession:
 
     prefill = str(payload.get("initial_message") or "").strip()
     if prefill:
+        # Optional opening message is applied after the orchestrator reaches user turn.
         session._prefill_message = parse_action_string(prefill, requestor="user")
         assert isinstance(session._prefill_message, UserMessage)
     return session
 
 
 def create_live_session(payload: dict) -> dict:
+    # Register and start a live session, then return its first stable snapshot.
     session = _build_live_session(payload)
     with _live_sessions_lock:
         _live_sessions[session.id] = session
@@ -383,6 +406,7 @@ def create_live_session(payload: dict) -> dict:
 
 
 def get_live_session(session_id: str) -> tuple[dict, int]:
+    # Fetch a snapshot without advancing the conversation.
     with _live_sessions_lock:
         session = _live_sessions.get(session_id)
     if session is None:
@@ -391,6 +415,7 @@ def get_live_session(session_id: str) -> tuple[dict, int]:
 
 
 def send_live_message(session_id: str, payload: dict) -> tuple[dict, int]:
+    # Submit the next user message and wait for the agent to respond or stop.
     from tau2.utils.tools import parse_action_string
 
     with _live_sessions_lock:

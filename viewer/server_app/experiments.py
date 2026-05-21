@@ -18,6 +18,7 @@ from .utils import _parse_task_ids, _prompt_label, _repo_rel, _safe_guardrail_co
 _worker_started = False
 
 def _build_command(exp: Experiment) -> list[str]:
+    # Build the exact tau2 command that the background worker will execute.
     uv_path = Path.home() / ".local" / "bin" / "uv"
     uv = str(uv_path if uv_path.exists() else "uv")
     save_to = f"viewer_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{exp.domain}_{_safe_slug(exp.name)}_{exp.id}"
@@ -57,6 +58,7 @@ def _build_command(exp: Experiment) -> list[str]:
     return cmd
 
 def _experiment_from_payload(payload: dict) -> Experiment:
+    # Validate browser input and normalize it into an Experiment record.
     domain = str(payload.get("domain") or "telecom").strip()
     if domain not in ALLOWED_DOMAINS:
         raise ValueError(f"Unsupported domain: {domain}")
@@ -101,6 +103,7 @@ def _experiment_from_payload(payload: dict) -> Experiment:
     return exp
 
 def _compact_experiment(exp: Experiment) -> dict:
+    # Trim logs before returning experiments to the browser.
     data = asdict(exp)
     logs = data.pop("logs", [])
     data["log_count"] = len(logs)
@@ -142,6 +145,7 @@ def _matching_experiment_pids(exp: Experiment) -> list[int]:
     return pids
 
 def _cancel_experiment(exp_id: str) -> tuple[dict, int]:
+    # Cancellation first updates persisted state, then attempts to stop the OS process.
     with _experiment_lock:
         exp = _experiments.get(exp_id)
         proc = _running_processes.get(exp_id)
@@ -187,6 +191,7 @@ def _cancel_experiment(exp_id: str) -> tuple[dict, int]:
         return (_compact_experiment(exp) if exp else {"id": exp_id, "status": "cancelling"}), 200
 
 def get_experiment_options() -> dict:
+    # Form options are derived from configured allow-lists and guardrail files.
     configs = [
         _repo_rel(path)
         for path in sorted(GUARDRAILS.glob("*.json"))
@@ -205,6 +210,7 @@ def get_experiment_options() -> dict:
     }
 
 def _run_experiment_worker():
+    # Single daemon worker: pull queued experiment IDs and run them one at a time.
     while True:
         exp_id = _experiment_queue.get()
         with _experiment_lock:
@@ -221,6 +227,7 @@ def _run_experiment_worker():
 
         result_path = DATA / exp.result_id / "results.json"
         try:
+            # Stream subprocess output into the experiment log shown in the UI.
             proc = subprocess.Popen(
                 exp.command,
                 cwd=REPO,
@@ -241,6 +248,7 @@ def _run_experiment_worker():
 
             return_code = proc.wait()
             with _experiment_lock:
+                # A completed results file is the source for dashboard metrics.
                 exp.finished_at = datetime.now().isoformat(timespec="seconds")
                 if exp.status == "cancelling":
                     exp.status = "cancelled"
@@ -312,6 +320,7 @@ def _reconcile_experiments_on_startup() -> None:
             _save_experiments_db()
 
 def _ensure_worker():
+    # Lazily start the daemon worker once per Python process.
     global _worker_started
     if _worker_started:
         return

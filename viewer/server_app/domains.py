@@ -30,10 +30,12 @@ EXCLUDED_DOMAINS = {"airline", "retail", "telecom"}
 
 
 def _rel(path: Path) -> str:
+    # Display paths relative to the repo instead of absolute local paths.
     return str(path.resolve().relative_to(REPO))
 
 
 def _safe_repo_file(value: str) -> Path:
+    # Only stage files that are inside this checkout and already exist.
     path = (REPO / value).resolve()
     if REPO.resolve() not in path.parents or not path.is_file():
         raise ValueError(f"Invalid file path: {value}")
@@ -41,6 +43,7 @@ def _safe_repo_file(value: str) -> Path:
 
 
 def _list_files(root: Path, patterns: tuple[str, ...]) -> list[dict]:
+    # Find candidate policy/task/tool files for the domain journey form.
     if not root.exists():
         return []
     files: list[Path] = []
@@ -51,6 +54,7 @@ def _list_files(root: Path, patterns: tuple[str, ...]) -> list[dict]:
 
 
 def _domain_names() -> list[str]:
+    # A domain can be discovered from either its data folder or source folder.
     names = set()
     data_root = REPO / "data" / "tau2" / "domains"
     src_root = REPO / "src" / "tau2" / "domains"
@@ -64,6 +68,7 @@ def _domain_names() -> list[str]:
 
 
 def get_domain_journey_options() -> dict:
+    # Build all file choices needed to import a custom domain into the mapper.
     domains = []
     for domain in _domain_names():
         data_dir = REPO / "data" / "tau2" / "domains" / domain
@@ -98,10 +103,12 @@ def get_domain_journey_options() -> dict:
 
 
 def _title_domain(domain: str) -> str:
+    # The mapper expects staged input filenames to start with TitleCase domains.
     return domain[0].upper() + domain[1:] if domain else domain
 
 
 def _stage_policy(domain: str, source: Path) -> Path:
+    # Copy policy markdown into the mapper's conventional input location.
     target = REPO / "policy_tool_mapper" / "input" / f"{_title_domain(domain)}Policy.md"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(source.read_text())
@@ -109,6 +116,7 @@ def _stage_policy(domain: str, source: Path) -> Path:
 
 
 def _stage_tasks(domain: str, source: Path) -> Path:
+    # Copy task definitions into the mapper's conventional input location.
     target = REPO / "policy_tool_mapper" / "input" / f"{_title_domain(domain)}Tasks.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, target)
@@ -116,6 +124,7 @@ def _stage_tasks(domain: str, source: Path) -> Path:
 
 
 def _stage_tools(domain: str, source: Path) -> Path:
+    # Convert Python toolkits to JSON schemas, or normalize existing JSON tools.
     target = REPO / "policy_tool_mapper" / "input" / f"{_title_domain(domain)}Tools.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     if source.suffix == ".py":
@@ -131,6 +140,7 @@ def _stage_tools(domain: str, source: Path) -> Path:
 
 
 def _schedule_journey_mapper(payload: dict, *, skip_eval: bool) -> dict:
+    # Create a mapper experiment as the final step of the domain journey import.
     domain = str(payload["domain"]).strip().lower()
     mode = str(payload.get("mode") or "retrieval").strip().lower()
     if mode not in {"retrieval", "llm"}:
@@ -159,6 +169,7 @@ def _schedule_journey_mapper(payload: dict, *, skip_eval: bool) -> dict:
 
 
 def start_domain_journey(payload: dict) -> dict:
+    # Validate the selected domain files, stage them, then queue mapper work.
     domain = str(payload.get("domain") or "").strip().lower()
     if not domain:
         raise ValueError("domain is required")

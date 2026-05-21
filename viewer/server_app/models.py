@@ -6,6 +6,7 @@ from datetime import datetime
 
 @dataclass
 class Experiment:
+    # A queued tau2 evaluation run plus the UI metadata needed to display it.
     id: str
     name: str
     domain: str
@@ -35,6 +36,7 @@ class Experiment:
 
 @dataclass
 class MapperExperiment:
+    # A policy-tool mapper run, tracked separately from regular simulations.
     id: str
     name: str
     domain: str
